@@ -10,7 +10,7 @@ import (
 	"github.com/elaxer/standardchess/piece"
 )
 
-type Castlings = map[string]map[chess.Side]map[move.Castling]bool
+type Castlings = map[string]map[chess.Side]map[string]bool
 
 var AllFuncs = []metric.MetricFunc{
 	CastlingAbility,
@@ -19,10 +19,10 @@ var AllFuncs = []metric.MetricFunc{
 }
 
 func CastlingAbility(board chess.Board) metric.Metric {
-	callback := func(side chess.Side, board chess.Board, validateObstacle bool) map[move.Castling]bool {
-		return map[move.Castling]bool{
-			move.CastlingShort: validator.ValidateCastlingMove(move.CastlingShort, side, board, validateObstacle) == nil,
-			move.CastlingLong:  validator.ValidateCastlingMove(move.CastlingLong, side, board, validateObstacle) == nil,
+	callback := func(side chess.Side, board chess.Board, validateObstacle bool) map[string]bool {
+		return map[string]bool{
+			move.CastlingShort.String(): validator.ValidateCastlingMove(move.CastlingShort, side, board, validateObstacle) == nil,
+			move.CastlingLong.String():  validator.ValidateCastlingMove(move.CastlingLong, side, board, validateObstacle) == nil,
 		}
 	}
 

@@ -35,16 +35,16 @@ func NewDecoder() *fen.Decoder {
 func castlingMetric(board chess.Board) metric.Metric {
 	theoretical := standardmetric.CastlingAbility(board).Value().(standardmetric.Castlings)["theoretical"]
 	str := ""
-	if theoretical[chess.SideWhite][move.CastlingShort] {
+	if theoretical[chess.SideWhite][move.CastlingShort.String()] {
 		str += "K"
 	}
-	if theoretical[chess.SideWhite][move.CastlingLong] {
+	if theoretical[chess.SideWhite][move.CastlingShort.String()] {
 		str += "Q"
 	}
-	if theoretical[chess.SideBlack][move.CastlingShort] {
+	if theoretical[chess.SideBlack][move.CastlingShort.String()] {
 		str += "k"
 	}
-	if theoretical[chess.SideBlack][move.CastlingLong] {
+	if theoretical[chess.SideBlack][move.CastlingShort.String()] {
 		str += "q"
 	}
 

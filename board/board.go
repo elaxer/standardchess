@@ -108,7 +108,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 	placements := make([]*Placement, 0, 32)
 	for pos, piece := range b.squares.Iter() {
 		placement := &Placement{Piece: Piece{piece, mapset.NewSet[position.Position]()}, Position: pos}
-		if piece.Side() == b.turn {
+		if piece != nil && piece.Side() == b.turn {
 			placement.Piece.LegalMoves = b.LegalMoves(piece)
 		}
 
