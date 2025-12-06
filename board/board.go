@@ -96,29 +96,32 @@ func (b *board) UndoLastMove() (chess.MoveResult, error) {
 }
 
 func (b *board) MarshalJSON() ([]byte, error) {
-	type Piece struct {
-		chess.Piece
-		LegalMoves position.Set `json:"legal_moves"`
-	}
 	type Placement struct {
-		Piece    Piece             `json:"piece"`
-		Position position.Position `json:"position"`
+		chess.Piece
+		LegalMoves position.Set      `json:"legal_moves"`
+		Position   position.Position `json:"position"`
 	}
 
 	placements := make([]*Placement, 0, 32)
 	for pos, piece := range b.squares.Iter() {
-		placement := &Placement{Piece: Piece{piece, mapset.NewSet[position.Position]()}, Position: pos}
-		if piece != nil && piece.Side() == b.turn {
-			placement.Piece.LegalMoves = b.LegalMoves(piece)
+		if piece == nil {
+			continue
+		}
+
+		placement := &Placement{Piece: piece, LegalMoves: mapset.NewSet[position.Position](), Position: pos}
+		if piece.Side() == b.turn {
+			placement.LegalMoves = b.LegalMoves(piece)
 		}
 
 		placements = append(placements, placement)
 	}
 
 	return json.Marshal(map[string]any{
-		"placements":      placements,
+		"turn":            b.turn,
 		"state":           b.State(b.turn),
-		"captured_pieces": b.capturedPieces,
 		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
+		"moves_history":   b.movesHistory,
+		"captured_pieces": b.capturedPieces,
+		"placements":      placements,
 	})
 }
