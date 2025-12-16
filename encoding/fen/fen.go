@@ -4,10 +4,8 @@ import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/encoding/fen"
 	"github.com/elaxer/chess/metric"
-	"github.com/elaxer/standardchess/board"
 	standardmetric "github.com/elaxer/standardchess/metric"
 	"github.com/elaxer/standardchess/move/move"
-	"github.com/elaxer/standardchess/piece"
 )
 
 // NewEncoder creates a new FEN encoder for the standard chess variant.
@@ -24,12 +22,6 @@ func NewEncoder() *fen.Encoder {
 			metric.FullmoveCounter,
 		},
 	}
-}
-
-// NewDecoder creates a new FEN decoder for the standard chess variant.
-// See github.com/elaxer/chess/encoding/fen/decoder for more details.
-func NewDecoder() *fen.Decoder {
-	return fen.NewDecoder(board.NewFactory(), piece.NewFactory())
 }
 
 func castlingMetric(board chess.Board) metric.Metric {

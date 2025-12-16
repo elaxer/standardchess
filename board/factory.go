@@ -41,10 +41,9 @@ func (f *factory) Create(turn chess.Side, placement map[position.Position]chess.
 	}
 
 	return &board{
-		turn:           turn,
-		squares:        squares,
-		movesHistory:   make([]chess.MoveResult, 0, 128),
-		capturedPieces: make([]chess.Piece, 0, 30),
+		turn:         turn,
+		squares:      squares,
+		movesHistory: make([]chess.MoveResult, 0, 128),
 
 		stateRules: stateRules,
 	}, nil
