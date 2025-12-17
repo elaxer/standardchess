@@ -6,6 +6,7 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/move/move"
+	"github.com/elaxer/standardchess/piece"
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
@@ -38,7 +39,7 @@ func (r *Normal) MarshalJSON() ([]byte, error) {
 
 func (r *Normal) String() string {
 	from := r.FromShortened
-	if from.IsEmpty() && r.IsCapture() {
+	if from.IsEmpty() && r.IsCapture() && r.InputMove.PieceNotation == piece.NotationPawn {
 		from.File = r.FromFull.File
 	}
 

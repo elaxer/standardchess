@@ -30,7 +30,7 @@ func (r Piece) Validate() error {
 }
 
 func (r Piece) captureString() string {
-	if r.IsCapture() {
+	if !r.IsCapture() {
 		return ""
 	}
 
