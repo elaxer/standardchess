@@ -16,9 +16,10 @@ import (
 var edgePosition = position.New(position.FileH, position.Rank8)
 
 type board struct {
-	turn         chess.Side
-	squares      *chess.Squares
-	movesHistory []chess.MoveResult
+	turn           chess.Side
+	squares        *chess.Squares
+	movesHistory   []chess.MoveResult
+	capturedPieces []chess.Piece
 
 	stateRules []rule.Rule
 }
@@ -87,6 +88,9 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 
 	b.movesHistory = append(b.movesHistory, moveResult)
 	b.turn = !b.turn
+	if moveResult.CapturedPiece() != nil {
+		b.capturedPieces = append(b.capturedPieces, moveResult.CapturedPiece())
+	}
 
 	return moveResult, nil
 }
@@ -117,11 +121,12 @@ func (b *board) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(map[string]any{
-		"turn":          b.turn,
-		"state":         b.State(b.turn),
-		"castlings":     metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
-		"moves_history": b.movesHistory,
-		"placements":    placements,
-		"fen":           fen.NewEncoder().Encode(b),
+		"turn":           b.turn,
+		"state":          b.State(b.turn),
+		"fen":            fen.NewEncoder().Encode(b),
+		"castlings":      metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
+		"capturedPieces": b.capturedPieces,
+		"moves_history":  b.movesHistory,
+		"placements":     placements,
 	})
 }
