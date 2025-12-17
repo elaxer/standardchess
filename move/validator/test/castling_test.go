@@ -11,7 +11,7 @@ import (
 )
 
 // todo добавить тесты с новым параметром Side
-func TestValidateCastling(t *testing.T) {
+func TestValidateCastlingMove(t *testing.T) {
 	type fields struct {
 		board Board
 	}

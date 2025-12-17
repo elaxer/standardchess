@@ -25,9 +25,28 @@ func (m *Castling) Make(castlingType move.Castling, board chess.Board) (chess.Mo
 	rookPosition, _ := m.rookPosition(direction, board.Squares(), kingPosition)
 
 	rank := kingPosition.Rank
+	kingNewPosition := position.New(kingPosition.File+direction*2, rank)
+	rookNewPosition := position.New(kingPosition.File+direction, rank)
 
-	board.Squares().MovePiece(kingPosition, position.New(kingPosition.File+direction*2, rank))
-	board.Squares().MovePiece(rookPosition, position.New(kingPosition.File+direction, rank))
+	if _, err := board.Squares().MovePiece(kingPosition, kingNewPosition); err != nil {
+		return nil, err
+	}
+	if _, err := board.Squares().MovePiece(rookPosition, rookNewPosition); err != nil {
+		return nil, err
+	}
+
+	king, err := board.Squares().FindByPosition(kingNewPosition)
+	if err != nil {
+		return nil, err
+	}
+
+	rook, err := board.Squares().FindByPosition(rookNewPosition)
+	if err != nil {
+		return nil, err
+	}
+
+	king.MarkMoved()
+	rook.MarkMoved()
 
 	return &result.Castling{Abstract: newAbstractResult(board), Castling: castlingType}, nil
 }
