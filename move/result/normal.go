@@ -1,6 +1,7 @@
 package result
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/elaxer/chess"
@@ -11,7 +12,7 @@ import (
 
 type Normal struct {
 	Piece
-	InputMove move.Normal `json:"input"`
+	InputMove move.Normal
 }
 
 func (r *Normal) Move() chess.Move {
@@ -24,6 +25,16 @@ func (r *Normal) Validate() error {
 		validation.Field(&r.Piece),
 		validation.Field(&r.InputMove),
 	)
+}
+
+func (r *Normal) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"move":            r.InputMove.String(),
+		"side":            r.Side(),
+		"captured_piece":  r.CapturedPiece(),
+		"board_new_state": r.BoardNewState(),
+		"str":             r.String(),
+	})
 }
 
 func (r *Normal) String() string {

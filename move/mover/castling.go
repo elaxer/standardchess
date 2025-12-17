@@ -11,8 +11,6 @@ import (
 	"github.com/elaxer/standardchess/piece"
 )
 
-// Castling это структура, реализующая интерфейс Mover для рокировки.
-// Она отвечает за выполнение и проверку допустимости рокировки на доске.
 type Castling struct {
 }
 

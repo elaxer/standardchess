@@ -7,8 +7,8 @@ import (
 )
 
 type Abstract struct {
-	MoveSide chess.Side  `json:"side"`
-	NewState chess.State `json:"board_new_state"`
+	MoveSide chess.Side
+	NewState chess.State
 }
 
 func (r Abstract) Side() chess.Side {

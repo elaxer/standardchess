@@ -8,9 +8,9 @@ import (
 
 type Piece struct {
 	Abstract
-	FromFull       position.Position `json:"from_full"`
-	FromShortened  position.Position `json:"from_shortened"`
-	ACapturedPiece chess.Piece       `json:"captured_piece"`
+	FromFull       position.Position
+	FromShortened  position.Position
+	ACapturedPiece chess.Piece
 }
 
 func (r Piece) CapturedPiece() chess.Piece {

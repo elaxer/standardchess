@@ -1,6 +1,7 @@
 package result
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/elaxer/chess"
@@ -10,7 +11,7 @@ import (
 
 type Promotion struct {
 	Piece
-	InputMove move.Promotion `json:"input"`
+	InputMove move.Promotion
 }
 
 func (r *Promotion) Move() chess.Move {
@@ -23,6 +24,16 @@ func (r *Promotion) Validate() error {
 		validation.Field(&r.Piece),
 		validation.Field(&r.InputMove),
 	)
+}
+
+func (r *Promotion) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"move":            r.InputMove.String(),
+		"side":            r.Side(),
+		"captured_piece":  r.CapturedPiece(),
+		"board_new_state": r.BoardNewState(),
+		"str":             r.String(),
+	})
 }
 
 func (r *Promotion) String() string {

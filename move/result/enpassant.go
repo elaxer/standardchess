@@ -1,6 +1,7 @@
 package result
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/elaxer/chess"
@@ -10,11 +11,11 @@ import (
 
 type EnPassant struct {
 	Piece
-	Input move.EnPassant `json:"input"`
+	InputMove move.EnPassant
 }
 
 func (r *EnPassant) Move() chess.Move {
-	return &r.Input
+	return &r.InputMove
 }
 
 func (r *EnPassant) Validate() error {
@@ -22,8 +23,18 @@ func (r *EnPassant) Validate() error {
 		r,
 		validation.Field(&r.Piece),
 		validation.Field(&r.ACapturedPiece, validation.NotNil),
-		validation.Field(&r.Input),
+		validation.Field(&r.InputMove),
 	)
+}
+
+func (r *EnPassant) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"move":            r.InputMove.String(),
+		"side":            r.Side(),
+		"captured_piece":  r.CapturedPiece(),
+		"board_new_state": r.BoardNewState(),
+		"str":             r.String(),
+	})
 }
 
 func (r *EnPassant) String() string {
@@ -32,5 +43,5 @@ func (r *EnPassant) String() string {
 		from.File = r.FromFull.File
 	}
 
-	return fmt.Sprintf("%sx%s%s", from, r.Input.To, r.suffix())
+	return fmt.Sprintf("%sx%s%s", from, r.InputMove.To, r.suffix())
 }
