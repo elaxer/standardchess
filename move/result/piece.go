@@ -8,13 +8,17 @@ import (
 
 type Piece struct {
 	Abstract
-	FromFull      position.Position `json:"from_full"`
-	FromShortened position.Position `json:"from_shortened"`
-	CapturedPiece chess.Piece       `json:"captured_piece"`
+	FromFull       position.Position `json:"from_full"`
+	FromShortened  position.Position `json:"from_shortened"`
+	ACapturedPiece chess.Piece       `json:"captured_piece"`
+}
+
+func (r Piece) CapturedPiece() chess.Piece {
+	return r.ACapturedPiece
 }
 
 func (r Piece) IsCapture() bool {
-	return r.CapturedPiece != nil
+	return r.ACapturedPiece != nil
 }
 
 func (r Piece) Validate() error {
@@ -26,7 +30,7 @@ func (r Piece) Validate() error {
 }
 
 func (r Piece) captureString() string {
-	if !r.IsCapture() {
+	if r.IsCapture() {
 		return ""
 	}
 

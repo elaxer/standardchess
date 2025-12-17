@@ -21,7 +21,7 @@ func (r *EnPassant) Validate() error {
 	return validation.ValidateStruct(
 		r,
 		validation.Field(&r.Piece),
-		validation.Field(&r.Piece.CapturedPiece, validation.NotNil),
+		validation.Field(&r.ACapturedPiece, validation.NotNil),
 		validation.Field(&r.Input),
 	)
 }

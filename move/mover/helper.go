@@ -37,9 +37,9 @@ func movePiece(move mv.Piece, movingPieceNotation string, board chess.Board) (re
 	piece.MarkMoved()
 
 	return result.Piece{
-		FromFull:      fullFrom,
-		FromShortened: shortenedFrom,
-		CapturedPiece: capturedPiece,
+		FromFull:       fullFrom,
+		FromShortened:  shortenedFrom,
+		ACapturedPiece: capturedPiece,
 	}, nil
 }
 

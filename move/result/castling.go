@@ -13,6 +13,10 @@ type Castling struct {
 	move.Castling `json:"castling"`
 }
 
+func (r *Castling) CapturedPiece() chess.Piece {
+	return nil
+}
+
 func (r *Castling) Move() chess.Move {
 	return r.Castling
 }
