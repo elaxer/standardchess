@@ -42,7 +42,7 @@ func (b *board) State(side chess.Side) chess.State {
 	return chess.StateClear
 }
 
-func (b *board) MovesHistory() []chess.MoveResult {
+func (b *board) MoveHistory() []chess.MoveResult {
 	return b.movesHistory
 }
 

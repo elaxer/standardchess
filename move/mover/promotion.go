@@ -23,10 +23,16 @@ func (m *Promotion) Make(promotion *move.Promotion, board chess.Board) (*result.
 		return nil, err
 	}
 
-	promotedPiece := piece.New(promotion.PromotedPieceNotation, board.Turn())
+	promotedPiece, err := piece.New(promotion.PromotedPieceNotation, board.Turn())
+	if err != nil {
+		return nil, err
+	}
+
 	promotedPiece.MarkMoved()
 
-	board.Squares().PlacePiece(promotedPiece, promotion.To)
+	if err := board.Squares().PlacePiece(promotedPiece, promotion.To); err != nil {
+		return nil, err
+	}
 
 	pieceResult.Abstract = newAbstractResult(board)
 

@@ -3,7 +3,7 @@ package board_test
 import (
 	"testing"
 
-	"github.com/elaxer/chess/encoding/fen"
+	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/standardtest"
 )
 

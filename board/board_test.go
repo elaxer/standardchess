@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/chess/encoding/fen"
-	"github.com/elaxer/standardchess/piece"
+	"github.com/elaxer/standardchess/encoding/fen"
 )
 
 func TestMakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
 	fenStr := "r3k2r/ppp2ppp/B1n2n1B/3pp2Q/3PP2q/b1N2N1b/PPP2PPP/R3K2R w KQkq - 0 1"
-	b, err := fen.NewDecoder(NewFactory(), piece.NewFactory()).Decode(fenStr)
+	b, err := fen.NewDecoder(NewFactory()).Decode(fenStr)
 	if err != nil {
 		t.Fatalf("failed to create board from FEN: %v", err)
 	}

@@ -54,11 +54,12 @@ func (f *factory) CreateFilled() chess.Board {
 	board, _ := f.Create(chess.SideWhite, nil)
 	for i, notation := range firstRowPieceNotations {
 		file := position.File(i + 1)
-
-		board.Squares().PlacePiece(piece.New(notation, chess.SideWhite), position.New(file, position.RankMin))
+		wPiece, _ := piece.New(notation, chess.SideWhite)
+		board.Squares().PlacePiece(wPiece, position.New(file, position.RankMin))
 		board.Squares().PlacePiece(piece.NewPawn(chess.SideWhite), position.New(file, position.RankMin+1))
 
-		board.Squares().PlacePiece(piece.New(notation, chess.SideBlack), position.New(file, edgePosition.Rank))
+		bPiece, _ := piece.New(notation, chess.SideBlack)
+		board.Squares().PlacePiece(bPiece, position.New(file, edgePosition.Rank))
 		board.Squares().PlacePiece(piece.NewPawn(chess.SideBlack), position.New(file, edgePosition.Rank-1))
 	}
 

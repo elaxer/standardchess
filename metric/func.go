@@ -41,11 +41,11 @@ func CastlingAbility(board chess.Board) metric.Metric {
 }
 
 func EnPassantTargetSquare(board chess.Board) metric.Metric {
-	if len(board.MovesHistory()) == 0 {
+	if len(board.MoveHistory()) == 0 {
 		return nil
 	}
 
-	lastMove := board.MovesHistory()[len(board.MovesHistory())-1]
+	lastMove := board.MoveHistory()[len(board.MoveHistory())-1]
 	normalMove, ok := lastMove.(*result.Normal)
 	if !ok || normalMove.InputMove.PieceNotation != piece.NotationPawn {
 		return nil
@@ -65,7 +65,7 @@ func EnPassantTargetSquare(board chess.Board) metric.Metric {
 
 func HalfmoveClock(board chess.Board) metric.Metric {
 	clock := 0
-	for _, m := range board.MovesHistory() {
+	for _, m := range board.MoveHistory() {
 		normalMove, ok := m.(*result.Normal)
 		if !ok || normalMove.InputMove.PieceNotation == piece.NotationPawn || normalMove.IsCapture() {
 			clock = 0

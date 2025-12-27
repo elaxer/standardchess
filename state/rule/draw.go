@@ -18,7 +18,7 @@ func Stalemate(board chess.Board, side chess.Side) chess.State {
 }
 
 func FiftyMoves(board chess.Board, side chess.Side) chess.State {
-	moves := slices.Clone(board.MovesHistory())
+	moves := slices.Clone(board.MoveHistory())
 	slices.Reverse(moves)
 
 	count := 0
