@@ -2,6 +2,7 @@ package standardchess
 
 import (
 	"encoding/json"
+	"fmt"
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
@@ -13,6 +14,25 @@ import (
 
 var edgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
 
+var firstRowPieceNotations = []string{
+	piece.NotationRook,
+	piece.NotationKnight,
+	piece.NotationBishop,
+	piece.NotationQueen,
+	piece.NotationKing,
+	piece.NotationBishop,
+	piece.NotationKnight,
+	piece.NotationRook,
+}
+
+var stateRules = []rule.Rule{
+	rule.Checkmate,
+	rule.Stalemate,
+	rule.Check,
+
+	rule.FiftyMoves,
+}
+
 type board struct {
 	turn           chess.Side
 	squares        *chess.Squares
@@ -20,6 +40,60 @@ type board struct {
 	capturedPieces []chess.Piece
 
 	stateRules []rule.Rule
+}
+
+func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) (chess.Board, error) {
+	return NewBoardSized(turn, placement, edgePosition)
+}
+
+func NewBoardSized(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
+	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
+	if err != nil {
+		return nil, err
+	}
+
+	return &board{
+		turn:           turn,
+		squares:        squares,
+		moveHistory:    make([]chess.MoveResult, 0, 128),
+		capturedPieces: make([]chess.Piece, 0, 30),
+
+		stateRules: stateRules,
+	}, nil
+}
+
+func NewBoardFilled() chess.Board {
+	board, err := NewBoard(chess.SideWhite, nil)
+	must(err)
+
+	for i, notation := range firstRowPieceNotations {
+		file := chess.File(i + 1)
+
+		wPiece, err := piece.New(notation, chess.SideWhite)
+		must(err)
+
+		must(board.Squares().PlacePiece(wPiece, chess.NewPosition(file, chess.RankMin)))
+		must(board.Squares().PlacePiece(piece.NewPawn(chess.SideWhite), chess.NewPosition(file, chess.RankMin+1)))
+
+		bPiece, err := piece.New(notation, chess.SideBlack)
+		must(err)
+
+		must(board.Squares().PlacePiece(bPiece, chess.NewPosition(file, edgePosition.Rank)))
+		must(board.Squares().PlacePiece(piece.NewPawn(chess.SideBlack), chess.NewPosition(file, edgePosition.Rank-1)))
+	}
+
+	return board
+}
+
+func NewBoardFromMoves(moves []chess.Move) (chess.Board, error) {
+	board := NewBoardFilled()
+	for i, move := range moves {
+		if _, err := board.MakeMove(move); err != nil {
+			return nil, fmt.Errorf("%s#%d: %w", move, i+1, err)
+		}
+	}
+
+	return board, nil
 }
 
 func (b *board) Squares() *chess.Squares {
@@ -131,4 +205,10 @@ func (b *board) MarshalJSON() ([]byte, error) {
 		"move_history":    b.moveHistory,
 		"placements":      placements,
 	})
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
