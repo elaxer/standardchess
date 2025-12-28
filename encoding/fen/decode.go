@@ -57,7 +57,7 @@ func Decode(fen string) (chess.Board, error) {
 		maps.Copy(placement, rowPlacement)
 	}
 
-	return board.NewSized(
+	return board.NewBoardSized(
 		side(data["side"]),
 		placement,
 		chess.NewPosition(maxFile-1, chess.Rank(len(rows))),

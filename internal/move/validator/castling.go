@@ -23,7 +23,7 @@ func ValidateCastlingMove(castlingType move.Castling, side chess.Side, board che
 		return fmt.Errorf("%w: the king is under threat", ErrCastling)
 	}
 
-	rook, err := board.Squares().FindByPosition(castlingRookPosition(castlingType, kingPosition.Rank))
+	rook, err := board.Squares().FindByPosition(castlingRookPosition(castlingType, board.Squares(), kingPosition))
 	if err != nil {
 		return err
 	}
@@ -34,17 +34,17 @@ func ValidateCastlingMove(castlingType move.Castling, side chess.Side, board che
 		return fmt.Errorf("%w: the rook already has been moved", ErrCastling)
 	}
 
-	direction := fileDirection(castlingType)
+	fileDir := fileDirection(castlingType)
 
 	if validateObstacle {
-		if err := castlingValidateObstacle(direction, board.Squares(), kingPosition, rook); err != nil {
+		if err := castlingValidateObstacle(fileDir, board.Squares(), kingPosition, rook); err != nil {
 			return err
 		}
 	}
 
 	positions := mapset.NewSet(
-		chess.NewPosition(kingPosition.File+direction, kingPosition.Rank),
-		chess.NewPosition(kingPosition.File+direction*2, kingPosition.Rank),
+		chess.NewPosition(kingPosition.File+fileDir, kingPosition.Rank),
+		chess.NewPosition(kingPosition.File+fileDir*2, kingPosition.Rank),
 	)
 	if board.Moves(!side).Intersect(positions).Cardinality() > 0 {
 		return fmt.Errorf("%w: castling squares are under threat", ErrCastling)
@@ -70,9 +70,13 @@ func fileDirection(castlingType move.Castling) chess.File {
 	}[castlingType]
 }
 
-func castlingRookPosition(castlingType move.Castling, rank chess.Rank) chess.Position {
-	return map[move.Castling]chess.Position{
-		move.CastlingShort: chess.NewPosition(chess.FileH, rank),
-		move.CastlingLong:  chess.NewPosition(chess.FileA, rank),
-	}[castlingType]
+func castlingRookPosition(castlingType move.Castling, squares *chess.Squares, kingPosition chess.Position) chess.Position {
+	direction := chess.NewPosition(fileDirection(castlingType), 0)
+	for pos, p := range squares.IterByDirection(kingPosition, direction) {
+		if p != nil && p.Notation() == piece.NotationRook {
+			return pos
+		}
+	}
+
+	return chess.NewPositionEmpty()
 }

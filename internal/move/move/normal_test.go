@@ -98,12 +98,12 @@ func TestNormal_String(t *testing.T) {
 	}{
 		{
 			"queen",
-			NewNormal(chess.NewEmptyPosition(), chess.PositionFromString("a8"), piece.NotationQueen),
+			NewNormal(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationQueen),
 			"Qa8",
 		},
 		{
 			"pawn",
-			NewNormal(chess.NewEmptyPosition(), chess.PositionFromString("e4"), piece.NotationPawn),
+			NewNormal(chess.NewPositionEmpty(), chess.PositionFromString("e4"), piece.NotationPawn),
 			"e4",
 		},
 	}

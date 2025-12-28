@@ -79,7 +79,7 @@ func TestUnresolveFrom(t *testing.T) {
 					chess.PositionFromString("f2"): piece.NewPawn(chess.SideBlack),
 				}),
 			},
-			chess.NewEmptyPosition(),
+			chess.NewPositionEmpty(),
 			false,
 		},
 		{
@@ -91,7 +91,7 @@ func TestUnresolveFrom(t *testing.T) {
 					chess.PositionFromString("c8"): piece.NewPawn(chess.SideBlack),
 				}),
 			},
-			chess.NewEmptyPosition(),
+			chess.NewPositionEmpty(),
 			false,
 		},
 	}

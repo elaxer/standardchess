@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/internal/move/move"
 	"github.com/elaxer/standardchess/internal/move/mover"
 	"github.com/elaxer/standardchess/internal/piece"
@@ -12,13 +11,17 @@ import (
 )
 
 func TestCastling_Make_Short(t *testing.T) {
-	b, _ := standardchess.New(chess.SideWhite, nil)
+	b := standardtest.NewBoard(chess.SideWhite, nil)
 
 	king := piece.NewKing(chess.SideWhite)
 	rook := piece.NewRook(chess.SideWhite)
 
-	b.Squares().PlacePiece(king, chess.PositionFromString("e1"))
-	b.Squares().PlacePiece(rook, chess.PositionFromString("h1"))
+	if err := b.Squares().PlacePiece(king, chess.PositionFromString("e1")); err != nil {
+		t.Fatalf("failed to place king: %v", err)
+	}
+	if err := b.Squares().PlacePiece(rook, chess.PositionFromString("h1")); err != nil {
+		t.Fatalf("failed to place rook: %v", err)
+	}
 
 	if got, err := new(mover.Castling).Make(move.CastlingShort, b); err != nil {
 		t.Fatalf("castling failed: %v", err)
@@ -35,14 +38,17 @@ func TestCastling_Make_Short(t *testing.T) {
 }
 
 func TestCastling_Make_Long(t *testing.T) {
-	b, _ := standardchess.New(chess.SideWhite, nil)
+	b := standardtest.NewBoard(chess.SideWhite, nil)
 
 	king := piece.NewKing(chess.SideWhite)
 	rook := piece.NewRook(chess.SideWhite)
 
-	b.Squares().PlacePiece(king, chess.PositionFromString("e1"))
-	b.Squares().PlacePiece(rook, chess.PositionFromString("a1"))
-
+	if err := b.Squares().PlacePiece(king, chess.PositionFromString("e1")); err != nil {
+		t.Fatalf("failed to place king: %v", err)
+	}
+	if err := b.Squares().PlacePiece(rook, chess.PositionFromString("a1")); err != nil {
+		t.Fatalf("failed to place rook: %v", err)
+	}
 	if got, err := new(mover.Castling).Make(move.CastlingLong, b); err != nil {
 		t.Fatalf("castling failed: %v", err)
 	} else if got == nil {
@@ -58,13 +64,17 @@ func TestCastling_Make_Long(t *testing.T) {
 }
 
 func TestCastling_Make_Black(t *testing.T) {
-	b, _ := standardchess.New(chess.SideBlack, nil)
+	b := standardtest.NewBoard(chess.SideBlack, nil)
 
 	king := piece.NewKing(chess.SideBlack)
 	rook := piece.NewRook(chess.SideBlack)
 
-	b.Squares().PlacePiece(king, chess.PositionFromString("e8"))
-	b.Squares().PlacePiece(rook, chess.PositionFromString("h8"))
+	if err := b.Squares().PlacePiece(king, chess.PositionFromString("e8")); err != nil {
+		t.Fatalf("failed to place king: %v", err)
+	}
+	if err := b.Squares().PlacePiece(rook, chess.PositionFromString("h8")); err != nil {
+		t.Fatalf("failed to place rook: %v", err)
+	}
 
 	if got, err := new(mover.Castling).Make(move.CastlingShort, b); err != nil {
 		t.Fatalf("castling failed: %v", err)

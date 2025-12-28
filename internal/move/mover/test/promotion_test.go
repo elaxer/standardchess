@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	. "github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/move"
 	"github.com/elaxer/standardchess/internal/move/mover"
 	"github.com/elaxer/standardchess/internal/piece"
@@ -12,13 +11,13 @@ import (
 )
 
 func TestPromotion_Make(t *testing.T) {
-	board := standardtest.NewBoard(SideWhite, map[chess.Position]Piece{
+	board := standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 		chess.PositionFromString("d7"): standardtest.NewPiece("P"),
 		chess.PositionFromString("a1"): standardtest.NewPiece("K"),
 		chess.PositionFromString("a8"): standardtest.NewPiece("k"),
 	})
 
-	promotion := move.NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("d8"), piece.NotationQueen)
+	promotion := move.NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("d8"), piece.NotationQueen)
 	_, err := new(mover.Promotion).Make(promotion, board)
 	if err != nil {
 		t.Fatalf("promotion failed: %v", err)

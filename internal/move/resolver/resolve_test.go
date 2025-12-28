@@ -24,7 +24,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"empty_from",
 			args{
-				move: move.NewNormal(chess.NewEmptyPosition(), chess.PositionFromString("e4"), piece.NotationPawn),
+				move: move.NewNormal(chess.NewPositionEmpty(), chess.PositionFromString("e4"), piece.NotationPawn),
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d2"): piece.NewPawn(chess.SideWhite),
 					chess.PositionFromString("e2"): piece.NewPawn(chess.SideWhite),

@@ -9,15 +9,15 @@ import (
 
 func UnresolveFrom(move move.Piece, board chess.Board) (chess.Position, error) {
 	if err := move.ValidateStrict(); err != nil {
-		return chess.NewEmptyPosition(), err
+		return chess.NewPositionEmpty(), err
 	}
 
 	piece, err := board.Squares().FindByPosition(move.From)
 	if err != nil {
-		return chess.NewEmptyPosition(), err
+		return chess.NewPositionEmpty(), err
 	}
 	if piece == nil {
-		return chess.NewEmptyPosition(), fmt.Errorf("%w: piece not found", Err)
+		return chess.NewPositionEmpty(), fmt.Errorf("%w: piece not found", Err)
 	}
 
 	hasSamePiece, hasSameFile, hasSameRank := false, false, false
@@ -35,7 +35,7 @@ func UnresolveFrom(move move.Piece, board chess.Board) (chess.Position, error) {
 		}
 	}
 
-	unresolvedFrom := chess.NewEmptyPosition()
+	unresolvedFrom := chess.NewPositionEmpty()
 	if hasSameRank || (hasSamePiece && !hasSameFile) {
 		unresolvedFrom.File = move.From.File
 	}

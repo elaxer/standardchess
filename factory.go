@@ -27,11 +27,11 @@ var stateRules = []rule.Rule{
 	rule.FiftyMoves,
 }
 
-func New(turn chess.Side, placement map[chess.Position]chess.Piece) (chess.Board, error) {
-	return NewSized(turn, placement, edgePosition)
+func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) (chess.Board, error) {
+	return NewBoardSized(turn, placement, edgePosition)
 }
 
-func NewSized(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
+func NewBoardSized(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
 	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
 	if err != nil {
 		return nil, err
@@ -47,8 +47,8 @@ func NewSized(turn chess.Side, placement map[chess.Position]chess.Piece, edgePos
 	}, nil
 }
 
-func NewFilled() chess.Board {
-	board, err := New(chess.SideWhite, nil)
+func NewBoardFilled() chess.Board {
+	board, err := NewBoard(chess.SideWhite, nil)
 	must(err)
 
 	for i, notation := range firstRowPieceNotations {
@@ -70,8 +70,8 @@ func NewFilled() chess.Board {
 	return board
 }
 
-func NewFromMoves(moves []chess.Move) (chess.Board, error) {
-	board := NewFilled()
+func NewBoardFromMoves(moves []chess.Move) (chess.Board, error) {
+	board := NewBoardFilled()
 	for i, move := range moves {
 		if _, err := board.MakeMove(move); err != nil {
 			return nil, fmt.Errorf("%s#%d: %w", move, i+1, err)

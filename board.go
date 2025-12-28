@@ -71,6 +71,7 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 
 	legalMoves := mapset.NewSetWithSize[chess.Position](pseudoMoves.Cardinality())
 	for to := range pseudoMoves.Iter() {
+		//nolint:errcheck
 		b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
 			if !b.Moves(!b.turn).ContainsOne(kingPosition) {
@@ -123,11 +124,11 @@ func (b *board) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(map[string]any{
-		"turn":           b.turn,
-		"state":          b.State(b.turn),
-		"castlings":      metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
-		"capturedPieces": b.capturedPieces,
-		"move_history":   b.moveHistory,
-		"placements":     placements,
+		"turn":            b.turn,
+		"state":           b.State(b.turn),
+		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
+		"captured_pieces": b.capturedPieces,
+		"move_history":    b.moveHistory,
+		"placements":      placements,
 	})
 }

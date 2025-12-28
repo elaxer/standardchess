@@ -11,7 +11,7 @@ import (
 )
 
 func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {
-	board, err := standardchess.New(turn, placement)
+	board, err := standardchess.NewBoard(turn, placement)
 	if err != nil {
 		panic(err)
 	}
@@ -22,7 +22,7 @@ func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) chess.B
 func NewBoardFromMoves(moveStrings ...string) chess.Board {
 	moves := chesstest.MoveStrings(moveStrings...)
 
-	board, err := standardchess.NewFromMoves(moves)
+	board, err := standardchess.NewBoardFromMoves(moves)
 	if err != nil {
 		panic(err)
 	}

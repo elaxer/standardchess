@@ -16,7 +16,7 @@ func ResolveFrom(move move.Piece, pieceNotation string, board chess.Board, turn 
 		return move.From, nil
 	}
 	if err := move.Validate(); err != nil {
-		return chess.NewEmptyPosition(), err
+		return chess.NewPositionEmpty(), err
 	}
 
 	pieces := make([]chess.Piece, 0, 8)
@@ -27,7 +27,7 @@ func ResolveFrom(move move.Piece, pieceNotation string, board chess.Board, turn 
 	}
 
 	if len(pieces) == 0 {
-		return chess.NewEmptyPosition(), fmt.Errorf("%w: no moves found", Err)
+		return chess.NewPositionEmpty(), fmt.Errorf("%w: no moves found", Err)
 	}
 	if len(pieces) == 1 {
 		return board.Squares().GetByPiece(pieces[0]), nil

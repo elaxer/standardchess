@@ -8,16 +8,16 @@ import (
 
 var (
 	orthogonalDirections = []chess.Position{
-		chess.NewPosition(1, 0),  // Right
-		chess.NewPosition(-1, 0), // Left
-		chess.NewPosition(0, 1),  // Up
-		chess.NewPosition(0, -1), // Down
+		chess.DirectionRight,
+		chess.DirectionLeft,
+		chess.DirectionTop,
+		chess.DirectionBottom,
 	}
 	diagonalDirections = []chess.Position{
-		chess.NewPosition(1, 1),   // Up-Right
-		chess.NewPosition(-1, -1), // Down-Left
-		chess.NewPosition(1, -1),  // Down-Right
-		chess.NewPosition(-1, 1),  // Up-Left
+		chess.DirectionTopRight,
+		chess.DirectionBottomLeft,
+		chess.DirectionBottomRight,
+		chess.DirectionTopLeft,
 	}
 	allDirections = append(orthogonalDirections, diagonalDirections...)
 )

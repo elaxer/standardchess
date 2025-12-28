@@ -20,7 +20,7 @@ func TestPromotionFromString(t *testing.T) {
 		{
 			"promotion",
 			args{"e8=Q"},
-			NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("e8"), piece.NotationQueen),
+			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("e8"), piece.NotationQueen),
 			false,
 		},
 		{
@@ -32,19 +32,19 @@ func TestPromotionFromString(t *testing.T) {
 		{
 			"with_check",
 			args{"d1=N+"},
-			NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("d1"), piece.NotationKnight),
+			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("d1"), piece.NotationKnight),
 			false,
 		},
 		{
 			"with_checkmate",
 			args{"a8=R#"},
-			NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("a8"), piece.NotationRook),
+			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationRook),
 			false,
 		},
 		{
 			"with_capture",
 			args{"xc8=B"},
-			NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("c8"), piece.NotationBishop),
+			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("c8"), piece.NotationBishop),
 			false,
 		},
 		{
@@ -86,7 +86,7 @@ func TestPromotion_String(t *testing.T) {
 	}{
 		{
 			"promotion",
-			fields{NewPromotion(chess.NewEmptyPosition(), chess.PositionFromString("a1"), piece.NotationRook)},
+			fields{NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("a1"), piece.NotationRook)},
 			"a1=R",
 		},
 		{
