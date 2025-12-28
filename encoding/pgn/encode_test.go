@@ -3,11 +3,11 @@ package pgn
 import (
 	"testing"
 
-	"github.com/elaxer/chess/chesstest"
+	"github.com/elaxer/standardchess/internal/standardtest"
 )
 
 func TestEncode(t *testing.T) {
-	board := chesstest.BoardFromMoves(
+	board := standardtest.NewBoardFromMoves(
 		"e4", "c6",
 		"d4", "d5",
 		"e5", "Bf5",
