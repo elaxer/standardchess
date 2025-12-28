@@ -4,7 +4,7 @@ go 1.23.7
 
 require (
 	github.com/deckarep/golang-set/v2 v2.8.0
-	github.com/elaxer/chess v1.0.4
+	github.com/elaxer/chess v1.0.5
 	github.com/elaxer/rgx v0.0.0-20250611140943-48f730656186
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 )
