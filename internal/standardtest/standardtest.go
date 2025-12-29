@@ -1,12 +1,16 @@
 package standardtest
 
 import (
+	"os"
 	"strings"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/chesstest"
+	"github.com/elaxer/chess/metric"
+	"github.com/elaxer/chess/visualizer"
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
+	standardmetric "github.com/elaxer/standardchess/internal/metric"
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
@@ -33,8 +37,9 @@ func NewBoardFromMoves(moveStrings ...string) chess.Board {
 // NewPiece creates a new piece by string.
 // Created piece marked as not moved.
 // P, R, N, B, Q, K - creates white piece
-// p, r, n, b, q, k - creates black piece
+// p, r, n, b, q, k - creates black piece.
 func NewPiece(str string) chess.Piece {
+	//nolint:gocritic
 	if len(str) != 1 || !strings.Contains("PRNBQKprnbqk", str) {
 		panic("invalid piece string")
 	}
@@ -58,7 +63,7 @@ func NewPiece(str string) chess.Piece {
 }
 
 // NewPieceM creates a new moved piece by string.
-// See NewPiece for more details
+// See NewPiece for more details.
 func NewPieceM(str string) chess.Piece {
 	piece := NewPiece(str)
 	piece.MarkMoved()
@@ -82,4 +87,16 @@ func DecodeFEN(str string) chess.Board {
 	}
 
 	return board
+}
+
+func Visualize(board chess.Board) {
+	vis := visualizer.Visualizer{
+		Options: visualizer.Options{
+			Orientation:      visualizer.OptionOrientationDefault,
+			DisplayPositions: true,
+			MetricFuncs:      append(standardmetric.AllFuncs, metric.AllFuncs...),
+		},
+	}
+
+	vis.Fprintln(os.Stdout, board)
 }

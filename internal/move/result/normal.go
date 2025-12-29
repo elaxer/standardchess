@@ -12,6 +12,7 @@ import (
 
 type Normal struct {
 	Piece
+
 	InputMove move.Normal
 }
 

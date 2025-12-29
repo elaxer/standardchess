@@ -7,6 +7,8 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/chesstest"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDecode(t *testing.T) {
@@ -494,21 +496,14 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			gotHeaders, gotMoves, err := Decode(tt.args.pgn)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Decode() error = %v, wantErr %v", err, tt.wantErr)
 
+			require.Truef(t, (err != nil) == tt.wantErr, "Decode() error = %v, wantErr %v", err, tt.wantErr)
+			if tt.wantErr {
 				return
 			}
 
-			if !slices.Equal(gotHeaders, tt.wantHeaders) {
-				t.Errorf("Decode() gotHeaders =\n%v, want\n%v", gotHeaders, tt.wantHeaders)
-
-				return
-			}
-
-			if !slices.Equal(gotMoves, tt.wantMoves) {
-				t.Errorf("Decode() gotMoves =\n%v, want\n%v", gotMoves, tt.wantMoves)
-			}
+			assert.True(t, slices.Equal(gotHeaders, tt.wantHeaders))
+			assert.True(t, slices.Equal(gotMoves, tt.wantMoves))
 		})
 	}
 }

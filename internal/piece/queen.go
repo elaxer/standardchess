@@ -55,5 +55,6 @@ func (q *Queen) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"side":     q.side,
 		"notation": q.Notation(),
+		"is_moved": q.isMoved,
 	})
 }

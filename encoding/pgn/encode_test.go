@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/elaxer/standardchess/internal/standardtest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEncode(t *testing.T) {
@@ -90,9 +91,7 @@ Ke8 34. Nd3 Re3 35. Kd2 Rh3 36. c6 Rxh2+ 37. Ke3 Rc2 38. e6 h3 39. Nb4 f4+ 40.
 Kd4 h2 41. Ra8+ Ke7 42. Rh8 Rd2+ 43. Kc5 Be4 44. c7 Bb7 45. Kb6 Bc8 46. Rxc8
 h1=Q 47. Re8+ Kxe8 48. c8=Q+ Ke7 49. Nc6+ Qxc6+ 50. Qxc6 Rd6 *`
 
-	if pgn != expectedPGN {
-		t.Errorf("Unexpected PGN:\n%s", pgn)
-	}
+	assert.Equal(t, expectedPGN, pgn)
 }
 
 func TestEncodeHeaders(t *testing.T) {
@@ -109,7 +108,6 @@ func TestEncodeHeaders(t *testing.T) {
 [foo "bar"]
 [ "empty"]
 [ ""]`
-	if got := EncodeHeaders(headers); got != expected {
-		t.Errorf("EncodeHeaders() = \n%v want\n%v", got, expected)
-	}
+
+	assert.Equal(t, expected, EncodeHeaders(headers))
 }

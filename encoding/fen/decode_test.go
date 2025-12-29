@@ -1,12 +1,12 @@
 package fen_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/chess/visualizer"
 	"github.com/elaxer/standardchess/encoding/fen"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDecode(t *testing.T) {
@@ -65,16 +65,16 @@ func TestDecode(t *testing.T) {
 		{
 			"10x10",
 			args{
-				"1n2r1b1qk/3p3p1p/2n5B1/3P1N2r1/4Q3P1/3b1K3P/4p2B2/3q2P3/R3P1r3/2N2k4",
+				"1n2r1b1qk/3p3p1p/2n5B1/3P1N2r1/4Q3P1/3b1K3P/4p2B2/3q2P3/R3P1r3/2N2k4 b KQ - 10 34",
 			},
 			"1n2r1b1qk/3p3p1p/2n5B1/3P1N2r1/4Q3P1/3b1K3P/4p2B2/3q2P3/R3P1r3/2N2k4",
-			chess.SideWhite,
+			chess.SideBlack,
 			false,
 		},
 		{
 			"12x8",
 			args{
-				"2r1k2bnq1p/3p4p1P1/10pp/1P1b2N3p1/kQ10/3K3P2N1/R10R/12",
+				"2r1k2bnq1p/3p4p1P1/10pp/1P1b2N3p1/kQ10/3K3P2N1/R10R/12 w k h4 14 38",
 			},
 			"2r1k2bnq1p/3p4p1P1/10pp/1P1b2N3p1/kQ10/3K3P2N1/R10R/12",
 			chess.SideWhite,
@@ -83,10 +83,10 @@ func TestDecode(t *testing.T) {
 		{
 			"7x13",
 			args{
-				"1q2b2/2p1P1n/1r2B2/2N2pk/3r1PB/1Q2n1K/3P3/1P3r1/2N1k1P/2p1bP1/1R2K2/2q2p1/2B1n2",
+				"1q2b2/2p1P1n/1r2B2/2N2pk/3r1PB/1Q2n1K/3P3/1P3r1/2N1k1P/2p1bP1/1R2K2/2q2p1/2B1n2 b KQk g3 5 55",
 			},
 			"1q2b2/2p1P1n/1r2B2/2N2pk/3r1PB/1Q2n1K/3P3/1P3r1/2N1k1P/2p1bP1/1R2K2/2q2p1/2B1n2",
-			chess.SideWhite,
+			chess.SideBlack,
 			false,
 		},
 
@@ -137,23 +137,14 @@ func TestDecode(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := fen.Decode(tt.args.fen)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Decode() error = %v, wantErr %v", err, tt.wantErr)
 
-				return
-			}
-
+			require.Truef(t, (err != nil) == tt.wantErr, "Decode() error = %v, wantErr %v", err, tt.wantErr)
 			if tt.wantErr {
 				return
 			}
 
-			if got.Turn() != tt.wantSide {
-				t.Errorf("Decode() got side = %v, want %v", got.Turn(), tt.wantSide)
-			}
-			if gotFEN := fen.EncodeSquares(got.Squares()); gotFEN != tt.wantFEN {
-				new(visualizer.Visualizer).Fprintln(os.Stdout, got)
-				t.Errorf("Decode() got =\n%v, want\n%v", gotFEN, tt.wantFEN)
-			}
+			assert.Equal(t, tt.wantSide, got.Turn())
+			assert.Equal(t, tt.wantFEN, fen.EncodeSquares(got.Squares()))
 		})
 	}
 }

@@ -11,6 +11,7 @@ import (
 
 type Promotion struct {
 	Piece
+
 	InputMove move.Promotion
 }
 

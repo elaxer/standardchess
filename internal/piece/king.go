@@ -67,5 +67,6 @@ func (k *King) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"side":     k.side,
 		"notation": k.Notation(),
+		"is_moved": k.isMoved,
 	})
 }

@@ -11,6 +11,7 @@ import (
 
 type Castling struct {
 	Abstract
+
 	move.Castling
 }
 

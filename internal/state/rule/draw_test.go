@@ -8,6 +8,7 @@ import (
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/elaxer/standardchess/internal/state/rule"
 	"github.com/elaxer/standardchess/internal/state/state"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestStalemate(t *testing.T) {
@@ -47,9 +48,8 @@ func TestStalemate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := rule.Stalemate(tt.args.board, tt.args.side); got != tt.want {
-				t.Errorf("Stalemate() = %v, want %v", got, tt.want)
-			}
+			got := rule.Stalemate(tt.args.board, tt.args.side)
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

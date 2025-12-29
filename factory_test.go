@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/elaxer/standardchess/internal/standardtest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFactory_CreateFromMoves(t *testing.T) {
@@ -76,9 +77,9 @@ func TestFactory_CreateFromMoves(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			board := standardtest.NewBoardFromMoves(tt.args.moves...)
-			if fen := standardtest.EncodeFenRows(board); fen != tt.wantFEN {
-				t.Errorf("Expected position \"%s\", got - %s", tt.wantFEN, fen)
-			}
+			fen := standardtest.EncodeFenRows(board)
+
+			assert.Equalf(t, tt.wantFEN, fen, "Expected position \"%s\", got - %s", tt.wantFEN, fen)
 		})
 	}
 }

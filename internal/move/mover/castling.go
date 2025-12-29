@@ -10,31 +10,38 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-type Castling struct {
-}
+var (
+	kingFileAfterShortCastling = chess.FileG
+	rookFileAfterShortCastling = chess.FileF
 
-func (m *Castling) Make(castlingType move.Castling, board chess.Board) (chess.MoveResult, error) {
+	kingFileAfterLongCastling = chess.FileC
+	rookFileAfterLongCastling = chess.FileD
+)
+
+func MakeCastling(castlingType move.Castling, board chess.Board) (chess.MoveResult, error) {
 	if err := validator.ValidateCastlingMove(castlingType, board.Turn(), board, true); err != nil {
 		return nil, err
 	}
 
-	fileDir := fileDirection(castlingType)
-
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, board.Turn())
-	rook, rookPosition, err := m.getRook(fileDir, board.Squares(), kingPosition)
+	rook, rookPosition, err := getRook(fileDirection(castlingType), board.Squares(), kingPosition)
 	if err != nil {
 		return nil, err
 	}
 
-	rank := kingPosition.Rank
-	// todo: изменить на конкретные позиции (для шахмат 960)
-	kingNewPosition := chess.NewPosition(kingPosition.File+fileDir*2, rank)
-	rookNewPosition := chess.NewPosition(kingPosition.File+fileDir, rank)
-
-	if _, err := board.Squares().MovePiece(kingPosition, kingNewPosition); err != nil {
+	if err := board.Squares().PlacePiece(nil, kingPosition); err != nil {
 		return nil, err
 	}
-	if _, err := board.Squares().MovePiece(rookPosition, rookNewPosition); err != nil {
+	if err := board.Squares().PlacePiece(nil, rookPosition); err != nil {
+		return nil, err
+	}
+
+	kingNewPos, rookNewPos := pickNewPositions(castlingType, kingPosition.Rank)
+
+	if err := board.Squares().PlacePiece(king, kingNewPos); err != nil {
+		return nil, err
+	}
+	if err := board.Squares().PlacePiece(rook, rookNewPos); err != nil {
 		return nil, err
 	}
 
@@ -44,7 +51,7 @@ func (m *Castling) Make(castlingType move.Castling, board chess.Board) (chess.Mo
 	return &result.Castling{Abstract: newAbstractResult(board), Castling: castlingType}, nil
 }
 
-func (m *Castling) getRook(direction chess.File, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, error) {
+func getRook(direction chess.File, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, error) {
 	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(direction, 0)) {
 		if p != nil && p.Notation() == piece.NotationRook {
 			return p, position, nil
@@ -59,4 +66,17 @@ func fileDirection(castlingType move.Castling) chess.File {
 		move.CastlingShort: 1,
 		move.CastlingLong:  -1,
 	}[castlingType]
+}
+
+func pickNewPositions(castlingType move.Castling, rank chess.Rank) (kingPos, rookPos chess.Position) {
+	kingFile := kingFileAfterShortCastling
+	if castlingType == move.CastlingLong {
+		kingFile = kingFileAfterLongCastling
+	}
+	rookFile := rookFileAfterShortCastling
+	if castlingType == move.CastlingLong {
+		rookFile = rookFileAfterLongCastling
+	}
+
+	return chess.NewPosition(kingFile, rank), chess.NewPosition(rookFile, rank)
 }

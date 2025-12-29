@@ -6,10 +6,7 @@ import (
 	"github.com/elaxer/standardchess/internal/move/result"
 )
 
-type Normal struct {
-}
-
-func (m *Normal) Make(normal *move.Normal, board chess.Board) (*result.Normal, error) {
+func MakeNormal(normal *move.Normal, board chess.Board) (*result.Normal, error) {
 	if err := normal.Validate(); err != nil {
 		return nil, err
 	}

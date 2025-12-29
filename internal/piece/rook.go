@@ -51,5 +51,6 @@ func (r *Rook) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"side":     r.Side(),
 		"notation": r.Notation(),
+		"is_moved": r.isMoved,
 	})
 }

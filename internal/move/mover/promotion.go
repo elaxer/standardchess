@@ -8,12 +8,8 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-// Promotion это структура, реализующая интерфейс Mover для выполнения и проверки ходов превращения фигур.
-// Она отвечает за логику, связанную с превращением пешки в другую фигуру на шахматной доске.
-type Promotion struct {
-}
-
-func (m *Promotion) Make(promotion *move.Promotion, board chess.Board) (*result.Promotion, error) {
+// MakePromotion отвечает за логику, связанную с превращением пешки в другую фигуру на шахматной доске.
+func MakePromotion(promotion *move.Promotion, board chess.Board) (*result.Promotion, error) {
 	if err := promotion.Validate(); err != nil {
 		return nil, err
 	}

@@ -7,6 +7,7 @@ import (
 
 type Piece struct {
 	Abstract
+
 	FromFull       chess.Position
 	FromShortened  chess.Position
 	ACapturedPiece chess.Piece

@@ -1,6 +1,10 @@
 package pgn
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestHeader_String(t *testing.T) {
 	type fields struct {
@@ -36,9 +40,7 @@ func TestHeader_String(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			h := NewHeader(tt.fields.Name, tt.fields.Value)
-			if got := h.String(); got != tt.want {
-				t.Errorf("Header.String() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, h.String())
 		})
 	}
 }

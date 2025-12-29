@@ -11,6 +11,7 @@ import (
 
 type EnPassant struct {
 	Piece
+
 	InputMove move.EnPassant
 }
 

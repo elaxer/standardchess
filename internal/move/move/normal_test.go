@@ -5,6 +5,8 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNormalFromString(t *testing.T) {
@@ -75,16 +77,10 @@ func TestNormalFromString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NormalFromString(tt.args.str)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NormalFromString() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if tt.wantErr {
-				return
-			}
 
-			if gotStr := got.String(); gotStr != tt.want {
-				t.Errorf("NormalFromString().String() = %v, want %v", gotStr, tt.want)
+			require.Truef(t, (err != nil) == tt.wantErr, "NormalFromString() error = %v, wantErr %v", err, tt.wantErr)
+			if !tt.wantErr {
+				assert.Equal(t, tt.want, got.String())
 			}
 		})
 	}
@@ -109,9 +105,7 @@ func TestNormal_String(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.move.String(); got != tt.want {
-				t.Errorf("Normal.String() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, tt.move.String())
 		})
 	}
 }

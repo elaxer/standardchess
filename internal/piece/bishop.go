@@ -51,5 +51,6 @@ func (b *Bishop) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"side":     b.side,
 		"notation": b.Notation(),
+		"is_moved": b.isMoved,
 	})
 }

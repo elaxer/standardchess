@@ -2,6 +2,9 @@ package move
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCastlingFromString(t *testing.T) {
@@ -63,16 +66,14 @@ func TestCastlingFromString(t *testing.T) {
 			false,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := CastlingFromString(tt.args.str)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("CastlingFromString() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
 
-			if !tt.wantErr && got != tt.want {
-				t.Errorf("CastlingFromString() = %v, want %v", got, tt.want)
+			require.Truef(t, (err != nil) == tt.wantErr, "CastlingFromString() error = %v, wantErr %v", err, tt.wantErr)
+			if !tt.wantErr {
+				assert.Equal(t, tt.want, got)
 			}
 		})
 	}
@@ -88,21 +89,20 @@ func TestCastling_String(t *testing.T) {
 		want   string
 	}{
 		{
-			"castling_short",
+			"short",
 			fields{(CastlingShort)},
 			"O-O",
 		},
 		{
-			"castling_long",
+			"long",
 			fields{(CastlingLong)},
 			"O-O-O",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.fields.move.String(); got != tt.want {
-				t.Errorf("Castling.String() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, tt.fields.move.String())
 		})
 	}
 }

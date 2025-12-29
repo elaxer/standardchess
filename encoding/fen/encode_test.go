@@ -6,6 +6,7 @@ import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/internal/standardtest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEncode(t *testing.T) {
@@ -61,9 +62,7 @@ func TestEncode(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := fen.Encode(tt.args.board); got != tt.want {
-				t.Errorf("Encode() = \n%v want\n%v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, fen.Encode(tt.args.board))
 		})
 	}
 }

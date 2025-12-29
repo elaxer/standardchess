@@ -42,11 +42,11 @@ func (p *Pawn) Weight() uint8 {
 	return WeightPawn
 }
 
-func (p *Pawn) movesForward(from chess.Position, direction chess.Rank, squares *chess.Squares) chess.PositionSet {
+func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *chess.Squares) chess.PositionSet {
 	moves := mapset.NewSetWithSize[chess.Position](2)
 	positions := [2]chess.Position{
-		chess.NewPosition(from.File, from.Rank+direction*1),
-		chess.NewPosition(from.File, from.Rank+direction*2),
+		chess.NewPosition(from.File, from.Rank+rankDir*1),
+		chess.NewPosition(from.File, from.Rank+rankDir*2),
 	}
 	for i, move := range positions {
 		piece, err := squares.FindByPosition(move)
@@ -60,11 +60,11 @@ func (p *Pawn) movesForward(from chess.Position, direction chess.Rank, squares *
 	return moves
 }
 
-func (p *Pawn) movesDiagonal(from chess.Position, direction chess.Rank, squares *chess.Squares) chess.PositionSet {
+func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *chess.Squares) chess.PositionSet {
 	moves := mapset.NewSetWithSize[chess.Position](2)
 	positions := [2]chess.Position{
-		chess.NewPosition(from.File+1, from.Rank+direction),
-		chess.NewPosition(from.File-1, from.Rank+direction),
+		chess.NewPosition(from.File+1, from.Rank+rankDir),
+		chess.NewPosition(from.File-1, from.Rank+rankDir),
 	}
 	for _, move := range positions {
 		piece, err := squares.FindByPosition(move)
@@ -88,5 +88,6 @@ func (p *Pawn) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"side":     p.side,
 		"notation": p.Notation(),
+		"is_moved": p.isMoved,
 	})
 }
