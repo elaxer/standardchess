@@ -5,23 +5,24 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type Piece struct {
+type PieceMove struct {
 	Abstract
 
-	FromFull       chess.Position
-	FromShortened  chess.Position
-	ACapturedPiece chess.Piece
+	WasMoved      bool
+	FromFull      chess.Position
+	FromShortened chess.Position
+	Captured      chess.Piece
 }
 
-func (r Piece) CapturedPiece() chess.Piece {
-	return r.ACapturedPiece
+func (r PieceMove) CapturedPiece() chess.Piece {
+	return r.Captured
 }
 
-func (r Piece) IsCapture() bool {
-	return r.ACapturedPiece != nil
+func (r PieceMove) IsCapture() bool {
+	return r.Captured != nil
 }
 
-func (r Piece) Validate() error {
+func (r PieceMove) Validate() error {
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.Abstract),
 		validation.Field(&r.FromFull, validation.By(chess.ValidationRulePositionIsEmpty)),
@@ -29,7 +30,7 @@ func (r Piece) Validate() error {
 	)
 }
 
-func (r Piece) captureString() string {
+func (r PieceMove) captureString() string {
 	if !r.IsCapture() {
 		return ""
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 type Normal struct {
-	Piece
+	PieceMove
 
 	InputMove move.Normal
 }
@@ -23,7 +23,7 @@ func (r *Normal) Move() chess.Move {
 func (r *Normal) Validate() error {
 	return validation.ValidateStruct(
 		r,
-		validation.Field(&r.Piece),
+		validation.Field(&r.PieceMove),
 		validation.Field(&r.InputMove),
 	)
 }

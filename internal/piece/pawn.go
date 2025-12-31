@@ -42,6 +42,22 @@ func (p *Pawn) Weight() uint8 {
 	return WeightPawn
 }
 
+func (p *Pawn) String() string {
+	if p.side == chess.SideBlack {
+		return "p"
+	}
+
+	return "P"
+}
+
+func (p *Pawn) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"side":     p.side,
+		"notation": p.Notation(),
+		"is_moved": p.isMoved,
+	})
+}
+
 func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *chess.Squares) chess.PositionSet {
 	moves := mapset.NewSetWithSize[chess.Position](2)
 	positions := [2]chess.Position{
@@ -74,20 +90,4 @@ func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *c
 	}
 
 	return moves
-}
-
-func (p *Pawn) String() string {
-	if p.side == chess.SideBlack {
-		return "p"
-	}
-
-	return "P"
-}
-
-func (p *Pawn) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		"side":     p.side,
-		"notation": p.Notation(),
-		"is_moved": p.isMoved,
-	})
 }

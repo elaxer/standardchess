@@ -36,23 +36,73 @@ func MakeCastling(castlingType move.Castling, board chess.Board) (chess.MoveResu
 		return nil, err
 	}
 
-	kingNewPos, rookNewPos := pickNewPositions(castlingType, kingPosition.Rank)
+	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
 
-	if err := board.Squares().PlacePiece(king, kingNewPos); err != nil {
+	if err := board.Squares().PlacePiece(king, kingNewPosition); err != nil {
 		return nil, err
 	}
-	if err := board.Squares().PlacePiece(rook, rookNewPos); err != nil {
+	if err := board.Squares().PlacePiece(rook, rookNewPosition); err != nil {
 		return nil, err
 	}
 
-	king.MarkMoved()
-	rook.MarkMoved()
+	king.SetIsMoved(true)
+	rook.SetIsMoved(true)
 
-	return &result.Castling{Abstract: newAbstractResult(board), Castling: castlingType}, nil
+	return &result.Castling{
+		Abstract:         newAbstractResult(board),
+		Castling:         castlingType,
+		InitKingPosition: kingPosition,
+		InitRookPosition: rookPosition,
+	}, nil
 }
 
-func getRook(direction chess.File, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, error) {
-	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(direction, 0)) {
+func UndoCastling(castling *result.Castling, board chess.Board) error {
+	if err := castling.Validate(); err != nil {
+		return err
+	}
+
+	rank := chess.Rank1
+	if castling.Side().IsBlack() {
+		rank = chess.Rank8
+	}
+
+	kingPosition, rookPosition := pickPositions(castling.Castling, rank)
+
+	king, err := board.Squares().FindByPosition(kingPosition)
+	if err != nil {
+		return err
+	}
+	if king == nil {
+		return fmt.Errorf("%w: cannot find the king", ErrUndoMove)
+	}
+
+	rook, err := board.Squares().FindByPosition(rookPosition)
+	if err != nil {
+		return err
+	}
+	if rook == nil {
+		return fmt.Errorf("%w: cannot find the rook", ErrUndoMove)
+	}
+
+	if err := board.Squares().PlacePiece(nil, kingPosition); err != nil {
+		return err
+	}
+	if err := board.Squares().PlacePiece(nil, rookPosition); err != nil {
+		return err
+	}
+
+	king.SetIsMoved(false)
+	if err := board.Squares().PlacePiece(king, castling.InitKingPosition); err != nil {
+		return err
+	}
+
+	rook.SetIsMoved(false)
+
+	return board.Squares().PlacePiece(rook, castling.InitRookPosition)
+}
+
+func getRook(fileDir chess.File, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, error) {
+	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(fileDir, 0)) {
 		if p != nil && p.Notation() == piece.NotationRook {
 			return p, position, nil
 		}
@@ -68,7 +118,7 @@ func fileDirection(castlingType move.Castling) chess.File {
 	}[castlingType]
 }
 
-func pickNewPositions(castlingType move.Castling, rank chess.Rank) (kingPos, rookPos chess.Position) {
+func pickPositions(castlingType move.Castling, rank chess.Rank) (kingPos, rookPos chess.Position) {
 	kingFile := kingFileAfterShortCastling
 	if castlingType == move.CastlingLong {
 		kingFile = kingFileAfterLongCastling

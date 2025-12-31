@@ -6,17 +6,17 @@ import (
 	"github.com/elaxer/rgx"
 )
 
-var RegexpCastling = regexp.MustCompile("^[0Oo]-[0Oo](?P<long>-[0Oo])?[#+]?$")
-
-type Castling bool
-
 const (
 	CastlingShort Castling = true
 	CastlingLong  Castling = false
 )
 
+var regexpCastling = regexp.MustCompile("^[0Oo]-[0Oo](?P<long>-[0Oo])?[#+]?$")
+
+type Castling bool
+
 func CastlingFromString(str string) (Castling, error) {
-	result, err := rgx.Group(RegexpCastling, str)
+	result, err := rgx.Group(regexpCastling, str)
 	if err != nil {
 		return false, err
 	}

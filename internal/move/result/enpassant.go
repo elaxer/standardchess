@@ -10,7 +10,7 @@ import (
 )
 
 type EnPassant struct {
-	Piece
+	PieceMove
 
 	InputMove move.EnPassant
 }
@@ -22,8 +22,8 @@ func (r *EnPassant) Move() chess.Move {
 func (r *EnPassant) Validate() error {
 	return validation.ValidateStruct(
 		r,
-		validation.Field(&r.Piece),
-		validation.Field(&r.ACapturedPiece, validation.NotNil),
+		validation.Field(&r.PieceMove),
+		validation.Field(&r.Captured, validation.NotNil),
 		validation.Field(&r.InputMove),
 	)
 }

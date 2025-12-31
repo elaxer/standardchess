@@ -42,6 +42,7 @@ func ValidateCastlingMove(castlingType move.Castling, side chess.Side, board che
 		}
 	}
 
+	// todo:
 	positions := mapset.NewSet(
 		chess.NewPosition(kingPosition.File+fileDir, kingPosition.Rank),
 		chess.NewPosition(kingPosition.File+fileDir*2, kingPosition.Rank),

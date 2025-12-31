@@ -2,9 +2,13 @@ package piece
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
 )
+
+// ErrCreate means an error during the piece creating process.
+var ErrCreate = errors.New("cannot create piece")
 
 var AllNotations = []string{
 	NotationPawn,
@@ -34,5 +38,5 @@ func New(notation string, side chess.Side) (chess.Piece, error) {
 		return NewKing(side), nil
 	}
 
-	return nil, errors.New("todo")
+	return nil, fmt.Errorf("%w: unknown notation", ErrCreate)
 }

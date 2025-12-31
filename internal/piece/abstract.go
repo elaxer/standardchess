@@ -17,8 +17,8 @@ func (p *abstract) IsMoved() bool {
 	return p.isMoved
 }
 
-func (p *abstract) MarkMoved() {
-	p.isMoved = true
+func (p *abstract) SetIsMoved(isMoved bool) {
+	p.isMoved = isMoved
 }
 
 // canMove проверяет, может ли фигура переместиться на указанную клетку.

@@ -10,7 +10,7 @@ import (
 )
 
 type Promotion struct {
-	Piece
+	PieceMove
 
 	InputMove move.Promotion
 }
@@ -22,7 +22,7 @@ func (r *Promotion) Move() chess.Move {
 func (r *Promotion) Validate() error {
 	return validation.ValidateStruct(
 		r,
-		validation.Field(&r.Piece),
+		validation.Field(&r.PieceMove),
 		validation.Field(&r.InputMove),
 	)
 }

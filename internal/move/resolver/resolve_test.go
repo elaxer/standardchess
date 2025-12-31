@@ -14,7 +14,7 @@ import (
 
 func TestResolveFrom(t *testing.T) {
 	type args struct {
-		pieceMove     move.Piece
+		pieceMove     move.PieceMove
 		pieceNotation string
 		board         chess.Board
 	}
@@ -27,7 +27,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"empty_from",
 			args{
-				pieceMove:     move.Piece{To: chess.PositionFromString("e4")},
+				pieceMove:     move.PieceMove{To: chess.PositionFromString("e4")},
 				pieceNotation: piece.NotationPawn,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d2"): piece.NewPawn(chess.SideWhite),
@@ -41,7 +41,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"same_file",
 			args{
-				pieceMove:     move.Piece{From: chess.PositionFromString("a"), To: chess.PositionFromString("b8")},
+				pieceMove:     move.PieceMove{From: chess.PositionFromString("a"), To: chess.PositionFromString("b8")},
 				pieceNotation: piece.NotationRook,
 				board: standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("f8"): piece.NewRook(chess.SideBlack),
@@ -54,7 +54,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"knights",
 			args{
-				pieceMove:     move.Piece{From: chess.PositionFromString("g"), To: chess.PositionFromString("e2")},
+				pieceMove:     move.PieceMove{From: chess.PositionFromString("g"), To: chess.PositionFromString("e2")},
 				pieceNotation: piece.NotationKnight,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("g1"): piece.NewKnight(chess.SideWhite),
@@ -67,7 +67,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"same_rank",
 			args{
-				pieceMove:     move.Piece{From: chess.PositionFromString("1"), To: chess.PositionFromString("a5")},
+				pieceMove:     move.PieceMove{From: chess.PositionFromString("1"), To: chess.PositionFromString("a5")},
 				pieceNotation: piece.NotationRook,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewRook(chess.SideWhite),
@@ -80,7 +80,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"full_from",
 			args{
-				pieceMove:     move.Piece{From: chess.PositionFromString("f2"), To: chess.PositionFromString("d4")},
+				pieceMove:     move.PieceMove{From: chess.PositionFromString("f2"), To: chess.PositionFromString("d4")},
 				pieceNotation: piece.NotationBishop,
 				board: standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("b2"): piece.NewBishop(chess.SideBlack),

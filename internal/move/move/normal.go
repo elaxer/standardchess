@@ -10,22 +10,23 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-var RegexpNormal = regexp.MustCompile("^(?P<piece>[KQBNR])?(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))[#+]?$")
+var regexpNormal = regexp.MustCompile("^(?P<piece>[KQBNR])?(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))[#+]?$")
 
 // Normal представляет обычный ход фигурой в шахматах.
 type Normal struct {
-	Piece
+	PieceMove
+
 	// PieceNotation обозначает фигуру, которая делает ход.
 	PieceNotation string `json:"piece_notation"`
 }
 
 func NewNormal(from, to chess.Position, pieceNotation string) *Normal {
-	return &Normal{NewPiece(from, to), pieceNotation}
+	return &Normal{NewPieceMove(from, to), pieceNotation}
 }
 
 // NormalFromString создает новый ход из шахматной нотации.
 func NormalFromString(notation string) (*Normal, error) {
-	data, err := rgx.Group(RegexpNormal, notation)
+	data, err := rgx.Group(regexpNormal, notation)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func (m *Normal) Validate() error {
 
 	return validation.ValidateStruct(
 		m,
-		validation.Field(&m.Piece),
+		validation.Field(&m.PieceMove),
 		validation.Field(&m.PieceNotation, validation.In(pieceNotations...)),
 	)
 }

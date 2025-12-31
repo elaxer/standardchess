@@ -3,6 +3,7 @@ package standardchess
 import (
 	"encoding/json"
 	"fmt"
+	"slices"
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
@@ -145,7 +146,7 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 
 	legalMoves := mapset.NewSetWithSize[chess.Position](pseudoMoves.Cardinality())
 	for to := range pseudoMoves.Iter() {
-		//nolint:errcheck
+		//nolint:errcheck,gosec
 		b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
 			if !b.Moves(!b.turn).ContainsOne(kingPosition) {
@@ -173,7 +174,24 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 }
 
 func (b *board) UndoLastMove() (chess.MoveResult, error) {
-	return nil, nil
+	movesLen := len(b.moveHistory)
+	if movesLen == 0 {
+		return nil, nil
+	}
+
+	lastMove := b.moveHistory[movesLen-1]
+	b.moveHistory = b.moveHistory[:movesLen-1]
+
+	if err := mover.UndoMove(lastMove, b); err != nil {
+		return nil, err
+	}
+
+	b.turn = !b.turn
+	if lastMove.CapturedPiece() != nil {
+		_ = slices.Delete(b.capturedPieces, len(b.capturedPieces)-1, len(b.capturedPieces))
+	}
+
+	return lastMove, nil
 }
 
 func (b *board) MarshalJSON() ([]byte, error) {

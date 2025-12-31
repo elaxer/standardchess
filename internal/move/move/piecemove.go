@@ -5,16 +5,16 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type Piece struct {
+type PieceMove struct {
 	From chess.Position `json:"from"`
 	To   chess.Position `json:"to"`
 }
 
-func NewPiece(from, to chess.Position) Piece {
-	return Piece{from, to}
+func NewPieceMove(from, to chess.Position) PieceMove {
+	return PieceMove{from, to}
 }
 
-func (m Piece) Validate() error {
+func (m PieceMove) Validate() error {
 	return validation.ValidateStruct(
 		&m,
 		validation.Field(&m.From),
@@ -22,7 +22,7 @@ func (m Piece) Validate() error {
 	)
 }
 
-func (m Piece) ValidateStrict() error {
+func (m PieceMove) ValidateStrict() error {
 	return validation.ValidateStruct(
 		&m,
 		validation.Field(&m.From, validation.By(chess.ValidationRulePositionIsEmpty)),

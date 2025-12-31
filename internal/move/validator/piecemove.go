@@ -17,7 +17,7 @@ var (
 	ErrMoving = fmt.Errorf("%w: moving validation error", Err)
 )
 
-func ValidatePieceMove(move move.Piece, movingPieceNotation string, board chess.Board) error {
+func ValidatePieceMove(move move.PieceMove, movingPieceNotation string, board chess.Board) error {
 	piece, err := board.Squares().FindByPosition(move.From)
 	if err != nil || piece == nil {
 		return ErrEmptySquare

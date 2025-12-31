@@ -11,8 +11,10 @@ import (
 
 type Castling struct {
 	Abstract
-
 	move.Castling
+
+	InitRookPosition chess.Position
+	InitKingPosition chess.Position
 }
 
 func (r *Castling) CapturedPiece() chess.Piece {
@@ -24,7 +26,12 @@ func (r *Castling) Move() chess.Move {
 }
 
 func (r *Castling) Validate() error {
-	return validation.ValidateStruct(r, validation.Field(&r.Abstract))
+	return validation.ValidateStruct(
+		r,
+		validation.Field(&r.Abstract),
+		validation.Field(&r.InitKingPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
+		validation.Field(&r.InitRookPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
+	)
 }
 
 func (r *Castling) MarshalJSON() ([]byte, error) {

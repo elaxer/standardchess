@@ -7,7 +7,7 @@ import (
 	"github.com/elaxer/standardchess/internal/move/move"
 )
 
-func UnresolveFrom(move move.Piece, board chess.Board) (chess.Position, error) {
+func UnresolveFrom(move move.PieceMove, board chess.Board) (chess.Position, error) {
 	if err := move.ValidateStrict(); err != nil {
 		return chess.NewPositionEmpty(), err
 	}

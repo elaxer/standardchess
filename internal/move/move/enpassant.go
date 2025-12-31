@@ -8,15 +8,15 @@ import (
 )
 
 type EnPassant struct {
-	Piece
+	PieceMove
 }
 
 func NewEnPassant(from, to chess.Position) *EnPassant {
-	return &EnPassant{NewPiece(from, to)}
+	return &EnPassant{NewPieceMove(from, to)}
 }
 
 func (m *EnPassant) Validate() error {
-	return validation.ValidateStruct(m, validation.Field(&m.Piece))
+	return validation.ValidateStruct(m, validation.Field(&m.PieceMove))
 }
 
 func (m *EnPassant) String() string {

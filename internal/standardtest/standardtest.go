@@ -66,17 +66,17 @@ func NewPiece(str string) chess.Piece {
 // See NewPiece for more details.
 func NewPieceM(str string) chess.Piece {
 	piece := NewPiece(str)
-	piece.MarkMoved()
+	piece.SetIsMoved(true)
 
 	return piece
 }
 
-func EncodeFEN(b chess.Board) string {
-	return fen.Encode(b)
+func EncodeFEN(board chess.Board) string {
+	return fen.Encode(board)
 }
 
-func EncodeFenRows(b chess.Board) string {
-	return fen.EncodeSquares(b.Squares())
+func EncodeFENRows(board chess.Board) string {
+	return fen.EncodeSquares(board.Squares())
 }
 
 // DecodeFEN decodes a FEN string into a chess.Board instance with the specified edge position.
