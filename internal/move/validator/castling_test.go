@@ -133,7 +133,7 @@ func TestValidateCastlingMove(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validator.ValidateCastlingMove(tt.args.castlingType, tt.args.board.Turn(), tt.args.board, true)
+			err := validator.ValidateCastling(tt.args.castlingType, tt.args.board.Turn(), tt.args.board, true)
 			assert.True(t, (err != nil) == tt.wantErr)
 		})
 	}

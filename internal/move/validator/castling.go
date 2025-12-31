@@ -9,9 +9,10 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-var ErrCastling = fmt.Errorf("%w: castling validation error", Err)
+var ErrCastling = fmt.Errorf("%w: castling move validation error", Err)
 
-func ValidateCastlingMove(castlingType move.Castling, side chess.Side, board chess.Board, validateObstacle bool) error {
+// todo
+func ValidateCastling(castlingType move.Castling, side chess.Side, board chess.Board, validateObstacle bool) error {
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
 	if king == nil {
 		return fmt.Errorf("%w: the king wasn't found", ErrCastling)

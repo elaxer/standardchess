@@ -19,7 +19,7 @@ var (
 )
 
 func MakeCastling(castlingType move.Castling, board chess.Board) (chess.MoveResult, error) {
-	if err := validator.ValidateCastlingMove(castlingType, board.Turn(), board, true); err != nil {
+	if err := validator.ValidateCastling(castlingType, board.Turn(), board, true); err != nil {
 		return nil, err
 	}
 
@@ -112,10 +112,11 @@ func getRook(fileDir chess.File, squares *chess.Squares, kingPosition chess.Posi
 }
 
 func fileDirection(castlingType move.Castling) chess.File {
-	return map[move.Castling]chess.File{
-		move.CastlingShort: 1,
-		move.CastlingLong:  -1,
-	}[castlingType]
+	if castlingType.IsLong() {
+		return -1
+	}
+
+	return 1
 }
 
 func pickPositions(castlingType move.Castling, rank chess.Rank) (kingPos, rookPos chess.Position) {

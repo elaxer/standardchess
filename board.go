@@ -7,15 +7,15 @@ import (
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/metric"
 	"github.com/elaxer/standardchess/internal/move/mover"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/state/rule"
+	"github.com/elaxer/standardchess/metric"
 )
 
 var edgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
 
-var firstRowPieceNotations = []string{
+var firstRowPieceNotations = [...]string{
 	piece.NotationRook,
 	piece.NotationKnight,
 	piece.NotationBishop,
@@ -174,13 +174,13 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 }
 
 func (b *board) UndoLastMove() (chess.MoveResult, error) {
-	movesLen := len(b.moveHistory)
-	if movesLen == 0 {
+	movesCount := len(b.moveHistory)
+	if movesCount == 0 {
 		return nil, nil
 	}
 
-	lastMove := b.moveHistory[movesLen-1]
-	b.moveHistory = b.moveHistory[:movesLen-1]
+	lastMove := b.moveHistory[movesCount-1]
+	b.moveHistory = b.moveHistory[:movesCount-1]
 
 	if err := mover.UndoMove(lastMove, b); err != nil {
 		return nil, err

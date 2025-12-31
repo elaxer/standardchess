@@ -20,8 +20,8 @@ var AllFuncs = []metric.MetricFunc{
 func CastlingAbility(board chess.Board) metric.Metric {
 	callback := func(side chess.Side, board chess.Board, validateObstacle bool) map[string]bool {
 		return map[string]bool{
-			move.CastlingShort.String(): validator.ValidateCastlingMove(move.CastlingShort, side, board, validateObstacle) == nil,
-			move.CastlingLong.String():  validator.ValidateCastlingMove(move.CastlingLong, side, board, validateObstacle) == nil,
+			move.CastlingShort.String(): validator.ValidateCastling(move.CastlingShort, side, board, validateObstacle) == nil,
+			move.CastlingLong.String():  validator.ValidateCastling(move.CastlingLong, side, board, validateObstacle) == nil,
 		}
 	}
 

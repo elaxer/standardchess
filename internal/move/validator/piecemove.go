@@ -14,7 +14,7 @@ var (
 	ErrEmptySquare   = fmt.Errorf("%w: no piece at square", Err)
 	ErrInvalidString = fmt.Errorf("%w: invalid move string", Err)
 
-	ErrMoving = fmt.Errorf("%w: moving validation error", Err)
+	ErrPieceMove = fmt.Errorf("%w: piece move validation error", Err)
 )
 
 func ValidatePieceMove(move move.PieceMove, movingPieceNotation string, board chess.Board) error {
@@ -24,13 +24,13 @@ func ValidatePieceMove(move move.PieceMove, movingPieceNotation string, board ch
 	}
 
 	if piece.Side() != board.Turn() {
-		return fmt.Errorf("%w: wrong side", ErrMoving)
+		return fmt.Errorf("%w: wrong side", ErrPieceMove)
 	}
 	if piece.Notation() != movingPieceNotation {
-		return fmt.Errorf("%w: moving piece doesn't found at this position", ErrMoving)
+		return fmt.Errorf("%w: moving piece doesn't found at this position", ErrPieceMove)
 	}
 	if !board.LegalMoves(piece).ContainsOne(move.To) {
-		return fmt.Errorf("%w: piece doesn't have such move", ErrMoving)
+		return fmt.Errorf("%w: piece doesn't have such move", ErrPieceMove)
 	}
 
 	return nil

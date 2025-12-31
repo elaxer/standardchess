@@ -10,8 +10,8 @@ import (
 	"github.com/elaxer/chess/visualizer"
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
-	standardmetric "github.com/elaxer/standardchess/internal/metric"
 	"github.com/elaxer/standardchess/internal/piece"
+	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
 func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {

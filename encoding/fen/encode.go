@@ -8,8 +8,8 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/metric"
-	standardmetric "github.com/elaxer/standardchess/internal/metric"
 	"github.com/elaxer/standardchess/internal/move/move"
+	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
 var metricFuncs = []metric.MetricFunc{
