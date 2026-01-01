@@ -8,7 +8,7 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-func MakeEnPassant(move *Move, board chess.Board) (*MoveResult, error) {
+func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 	if err := move.Validate(); err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func MakeEnPassant(move *Move, board chess.Board) (*MoveResult, error) {
 	}, nil
 }
 
-func UndoEnPassant(move *MoveResult, board chess.Board) error {
+func UndoMove(move *MoveResult, board chess.Board) error {
 	if err := move.Validate(); err != nil {
 		return err
 	}

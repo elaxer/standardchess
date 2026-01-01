@@ -1,6 +1,7 @@
 package enpassant
 
 import (
+	"errors"
 	"fmt"
 	"math"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-var ErrValidation = fmt.Errorf("en passant move validation error")
+var ErrValidation = errors.New("en passant move validation error")
 
 func ValidateMove(from, to chess.Position, board chess.Board) error {
 	movesCount := len(board.MoveHistory())
@@ -48,12 +49,4 @@ func ValidateMove(from, to chess.Position, board chess.Board) error {
 	}
 
 	return nil
-}
-
-func enPassantRank(side chess.Side) chess.Rank {
-	if side.IsBlack() {
-		return chess.Rank5
-	}
-
-	return chess.Rank4
 }

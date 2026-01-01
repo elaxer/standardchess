@@ -7,6 +7,7 @@ import (
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/mover"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/state/rule"
@@ -153,6 +154,11 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 				legalMoves.Add(to)
 			}
 		})
+	}
+
+	pawns := enpassant.AttackingPawns(b)
+	if pawns[0] == p || pawns[1] == p {
+		legalMoves.Add(enpassant.EnPassantPosition(b))
 	}
 
 	return legalMoves

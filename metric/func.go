@@ -4,6 +4,7 @@ import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/metric"
 	"github.com/elaxer/standardchess/internal/move/castling"
+	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
 )
@@ -39,26 +40,12 @@ func CastlingAbility(board chess.Board) metric.Metric {
 }
 
 func EnPassantTargetSquare(board chess.Board) metric.Metric {
-	if len(board.MoveHistory()) == 0 {
+	targetPosition := enpassant.EnPassantPosition(board)
+	if targetPosition.IsEmpty() {
 		return nil
 	}
 
-	lastMove := board.MoveHistory()[len(board.MoveHistory())-1]
-	normalMove, ok := lastMove.(*normal.MoveResult)
-	if !ok || normalMove.InputMove.PieceNotation != piece.NotationPawn {
-		return nil
-	}
-
-	if normalMove.InputMove.To.Rank != normalMove.FromFull.Rank+(piece.PawnRankDirection(!board.Turn())*2) {
-		return nil
-	}
-
-	passant := chess.NewPosition(
-		normalMove.InputMove.To.File,
-		normalMove.FromFull.Rank+piece.PawnRankDirection(!board.Turn()),
-	)
-
-	return metric.New("En passant target square", passant)
+	return metric.New("En passant target square", targetPosition)
 }
 
 func HalfmoveClock(board chess.Board) metric.Metric {

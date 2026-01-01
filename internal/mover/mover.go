@@ -9,6 +9,7 @@ import (
 	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/move/promotion"
+	"github.com/elaxer/standardchess/internal/piece"
 )
 
 var (
@@ -21,6 +22,11 @@ func MakeMove(move chess.Move, board chess.Board) (chess.MoveResult, error) {
 	str := move.String()
 
 	if move, err := normal.MoveFromString(str); err == nil {
+		isPawn := move.PieceNotation == piece.NotationPawn
+		if enpassant.CanEnPassant(board) && isPawn && move.To == enpassant.EnPassantPosition(board) {
+			return enpassant.MakeMove(enpassant.NewEnPassant(move.From, move.To), board)
+		}
+
 		return normal.MakeMove(move, board)
 	}
 	if move, err := promotion.MoveFromString(str); err == nil {
@@ -40,7 +46,7 @@ func UndoMove(move chess.MoveResult, board chess.Board) error {
 	case *promotion.MoveResult:
 		return promotion.UndoPromotion(move, board)
 	case *enpassant.MoveResult:
-		return enpassant.UndoEnPassant(move, board)
+		return enpassant.UndoMove(move, board)
 	case *castling.MoveResult:
 		return castling.UndoMove(move, board)
 	default:
