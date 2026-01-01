@@ -11,6 +11,13 @@ type Abstract struct {
 	NewState chess.State
 }
 
+func NewAbstract(board chess.Board) Abstract {
+	return Abstract{
+		MoveSide: board.Turn(),
+		NewState: board.State(!board.Turn()),
+	}
+}
+
 func (r Abstract) Side() chess.Side {
 	return r.MoveSide
 }
@@ -25,7 +32,7 @@ func (r Abstract) Validate() error {
 	)
 }
 
-func (r Abstract) suffix() string {
+func (r Abstract) Suffix() string {
 	switch r.NewState {
 	case state.Check:
 		return "+"

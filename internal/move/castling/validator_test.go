@@ -1,11 +1,10 @@
-package validator_test
+package castling_test
 
 import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
-	"github.com/elaxer/standardchess/internal/move/validator"
+	"github.com/elaxer/standardchess/internal/move/castling"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 )
@@ -13,7 +12,7 @@ import (
 // todo добавить тесты с новым параметром Side
 func TestValidateCastlingMove(t *testing.T) {
 	type args struct {
-		castlingType move.Castling
+		castlingType castling.CastlingType
 		board        chess.Board
 	}
 	tests := []struct {
@@ -24,7 +23,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"short",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("g8"): standardtest.NewPiece("Q"),
@@ -38,7 +37,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"long",
 			args{
-				move.CastlingLong,
+				castling.TypeLong,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -51,7 +50,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"king_is_walked",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPieceM("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -63,7 +62,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"rook_is_walked",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -73,9 +72,21 @@ func TestValidateCastlingMove(t *testing.T) {
 			true,
 		},
 		{
+			"opposite_side_rook",
+			args{
+				castling.TypeShort,
+				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
+					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
+					chess.PositionFromString("h1"): standardtest.NewPiece("r"),
+				}),
+			},
+			true,
+		},
+		{
 			"let",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -88,7 +99,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"obstacle",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -101,7 +112,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"future_check",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -114,7 +125,7 @@ func TestValidateCastlingMove(t *testing.T) {
 		{
 			"attacked_castling_square",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -126,14 +137,14 @@ func TestValidateCastlingMove(t *testing.T) {
 		},
 		{
 			"another_piece_instead_rook",
-			args{move.CastlingShort, standardtest.DecodeFEN("12/12/12/12/12/3K3P2N1")},
+			args{castling.TypeShort, standardtest.DecodeFEN("12/12/12/12/12/3K3P2N1")},
 			true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validator.ValidateCastling(tt.args.castlingType, tt.args.board.Turn(), tt.args.board, true)
+			err := castling.ValidateMove(tt.args.castlingType, tt.args.board.Turn(), tt.args.board, true)
 			assert.True(t, (err != nil) == tt.wantErr)
 		})
 	}

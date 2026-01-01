@@ -1,31 +1,31 @@
-package result
+package castling
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
+	"github.com/elaxer/standardchess/internal/move/result"
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type Castling struct {
-	Abstract
-	move.Castling
+type MoveResult struct {
+	result.Abstract
+	CastlingType
 
 	InitRookPosition chess.Position
 	InitKingPosition chess.Position
 }
 
-func (r *Castling) CapturedPiece() chess.Piece {
+func (r *MoveResult) CapturedPiece() chess.Piece {
 	return nil
 }
 
-func (r *Castling) Move() chess.Move {
-	return r.Castling
+func (r *MoveResult) Move() chess.Move {
+	return r.CastlingType
 }
 
-func (r *Castling) Validate() error {
+func (r *MoveResult) Validate() error {
 	return validation.ValidateStruct(
 		r,
 		validation.Field(&r.Abstract),
@@ -34,9 +34,9 @@ func (r *Castling) Validate() error {
 	)
 }
 
-func (r *Castling) MarshalJSON() ([]byte, error) {
+func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"move":            r.Castling.String(),
+		"move":            r.CastlingType.String(),
 		"side":            r.Side(),
 		"captured_piece":  nil,
 		"board_new_state": r.BoardNewState(),
@@ -44,6 +44,6 @@ func (r *Castling) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (r *Castling) String() string {
-	return fmt.Sprintf("%s%s", r.Castling, r.suffix())
+func (r *MoveResult) String() string {
+	return fmt.Sprintf("%s%s", r.CastlingType, r.Suffix())
 }

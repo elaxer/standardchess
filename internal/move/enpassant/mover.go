@@ -1,27 +1,26 @@
-package mover
+package enpassant
 
 import (
 	"github.com/elaxer/chess"
-	mv "github.com/elaxer/standardchess/internal/move/move"
+	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/move/result"
-	"github.com/elaxer/standardchess/internal/move/validator"
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-func MakeEnPassant(move *mv.EnPassant, board chess.Board) (*result.EnPassant, error) {
+func MakeEnPassant(move *Move, board chess.Board) (*MoveResult, error) {
 	if err := move.Validate(); err != nil {
 		return nil, err
 	}
 
-	fullFrom, err := resolver.ResolveFrom(move.PieceMove, piece.NotationPawn, board, board.Turn())
+	fullFrom, err := resolver.ResolveFrom(move.From, move.To, piece.NotationPawn, board, board.Turn())
 	if err != nil {
 		return nil, err
 	}
-	if err := validator.ValidateEnPassant(fullFrom, move.To, board); err != nil {
+	if err := ValidateMove(fullFrom, move.To, board); err != nil {
 		return nil, err
 	}
-	shortenedFrom, err := resolver.UnresolveFrom(mv.NewPieceMove(fullFrom, move.To), board)
+	shortenedFrom, err := resolver.UnresolveFrom(fullFrom, move.To, board)
 	if err != nil {
 		return nil, err
 	}
@@ -40,9 +39,9 @@ func MakeEnPassant(move *mv.EnPassant, board chess.Board) (*result.EnPassant, er
 		return nil, err
 	}
 
-	return &result.EnPassant{
-		PieceMove: result.PieceMove{
-			Abstract:      newAbstractResult(board),
+	return &MoveResult{
+		PieceMoveResult: piecemove.PieceMoveResult{
+			Abstract:      result.NewAbstract(board),
 			WasMoved:      true,
 			FromFull:      fullFrom,
 			FromShortened: shortenedFrom,
@@ -52,7 +51,7 @@ func MakeEnPassant(move *mv.EnPassant, board chess.Board) (*result.EnPassant, er
 	}, nil
 }
 
-func UndoEnPassant(move *result.EnPassant, board chess.Board) error {
+func UndoEnPassant(move *MoveResult, board chess.Board) error {
 	if err := move.Validate(); err != nil {
 		return err
 	}
@@ -67,12 +66,4 @@ func UndoEnPassant(move *result.EnPassant, board chess.Board) error {
 	}
 
 	return nil
-}
-
-func enPassantRank(side chess.Side) chess.Rank {
-	if side.IsBlack() {
-		return chess.Rank5
-	}
-
-	return chess.Rank4
 }

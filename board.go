@@ -7,7 +7,7 @@ import (
 
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/mover"
+	"github.com/elaxer/standardchess/internal/mover"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/state/rule"
 	"github.com/elaxer/standardchess/metric"
@@ -159,6 +159,10 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 }
 
 func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
+	if b.State(b.turn).Type().IsTerminal() {
+		return nil, nil
+	}
+
 	moveResult, err := mover.MakeMove(move, b)
 	if err != nil {
 		return nil, err

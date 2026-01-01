@@ -1,11 +1,10 @@
-package mover_test
+package promotion_test
 
 import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
-	"github.com/elaxer/standardchess/internal/move/mover"
+	"github.com/elaxer/standardchess/internal/move/promotion"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
@@ -19,9 +18,9 @@ func TestMakePromotion_White(t *testing.T) {
 		chess.PositionFromString("a8"): standardtest.NewPiece("k"),
 	})
 
-	promotion := move.NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("d8"), piece.NotationQueen)
+	move := promotion.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("d8"), piece.NotationQueen)
 
-	promotionRes, err := mover.MakePromotion(promotion, board)
+	promotionRes, err := promotion.MakeMove(move, board)
 	require.NoError(t, err)
 	require.NotNil(t, promotionRes)
 
@@ -39,9 +38,9 @@ func TestMakePromotion_Black(t *testing.T) {
 		chess.PositionFromString("c1"): standardtest.NewPiece("B"),
 	})
 
-	promotion := move.NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("c1"), piece.NotationRook)
+	move := promotion.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("c1"), piece.NotationRook)
 
-	promotionRes, err := mover.MakePromotion(promotion, board)
+	promotionRes, err := promotion.MakeMove(move, board)
 	require.NoError(t, err)
 	require.NotNil(t, promotionRes)
 

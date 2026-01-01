@@ -1,11 +1,10 @@
-package mover_test
+package castling_test
 
 import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
-	"github.com/elaxer/standardchess/internal/move/mover"
+	"github.com/elaxer/standardchess/internal/move/castling"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +27,7 @@ var (
 
 func TestMakeCastling(t *testing.T) {
 	type args struct {
-		castlingType move.Castling
+		castlingType castling.CastlingType
 		board        chess.Board
 	}
 	tests := []struct {
@@ -40,7 +39,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"white_short",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, nil),
 			},
 			chess.PositionFromString("e1"),
@@ -51,7 +50,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"white_short_uncommon_position",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideWhite, nil),
 			},
 			chess.PositionFromString("f1"),
@@ -62,7 +61,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"white_long",
 			args{
-				move.CastlingLong,
+				castling.TypeLong,
 				standardtest.NewBoard(chess.SideWhite, nil),
 			},
 			chess.PositionFromString("e1"),
@@ -73,7 +72,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"white_long_uncommon_position",
 			args{
-				move.CastlingLong,
+				castling.TypeLong,
 				standardtest.NewBoard(chess.SideWhite, nil),
 			},
 			chess.PositionFromString("g1"),
@@ -84,7 +83,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"black_short",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideBlack, nil),
 			},
 			chess.PositionFromString("e8"),
@@ -95,7 +94,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"black_short_uncommon_position",
 			args{
-				move.CastlingShort,
+				castling.TypeShort,
 				standardtest.NewBoard(chess.SideBlack, nil),
 			},
 			chess.PositionFromString("c8"),
@@ -106,7 +105,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"black_long",
 			args{
-				move.CastlingLong,
+				castling.TypeLong,
 				standardtest.NewBoard(chess.SideBlack, nil),
 			},
 			chess.PositionFromString("e8"),
@@ -117,7 +116,7 @@ func TestMakeCastling(t *testing.T) {
 		{
 			"black_long_uncommon_position",
 			args{
-				move.CastlingLong,
+				castling.TypeLong,
 				standardtest.NewBoard(chess.SideBlack, nil),
 			},
 			chess.PositionFromString("b8"),
@@ -139,7 +138,7 @@ func TestMakeCastling(t *testing.T) {
 			err = board.Squares().PlacePiece(rook, tt.rookPos)
 			require.NoError(t, err, "failed to place rook")
 
-			got, err := mover.MakeCastling(tt.args.castlingType, board)
+			got, err := castling.MakeMove(tt.args.castlingType, board)
 			require.NoError(t, err)
 			require.NotNil(t, got)
 
@@ -156,8 +155,8 @@ func TestMakeCastling(t *testing.T) {
 }
 
 func TestMakeCastling_Negative(t *testing.T) {
-	_, err := mover.MakeCastling(
-		move.CastlingShort,
+	_, err := castling.MakeMove(
+		castling.TypeShort,
 		standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 			chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 			chess.PositionFromString("h1"): standardtest.NewPiece("R"),

@@ -1,34 +1,34 @@
-package result
+package normal
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
+	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/piece"
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type Normal struct {
-	PieceMove
+type MoveResult struct {
+	piecemove.PieceMoveResult
 
-	InputMove move.Normal
+	InputMove Move
 }
 
-func (r *Normal) Move() chess.Move {
+func (r *MoveResult) Move() chess.Move {
 	return &r.InputMove
 }
 
-func (r *Normal) Validate() error {
+func (r *MoveResult) Validate() error {
 	return validation.ValidateStruct(
 		r,
-		validation.Field(&r.PieceMove),
+		validation.Field(&r.PieceMoveResult),
 		validation.Field(&r.InputMove),
 	)
 }
 
-func (r *Normal) MarshalJSON() ([]byte, error) {
+func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"move":            r.InputMove.String(),
 		"side":            r.Side(),
@@ -38,11 +38,11 @@ func (r *Normal) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (r *Normal) String() string {
+func (r *MoveResult) String() string {
 	from := r.FromShortened
 	if from.IsEmpty() && r.IsCapture() && r.InputMove.PieceNotation == piece.NotationPawn {
 		from.File = r.FromFull.File
 	}
 
-	return fmt.Sprintf("%s%s%s%s%s", r.InputMove.PieceNotation, from, r.captureString(), r.InputMove.To, r.suffix())
+	return fmt.Sprintf("%s%s%s%s%s", r.InputMove.PieceNotation, from, r.CaptureString(), r.InputMove.To, r.Suffix())
 }

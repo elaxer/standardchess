@@ -1,9 +1,10 @@
-package move
+package normal_test
 
 import (
 	"testing"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -76,7 +77,7 @@ func TestNormalFromString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NormalFromString(tt.args.str)
+			got, err := normal.MoveFromString(tt.args.str)
 
 			require.Truef(t, (err != nil) == tt.wantErr, "NormalFromString() error = %v, wantErr %v", err, tt.wantErr)
 			if !tt.wantErr {
@@ -89,17 +90,17 @@ func TestNormalFromString(t *testing.T) {
 func TestNormal_String(t *testing.T) {
 	tests := []struct {
 		name string
-		move *Normal
+		move *normal.Move
 		want string
 	}{
 		{
 			"queen",
-			NewNormal(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationQueen),
+			normal.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationQueen),
 			"Qa8",
 		},
 		{
 			"pawn",
-			NewNormal(chess.NewPositionEmpty(), chess.PositionFromString("e4"), piece.NotationPawn),
+			normal.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("e4"), piece.NotationPawn),
 			"e4",
 		},
 	}

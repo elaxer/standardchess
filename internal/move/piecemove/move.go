@@ -1,4 +1,4 @@
-package move
+package piecemove
 
 import (
 	"github.com/elaxer/chess"
@@ -18,14 +18,6 @@ func (m PieceMove) Validate() error {
 	return validation.ValidateStruct(
 		&m,
 		validation.Field(&m.From),
-		validation.Field(&m.To, validation.By(chess.ValidationRulePositionIsEmpty)),
-	)
-}
-
-func (m PieceMove) ValidateStrict() error {
-	return validation.ValidateStruct(
-		&m,
-		validation.Field(&m.From, validation.By(chess.ValidationRulePositionIsEmpty)),
 		validation.Field(&m.To, validation.By(chess.ValidationRulePositionIsEmpty)),
 	)
 }

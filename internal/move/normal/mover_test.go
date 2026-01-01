@@ -1,11 +1,10 @@
-package mover_test
+package normal_test
 
 import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
-	"github.com/elaxer/standardchess/internal/move/mover"
+	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -28,24 +27,24 @@ func TestUndoNormal(t *testing.T) {
 
 	initFEN := standardtest.EncodeFEN(board)
 
-	firstMoveResult, err := mover.MakeNormal(move.NewNormal(
+	firstMoveResult, err := normal.MakeMove(normal.NewMove(
 		chess.PositionFromString("a1"),
 		chess.PositionFromString("h1"),
 		piece.Notation(),
 	), board)
 	require.NoError(t, err)
 
-	secondMoveResult, err := mover.MakeNormal(move.NewNormal(
+	secondMoveResult, err := normal.MakeMove(normal.NewMove(
 		chess.PositionFromString("h8"),
 		chess.PositionFromString("a8"),
 		movedPiece.Notation(),
 	), board)
 	require.NoError(t, err)
 
-	err = mover.UndoNormal(secondMoveResult, board)
+	err = normal.UndoMove(secondMoveResult, board)
 	require.NoError(t, err)
 
-	err = mover.UndoNormal(firstMoveResult, board)
+	err = normal.UndoMove(firstMoveResult, board)
 	require.NoError(t, err)
 
 	assert.Equal(t, initFEN, standardtest.EncodeFEN(board))

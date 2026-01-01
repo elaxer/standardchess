@@ -8,7 +8,7 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/metric"
-	"github.com/elaxer/standardchess/internal/move/move"
+	"github.com/elaxer/standardchess/internal/move/castling"
 	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
@@ -90,24 +90,24 @@ func callMetricFunc(metricFunc metric.MetricFunc, board chess.Board) any {
 }
 
 func castlingMetric(board chess.Board) metric.Metric {
-	theoretical := standardmetric.CastlingAbility(board).Value().(standardmetric.Castlings)["theoretical"]
-	str := ""
-	if theoretical[chess.SideWhite][move.CastlingShort.String()] {
-		str += "K"
+	var str strings.Builder
+	if err := castling.ValidateMove(castling.TypeShort, chess.SideWhite, board, false); err == nil {
+		str.WriteString("K")
 	}
-	if theoretical[chess.SideWhite][move.CastlingShort.String()] {
-		str += "Q"
+	if err := castling.ValidateMove(castling.TypeLong, chess.SideWhite, board, false); err == nil {
+		str.WriteString("Q")
 	}
-	if theoretical[chess.SideBlack][move.CastlingShort.String()] {
-		str += "k"
+	if err := castling.ValidateMove(castling.TypeShort, chess.SideBlack, board, false); err == nil {
+		str.WriteString("k")
 	}
-	if theoretical[chess.SideBlack][move.CastlingShort.String()] {
-		str += "q"
+	if err := castling.ValidateMove(castling.TypeLong, chess.SideBlack, board, false); err == nil {
+		str.WriteString("q")
 	}
 
-	if str == "" {
+	result := str.String()
+	if result == "" {
 		return nil
 	}
 
-	return metric.New("Castling Ability", str)
+	return metric.New("Castling Ability", result)
 }

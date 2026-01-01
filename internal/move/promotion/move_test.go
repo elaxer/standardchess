@@ -1,4 +1,4 @@
-package move
+package promotion
 
 import (
 	"testing"
@@ -16,37 +16,37 @@ func TestPromotionFromString(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *Promotion
+		want    *Move
 		wantErr bool
 	}{
 		{
 			"promotion",
 			args{"e8=Q"},
-			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("e8"), piece.NotationQueen),
+			NewMove(chess.NewPositionEmpty(), chess.PositionFromString("e8"), piece.NotationQueen),
 			false,
 		},
 		{
 			"from_file",
 			args{"fe8=R"},
-			NewPromotion(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook),
+			NewMove(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook),
 			false,
 		},
 		{
 			"with_check",
 			args{"d1=N+"},
-			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("d1"), piece.NotationKnight),
+			NewMove(chess.NewPositionEmpty(), chess.PositionFromString("d1"), piece.NotationKnight),
 			false,
 		},
 		{
 			"with_checkmate",
 			args{"a8=R#"},
-			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationRook),
+			NewMove(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationRook),
 			false,
 		},
 		{
 			"with_capture",
 			args{"xc8=B"},
-			NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("c8"), piece.NotationBishop),
+			NewMove(chess.NewPositionEmpty(), chess.PositionFromString("c8"), piece.NotationBishop),
 			false,
 		},
 		{
@@ -64,7 +64,7 @@ func TestPromotionFromString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := PromotionFromString(tt.args.notation)
+			got, err := MoveFromString(tt.args.notation)
 
 			require.Truef(t, (err != nil) == tt.wantErr, "PromotionFromString() error = %v, wantErr %v", err, tt.wantErr)
 			if !tt.wantErr {
@@ -76,7 +76,7 @@ func TestPromotionFromString(t *testing.T) {
 
 func TestPromotion_String(t *testing.T) {
 	type fields struct {
-		promotion *Promotion
+		promotion *Move
 	}
 	tests := []struct {
 		name   string
@@ -85,17 +85,17 @@ func TestPromotion_String(t *testing.T) {
 	}{
 		{
 			"promotion",
-			fields{NewPromotion(chess.NewPositionEmpty(), chess.PositionFromString("a1"), piece.NotationRook)},
+			fields{NewMove(chess.NewPositionEmpty(), chess.PositionFromString("a1"), piece.NotationRook)},
 			"a1=R",
 		},
 		{
 			"from_file",
-			fields{NewPromotion(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook)},
+			fields{NewMove(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook)},
 			"fe8=R",
 		},
 		{
 			"full_from",
-			fields{NewPromotion(chess.PositionFromString("b2"), chess.PositionFromString("b1"), piece.NotationKnight)},
+			fields{NewMove(chess.PositionFromString("b2"), chess.PositionFromString("b1"), piece.NotationKnight)},
 			"b2b1=N",
 		},
 	}

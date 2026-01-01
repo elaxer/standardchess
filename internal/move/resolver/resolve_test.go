@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
 	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
@@ -14,7 +13,7 @@ import (
 
 func TestResolveFrom(t *testing.T) {
 	type args struct {
-		pieceMove     move.PieceMove
+		from, to      chess.Position
 		pieceNotation string
 		board         chess.Board
 	}
@@ -27,7 +26,7 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"empty_from",
 			args{
-				pieceMove:     move.PieceMove{To: chess.PositionFromString("e4")},
+				to:            chess.PositionFromString("e4"),
 				pieceNotation: piece.NotationPawn,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d2"): piece.NewPawn(chess.SideWhite),
@@ -41,7 +40,8 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"same_file",
 			args{
-				pieceMove:     move.PieceMove{From: chess.PositionFromString("a"), To: chess.PositionFromString("b8")},
+				from:          chess.PositionFromString("a"),
+				to:            chess.PositionFromString("b8"),
 				pieceNotation: piece.NotationRook,
 				board: standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("f8"): piece.NewRook(chess.SideBlack),
@@ -54,7 +54,8 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"knights",
 			args{
-				pieceMove:     move.PieceMove{From: chess.PositionFromString("g"), To: chess.PositionFromString("e2")},
+				from:          chess.PositionFromString("g"),
+				to:            chess.PositionFromString("e2"),
 				pieceNotation: piece.NotationKnight,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("g1"): piece.NewKnight(chess.SideWhite),
@@ -67,7 +68,8 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"same_rank",
 			args{
-				pieceMove:     move.PieceMove{From: chess.PositionFromString("1"), To: chess.PositionFromString("a5")},
+				from:          chess.PositionFromString("1"),
+				to:            chess.PositionFromString("a5"),
 				pieceNotation: piece.NotationRook,
 				board: standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewRook(chess.SideWhite),
@@ -80,7 +82,8 @@ func TestResolveFrom(t *testing.T) {
 		{
 			"full_from",
 			args{
-				pieceMove:     move.PieceMove{From: chess.PositionFromString("f2"), To: chess.PositionFromString("d4")},
+				from:          chess.PositionFromString("f2"),
+				to:            chess.PositionFromString("d4"),
 				pieceNotation: piece.NotationBishop,
 				board: standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("b2"): piece.NewBishop(chess.SideBlack),
@@ -95,7 +98,7 @@ func TestResolveFrom(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := resolver.ResolveFrom(tt.args.pieceMove, tt.args.pieceNotation, tt.args.board, tt.args.board.Turn())
+			got, err := resolver.ResolveFrom(tt.args.from, tt.args.to, tt.args.pieceNotation, tt.args.board, tt.args.board.Turn())
 			require.Truef(t, (err != nil) == tt.wantErr, "ResolveNormal() error = %v, wantErr %v", err, tt.wantErr)
 
 			if tt.wantErr {

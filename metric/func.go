@@ -3,13 +3,10 @@ package metric
 import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/metric"
-	"github.com/elaxer/standardchess/internal/move/move"
-	"github.com/elaxer/standardchess/internal/move/result"
-	"github.com/elaxer/standardchess/internal/move/validator"
+	"github.com/elaxer/standardchess/internal/move/castling"
+	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
 )
-
-type Castlings = map[string]map[chess.Side]map[string]bool
 
 var AllFuncs = []metric.MetricFunc{
 	CastlingAbility,
@@ -17,11 +14,13 @@ var AllFuncs = []metric.MetricFunc{
 	HalfmoveClock,
 }
 
+type Castlings = map[string]map[chess.Side]map[string]bool
+
 func CastlingAbility(board chess.Board) metric.Metric {
 	callback := func(side chess.Side, board chess.Board, validateObstacle bool) map[string]bool {
 		return map[string]bool{
-			move.CastlingShort.String(): validator.ValidateCastling(move.CastlingShort, side, board, validateObstacle) == nil,
-			move.CastlingLong.String():  validator.ValidateCastling(move.CastlingLong, side, board, validateObstacle) == nil,
+			castling.TypeShort.String(): castling.ValidateMove(castling.TypeShort, side, board, validateObstacle) == nil,
+			castling.TypeLong.String():  castling.ValidateMove(castling.TypeLong, side, board, validateObstacle) == nil,
 		}
 	}
 
@@ -45,7 +44,7 @@ func EnPassantTargetSquare(board chess.Board) metric.Metric {
 	}
 
 	lastMove := board.MoveHistory()[len(board.MoveHistory())-1]
-	normalMove, ok := lastMove.(*result.Normal)
+	normalMove, ok := lastMove.(*normal.MoveResult)
 	if !ok || normalMove.InputMove.PieceNotation != piece.NotationPawn {
 		return nil
 	}
@@ -65,7 +64,7 @@ func EnPassantTargetSquare(board chess.Board) metric.Metric {
 func HalfmoveClock(board chess.Board) metric.Metric {
 	clock := 0
 	for _, m := range board.MoveHistory() {
-		normalMove, ok := m.(*result.Normal)
+		normalMove, ok := m.(*normal.MoveResult)
 		if !ok || normalMove.InputMove.PieceNotation == piece.NotationPawn || normalMove.IsCapture() {
 			clock = 0
 

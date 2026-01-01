@@ -1,12 +1,13 @@
-package result
+package piecemove
 
 import (
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/move/result"
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type PieceMove struct {
-	Abstract
+type PieceMoveResult struct {
+	result.Abstract
 
 	WasMoved      bool
 	FromFull      chess.Position
@@ -14,15 +15,15 @@ type PieceMove struct {
 	Captured      chess.Piece
 }
 
-func (r PieceMove) CapturedPiece() chess.Piece {
+func (r PieceMoveResult) CapturedPiece() chess.Piece {
 	return r.Captured
 }
 
-func (r PieceMove) IsCapture() bool {
+func (r PieceMoveResult) IsCapture() bool {
 	return r.Captured != nil
 }
 
-func (r PieceMove) Validate() error {
+func (r PieceMoveResult) Validate() error {
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.Abstract),
 		validation.Field(&r.FromFull, validation.By(chess.ValidationRulePositionIsEmpty)),
@@ -30,7 +31,7 @@ func (r PieceMove) Validate() error {
 	)
 }
 
-func (r PieceMove) captureString() string {
+func (r PieceMoveResult) CaptureString() string {
 	if !r.IsCapture() {
 		return ""
 	}

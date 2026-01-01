@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/move"
 	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
@@ -14,8 +13,8 @@ import (
 
 func TestUnresolveFrom(t *testing.T) {
 	type args struct {
-		move  move.PieceMove
-		board chess.Board
+		from, to chess.Position
+		board    chess.Board
 	}
 	tests := []struct {
 		name    string
@@ -26,7 +25,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"same_file",
 			args{
-				move.NewPieceMove(chess.PositionFromString("d1"), chess.PositionFromString("d4")),
+				chess.PositionFromString("d1"),
+				chess.PositionFromString("d4"),
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d1"): piece.NewQueen(chess.SideWhite),
 					chess.PositionFromString("d8"): piece.NewQueen(chess.SideWhite),
@@ -38,7 +38,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"same_rank",
 			args{
-				move.NewPieceMove(chess.PositionFromString("a1"), chess.PositionFromString("d1")),
+				chess.PositionFromString("a1"),
+				chess.PositionFromString("d1"),
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewRook(chess.SideBlack),
 					chess.PositionFromString("g1"): piece.NewRook(chess.SideBlack),
@@ -50,7 +51,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"same_file_and_rank",
 			args{
-				move.NewPieceMove(chess.PositionFromString("b7"), chess.PositionFromString("d5")),
+				chess.PositionFromString("b7"),
+				chess.PositionFromString("d5"),
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("b7"): piece.NewBishop(chess.SideWhite),
 					chess.PositionFromString("f7"): piece.NewBishop(chess.SideWhite),
@@ -63,7 +65,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"no_same_file_and_rank",
 			args{
-				move.NewPieceMove(chess.PositionFromString("g1"), chess.PositionFromString("e2")),
+				chess.PositionFromString("g1"),
+				chess.PositionFromString("e2"),
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("c3"): piece.NewKnight(chess.SideWhite),
 					chess.PositionFromString("g1"): piece.NewKnight(chess.SideWhite),
@@ -75,7 +78,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"no_same_moves",
 			args{
-				move.NewPieceMove(chess.PositionFromString("e2"), chess.PositionFromString("e4")),
+				chess.PositionFromString("e2"),
+				chess.PositionFromString("e4"),
 				standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e2"): piece.NewPawn(chess.SideBlack),
 					chess.PositionFromString("f2"): piece.NewPawn(chess.SideBlack),
@@ -87,7 +91,8 @@ func TestUnresolveFrom(t *testing.T) {
 		{
 			"single_pawn_capture",
 			args{
-				move.NewPieceMove(chess.PositionFromString("b7"), chess.PositionFromString("c8")),
+				chess.PositionFromString("b7"),
+				chess.PositionFromString("c8"),
 				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("b7"): piece.NewPawn(chess.SideWhite),
 					chess.PositionFromString("c8"): piece.NewPawn(chess.SideBlack),
@@ -99,7 +104,7 @@ func TestUnresolveFrom(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := resolver.UnresolveFrom(tt.args.move, tt.args.board)
+			got, err := resolver.UnresolveFrom(tt.args.from, tt.args.to, tt.args.board)
 			require.Truef(t, (err != nil) == tt.wantErr, "UnresolveFrom() error = %v, wantErr %v", err, tt.wantErr)
 
 			if !tt.wantErr {

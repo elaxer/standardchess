@@ -1,0 +1,80 @@
+package castling
+
+import (
+	"errors"
+	"fmt"
+
+	mapset "github.com/deckarep/golang-set/v2"
+	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/piece"
+)
+
+var ErrValidation = errors.New("castling move validation error")
+
+var (
+	kingFileAfterShortCastling = chess.FileG
+	rookFileAfterShortCastling = chess.FileF
+
+	kingFileAfterLongCastling = chess.FileC
+	rookFileAfterLongCastling = chess.FileD
+)
+
+func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board, validateObstacle bool) error {
+	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
+	if king == nil {
+		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
+	}
+	if king.IsMoved() {
+		return fmt.Errorf("%w: the king already has been moved", ErrValidation)
+	}
+	if !board.State(side).Type().IsClear() {
+		return fmt.Errorf("%w: the king is under threat", ErrValidation)
+	}
+
+	fileDir := fileDirection(castlingType)
+
+	rook, _, hasObstacle, err := getRook(fileDir, side, board.Squares(), kingPosition)
+	if err != nil {
+		return err
+	}
+	if rook.IsMoved() {
+		return fmt.Errorf("%w: the rook already has been moved", ErrValidation)
+	}
+
+	if validateObstacle && hasObstacle {
+		return fmt.Errorf("%w: an obstacle", ErrValidation)
+	}
+
+	positions := mapset.NewSet(pickPositions(castlingType, kingPosition.Rank))
+	if board.Moves(!side).Intersect(positions).Cardinality() > 0 {
+		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
+	}
+
+	return nil
+}
+
+func getRook(fileDir chess.File, side chess.Side, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, bool, error) {
+	hasObstacle := false
+	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(fileDir, 0)) {
+		if p == nil {
+			continue
+		}
+		if p.Side() != side || p.Notation() != piece.NotationRook {
+			hasObstacle = true
+
+			continue
+		}
+
+		return p, position, hasObstacle, nil
+	}
+
+	return nil, chess.NewPositionEmpty(), hasObstacle, fmt.Errorf("%w: rook wasn't found", ErrValidation)
+}
+
+func fileDirection(castlingType CastlingType) chess.File {
+	if castlingType.IsLong() {
+		return -1
+	}
+
+	return 1
+}

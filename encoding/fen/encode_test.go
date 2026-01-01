@@ -31,17 +31,17 @@ func TestEncode(t *testing.T) {
 		{
 			"black",
 			args{standardtest.DecodeFEN("3b2n1/pp2p1p1/2k2r2/3P4/8/2N1B1q1/3P4/R3K3 b")},
-			"3b2n1/pp2p1p1/2k2r2/3P4/8/2N1B1q1/3P4/R3K3 b - - 0 1",
+			"3b2n1/pp2p1p1/2k2r2/3P4/8/2N1B1q1/3P4/R3K3 b Q - 0 1",
 		},
 		{
 			"valid",
 			args{standardtest.DecodeFEN("3r2k1/pRp4p/2R3p1/8/3K4/P4r2/2P4P/1N6")},
-			"3r2k1/pRp4p/2R3p1/8/3K4/P4r2/2P4P/1N6 w - - 0 1",
+			"3r2k1/pRp4p/2R3p1/8/3K4/P4r2/2P4P/1N6 w q - 0 1",
 		},
 		{
 			"6x6",
 			args{standardtest.DecodeFEN("rnq1kb/pp1ppp/6/6/PPP1PP/RNQK1B")},
-			"rnq1kb/pp1ppp/6/6/PPP1PP/RNQK1B w - - 0 1",
+			"rnq1kb/pp1ppp/6/6/PPP1PP/RNQK1B w Qq - 0 1",
 		},
 		{
 			"12x8",

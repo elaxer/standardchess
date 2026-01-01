@@ -1,4 +1,4 @@
-package move
+package castling
 
 import (
 	"testing"
@@ -14,62 +14,62 @@ func TestCastlingFromString(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    Castling
+		want    CastlingType
 		wantErr bool
 	}{
 		{
 			"short",
 			args{"0-0"},
-			CastlingShort,
+			TypeShort,
 			false,
 		},
 		{
 			"long",
 			args{"0-0-0"},
-			CastlingLong,
+			TypeLong,
 			false,
 		},
 		{
 			"short_with_check",
 			args{"0-0+"},
-			CastlingShort,
+			TypeShort,
 			false,
 		},
 		{
 			"short_with_checkmate",
 			args{"0-0#"},
-			CastlingShort,
+			TypeShort,
 			false,
 		},
 		{
 			"long_with_check",
 			args{"0-0-0+"},
-			CastlingLong,
+			TypeLong,
 			false,
 		},
 		{
 			"long_with_checkmate",
 			args{"0-0-0#"},
-			CastlingLong,
+			TypeLong,
 			false,
 		},
 		{
 			"O character",
 			args{"O-O"},
-			CastlingShort,
+			TypeShort,
 			false,
 		},
 		{
 			"All characters",
 			args{"O-o-0+"},
-			CastlingLong,
+			TypeLong,
 			false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := CastlingFromString(tt.args.str)
+			got, err := TypeFromString(tt.args.str)
 
 			require.Truef(t, (err != nil) == tt.wantErr, "CastlingFromString() error = %v, wantErr %v", err, tt.wantErr)
 			if !tt.wantErr {
@@ -81,7 +81,7 @@ func TestCastlingFromString(t *testing.T) {
 
 func TestCastling_String(t *testing.T) {
 	type fields struct {
-		move Castling
+		move CastlingType
 	}
 	tests := []struct {
 		name   string
@@ -90,12 +90,12 @@ func TestCastling_String(t *testing.T) {
 	}{
 		{
 			"short",
-			fields{(CastlingShort)},
+			fields{(TypeShort)},
 			"O-O",
 		},
 		{
 			"long",
-			fields{(CastlingLong)},
+			fields{(TypeLong)},
 			"O-O-O",
 		},
 	}

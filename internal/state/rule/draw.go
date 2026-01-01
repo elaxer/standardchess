@@ -4,7 +4,7 @@ import (
 	"slices"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/result"
+	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/state/state"
 )
@@ -23,7 +23,7 @@ func FiftyMoves(board chess.Board, side chess.Side) chess.State {
 
 	count := 0
 	for _, move := range moves {
-		normalMove, ok := move.(*result.Normal)
+		normalMove, ok := move.(*normal.MoveResult)
 		if !ok || normalMove.InputMove.PieceNotation == piece.NotationPawn || normalMove.IsCapture() {
 			count = 0
 		} else {
