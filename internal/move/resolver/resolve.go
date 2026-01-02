@@ -46,5 +46,9 @@ func ResolveFrom(from, to chess.Position, pieceNotation string, board chess.Boar
 		}
 	}
 
+	if !resolvedFrom.IsFull() {
+		return chess.NewPositionEmpty(), fmt.Errorf("%w: failed to resolve init position", ErrResolve)
+	}
+
 	return resolvedFrom, nil
 }

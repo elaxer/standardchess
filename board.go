@@ -40,8 +40,7 @@ type board struct {
 	squares        *chess.Squares
 	moveHistory    []chess.MoveResult
 	capturedPieces []chess.Piece
-
-	stateRules []rule.Rule
+	stateRules     []rule.Rule
 }
 
 func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) (chess.Board, error) {
@@ -156,9 +155,9 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 		})
 	}
 
-	pawns := enpassant.AttackingPawns(b)
-	if pawns[0] == p || pawns[1] == p {
-		legalMoves.Add(enpassant.EnPassantPosition(b))
+	enPassantPosition := enpassant.EnPassantPosition(b)
+	if err := enpassant.ValidateMove(from, enPassantPosition, b); err == nil {
+		legalMoves.Add(enPassantPosition)
 	}
 
 	return legalMoves

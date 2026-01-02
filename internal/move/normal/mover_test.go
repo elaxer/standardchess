@@ -4,7 +4,9 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/internal/move/normal"
+	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -52,4 +54,24 @@ func TestUndoNormal(t *testing.T) {
 	assert.True(t, movedPiece.IsMoved())
 	assert.False(t, pieceWillBeCaptured.IsMoved())
 	assert.True(t, movedPieceWillBeCaptured.IsMoved())
+}
+
+func BenchmarkMakeMove(b *testing.B) {
+	board := standardchess.NewBoardFilled()
+
+	move := normal.NewMove(
+		chess.PositionFromString("e2"),
+		chess.PositionFromString("e4"),
+		piece.NotationPawn,
+	)
+	b.ResetTimer()
+	for range b.N {
+		_, err := normal.MakeMove(move, board)
+
+		b.StopTimer()
+		require.NoError(b, err)
+		board.UndoLastMove()
+		board = standardchess.NewBoardFilled()
+		b.StartTimer()
+	}
 }

@@ -10,15 +10,14 @@ import (
 	"github.com/elaxer/chess/visualizer"
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
+	"github.com/elaxer/standardchess/encoding/pgn"
 	"github.com/elaxer/standardchess/internal/piece"
 	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
 func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {
 	board, err := standardchess.NewBoard(turn, placement)
-	if err != nil {
-		panic(err)
-	}
+	must(err)
 
 	return board
 }
@@ -27,11 +26,16 @@ func NewBoardFromMoves(moveStrings ...string) chess.Board {
 	moves := chesstest.MoveStrings(moveStrings...)
 
 	board, err := standardchess.NewBoardFromMoves(moves)
-	if err != nil {
-		panic(err)
-	}
+	must(err)
 
 	return board
+}
+
+func MovesFromPGN(pgnStr string) []chess.Move {
+	_, moves, err := pgn.Decode(pgnStr)
+	must(err)
+
+	return moves
 }
 
 // NewPiece creates a new piece by string.
@@ -55,9 +59,7 @@ func NewPiece(str string) chess.Piece {
 	}
 
 	piece, err := piece.New(notation, side)
-	if err != nil {
-		panic(err)
-	}
+	must(err)
 
 	return piece
 }
@@ -82,9 +84,7 @@ func EncodeFENRows(board chess.Board) string {
 // DecodeFEN decodes a FEN string into a chess.Board instance with the specified edge position.
 func DecodeFEN(str string) chess.Board {
 	board, err := fen.Decode(str)
-	if err != nil {
-		panic(err)
-	}
+	must(err)
 
 	return board
 }
@@ -99,4 +99,10 @@ func Visualize(board chess.Board) {
 	}
 
 	vis.Fprintln(os.Stdout, board)
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

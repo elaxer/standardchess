@@ -1,34 +1,29 @@
-package pgn
+package pgn_test
 
 import (
-	"regexp"
 	"slices"
 	"testing"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/chess/chesstest"
+	"github.com/elaxer/standardchess/encoding/pgn"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestDecode(t *testing.T) {
-	type fields struct {
-		headersRegexp, movesRegexp *regexp.Regexp
-	}
 	type args struct {
 		pgn string
 	}
 	tests := []struct {
 		name        string
-		fields      fields
 		args        args
-		wantHeaders []Header
+		wantHeaders []pgn.Header
 		wantMoves   []chess.Move
 		wantErr     bool
 	}{
 		{
 			"only_headers",
-			fields{regexpHeaders, regexpMoves},
 			args{`[Event "It (open)"]
 [Site "Sevilla (Spain)"]
 [Date "1992.??.??"]
@@ -38,28 +33,27 @@ func TestDecode(t *testing.T) {
 [Result "0-1"]
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"]`},
-			[]Header{
-				NewHeader("Event", "It (open)"),
-				NewHeader("Site", "Sevilla (Spain)"),
-				NewHeader("Date", "1992.??.??"),
-				NewHeader("Round", "?"),
-				NewHeader("White", "Gonzalez Raul"),
-				NewHeader("Black", "Mikhail Tal"),
-				NewHeader("Result", "0-1"),
-				NewHeader("TimeControl", ""),
-				NewHeader("Link", "https://www.chess.com/games/view/4082964"),
+			[]pgn.Header{
+				pgn.NewHeader("Event", "It (open)"),
+				pgn.NewHeader("Site", "Sevilla (Spain)"),
+				pgn.NewHeader("Date", "1992.??.??"),
+				pgn.NewHeader("Round", "?"),
+				pgn.NewHeader("White", "Gonzalez Raul"),
+				pgn.NewHeader("Black", "Mikhail Tal"),
+				pgn.NewHeader("Result", "0-1"),
+				pgn.NewHeader("TimeControl", ""),
+				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082964"),
 			},
 			[]chess.Move{},
 			false,
 		},
 		{
 			"only_moves",
-			fields{regexpHeaders, regexpMoves},
 			args{`1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Qb6 5. Nb3 Nf6 6. Nc3 e6 7. Be3 Qc7 8. a3
 a6 9. Be2 b5 10. O-O Be7 11. Bd3 O-O 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 Qxc2 25. Nf2 Bd5 26. Nd3 h5`},
-			[]Header{},
+			[]pgn.Header{},
 			chesstest.MoveStrings(
 				"e4",
 				"c5",
@@ -118,7 +112,6 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 		},
 		{
 			"raul_vs_tal",
-			fields{regexpHeaders, regexpMoves},
 			args{`[Event "It (open)"]
 [Site "Sevilla (Spain)"]
 [Date "1992.??.??"]
@@ -133,16 +126,16 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 a6 9. Be2 b5 10. O-O Be7 11. Bd3 O-O 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 Qxc2 25. Nf2 Bd5 26. Nd3 h5 0-1`},
-			[]Header{
-				NewHeader("Event", "It (open)"),
-				NewHeader("Site", "Sevilla (Spain)"),
-				NewHeader("Date", "1992.??.??"),
-				NewHeader("Round", "?"),
-				NewHeader("White", "Gonzalez Raul"),
-				NewHeader("Black", "Mikhail Tal"),
-				NewHeader("Result", "0-1"),
-				NewHeader("TimeControl", ""),
-				NewHeader("Link", "https://www.chess.com/games/view/4082964"),
+			[]pgn.Header{
+				pgn.NewHeader("Event", "It (open)"),
+				pgn.NewHeader("Site", "Sevilla (Spain)"),
+				pgn.NewHeader("Date", "1992.??.??"),
+				pgn.NewHeader("Round", "?"),
+				pgn.NewHeader("White", "Gonzalez Raul"),
+				pgn.NewHeader("Black", "Mikhail Tal"),
+				pgn.NewHeader("Result", "0-1"),
+				pgn.NewHeader("TimeControl", ""),
+				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082964"),
 			},
 			chesstest.MoveStrings(
 				"e4",
@@ -202,7 +195,6 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 		},
 		{
 			"carlsen_vs_ilinca",
-			fields{regexpHeaders, regexpMoves},
 			args{`[Event "January 07 Late 2025"]
 [Site ""]
 [Date "2025.01.07"]
@@ -221,16 +213,16 @@ Kf5 28. Rc6 a4 29. g4+ Kg6 30. h4 Kf7 31. h5 b4 32. Bc5 a3 33. b3 Bxc5 34. Rxc5
 Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 41. Rxg4 Re7 42. e3 Re4+ 43. Kd3 Kc5 44. Rg6 Re8 45. Rxh6 Rg8 46. Rg6 Rh8 47. h6
 1-0`},
-			[]Header{
-				NewHeader("Event", "January 07 Late 2025"),
-				NewHeader("Site", ""),
-				NewHeader("Date", "2025.01.07"),
-				NewHeader("Round", "?"),
-				NewHeader("White", "Magnus Carlsen"),
-				NewHeader("Black", "Felix Antonio Ilinca Ilinca"),
-				NewHeader("Result", "1-0"),
-				NewHeader("TimeControl", ""),
-				NewHeader("Link", "https://www.chess.com/games/view/17633485"),
+			[]pgn.Header{
+				pgn.NewHeader("Event", "January 07 Late 2025"),
+				pgn.NewHeader("Site", ""),
+				pgn.NewHeader("Date", "2025.01.07"),
+				pgn.NewHeader("Round", "?"),
+				pgn.NewHeader("White", "Magnus Carlsen"),
+				pgn.NewHeader("Black", "Felix Antonio Ilinca Ilinca"),
+				pgn.NewHeader("Result", "1-0"),
+				pgn.NewHeader("TimeControl", ""),
+				pgn.NewHeader("Link", "https://www.chess.com/games/view/17633485"),
 			},
 			chesstest.MoveStrings(
 				"d4",
@@ -332,7 +324,6 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 		},
 		{
 			"tal_vs_lautier",
-			fields{regexpHeaders, regexpMoves},
 			args{`[Event "It"]
 [Site "Barcelona (Spain)"]
 [Date "1992.??.??"]
@@ -353,16 +344,16 @@ Kd3 Rb5 41. f4 Rbb4 42. g4 Kd7 43. g5 Ke6 44. h4 d5 45. Nxd5 Rxc2 46. Nxb4 Rxb2
 47. Nc2 Rb3+ 48. Kc4 Rh3 49. Nd4+ Kf7 50. f5 Rxh4 51. Kd5 Rg4 52. Nf3 Rg3 53.
 Ne5+ Kg8 54. f6 Rxg5 55. Ke6 Rg1 56. f7+ Kg7 57. Nd7 Rf1 58. f8=Q+ Rxf8 59. Nxf8
 h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
-			[]Header{
-				NewHeader("Event", "It"),
-				NewHeader("Site", "Barcelona (Spain)"),
-				NewHeader("Date", "1992.??.??"),
-				NewHeader("Round", "?"),
-				NewHeader("White", "Mikhail Tal"),
-				NewHeader("Black", "Joel Lautier"),
-				NewHeader("Result", "1-0"),
-				NewHeader("TimeControl", ""),
-				NewHeader("Link", "https://www.chess.com/games/view/4082949"),
+			[]pgn.Header{
+				pgn.NewHeader("Event", "It"),
+				pgn.NewHeader("Site", "Barcelona (Spain)"),
+				pgn.NewHeader("Date", "1992.??.??"),
+				pgn.NewHeader("Round", "?"),
+				pgn.NewHeader("White", "Mikhail Tal"),
+				pgn.NewHeader("Black", "Joel Lautier"),
+				pgn.NewHeader("Result", "1-0"),
+				pgn.NewHeader("TimeControl", ""),
+				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082949"),
 			},
 			chesstest.MoveStrings(
 				"d4",
@@ -495,7 +486,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotHeaders, gotMoves, err := Decode(tt.args.pgn)
+			gotHeaders, gotMoves, err := pgn.Decode(tt.args.pgn)
 
 			require.Truef(t, (err != nil) == tt.wantErr, "Decode() error = %v, wantErr %v", err, tt.wantErr)
 			if tt.wantErr {

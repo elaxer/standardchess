@@ -1,8 +1,9 @@
-package pgn
+package pgn_test
 
 import (
 	"testing"
 
+	"github.com/elaxer/standardchess/encoding/pgn"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 )
@@ -61,16 +62,16 @@ func TestEncode(t *testing.T) {
 		"Qxc6", "Rd6",
 	)
 
-	pgn := Encode([]Header{
-		NewHeader("Event", "Saint Louis Rapid 2017"),
-		NewHeader("Site", "Saint Louis USA"),
-		NewHeader("Date", "2017.08.14"),
-		NewHeader("Round", "?"),
-		NewHeader("White", "Garry Kasparov"),
-		NewHeader("Black", "Navara, David"),
-		NewHeader("Result", "*"),
-		NewHeader("TimeControl", ""),
-		NewHeader("Link", "https://www.chess.com/games/view/14842105"),
+	pgn := pgn.Encode([]pgn.Header{
+		pgn.NewHeader("Event", "Saint Louis Rapid 2017"),
+		pgn.NewHeader("Site", "Saint Louis USA"),
+		pgn.NewHeader("Date", "2017.08.14"),
+		pgn.NewHeader("Round", "?"),
+		pgn.NewHeader("White", "Garry Kasparov"),
+		pgn.NewHeader("Black", "Navara, David"),
+		pgn.NewHeader("Result", "*"),
+		pgn.NewHeader("TimeControl", ""),
+		pgn.NewHeader("Link", "https://www.chess.com/games/view/14842105"),
 	}, board, "*")
 	expectedPGN := `[Event "Saint Louis Rapid 2017"]
 [Site "Saint Louis USA"]
@@ -95,12 +96,12 @@ h1=Q 47. Re8+ Kxe8 48. c8=Q+ Ke7 49. Nc6+ Qxc6+ 50. Qxc6 Rd6 *`
 }
 
 func TestEncodeHeaders(t *testing.T) {
-	headers := []Header{
-		NewHeader("my", "header"),
-		NewHeader("anoth", "er header"),
-		NewHeader("foo", "bar"),
-		NewHeader("", "empty"),
-		NewHeader("", ""),
+	headers := []pgn.Header{
+		pgn.NewHeader("my", "header"),
+		pgn.NewHeader("anoth", "er header"),
+		pgn.NewHeader("foo", "bar"),
+		pgn.NewHeader("", "empty"),
+		pgn.NewHeader("", ""),
 	}
 
 	const expected = `[my "header"]
@@ -109,5 +110,5 @@ func TestEncodeHeaders(t *testing.T) {
 [ "empty"]
 [ ""]`
 
-	assert.Equal(t, expected, EncodeHeaders(headers))
+	assert.Equal(t, expected, pgn.EncodeHeaders(headers))
 }

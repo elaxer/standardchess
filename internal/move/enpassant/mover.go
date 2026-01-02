@@ -57,7 +57,7 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 	}
 
 	if _, err := board.Squares().MovePiece(move.InputMove.To, move.FromFull); err != nil {
-		return nil
+		return err
 	}
 
 	capturedPiecePosition := chess.NewPosition(move.InputMove.To.File, enPassantRank(move.MoveSide))

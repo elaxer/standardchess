@@ -1,8 +1,6 @@
 package enpassant
 
 import (
-	"math"
-
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
@@ -23,7 +21,7 @@ func EnPassantPosition(board chess.Board) chess.Position {
 		return chess.NewPositionEmpty()
 	}
 
-	if normalMove.InputMove.To.Rank-normalMove.FromFull.Rank != chess.Rank(math.Abs(2)) {
+	if absRank(normalMove.InputMove.To.Rank-normalMove.FromFull.Rank) != 2 {
 		return chess.NewPositionEmpty()
 	}
 
@@ -33,34 +31,18 @@ func EnPassantPosition(board chess.Board) chess.Position {
 	)
 }
 
-func AttackingPawns(board chess.Board) [2]chess.Piece {
-	var pawns [2]chess.Piece
-
-	enPassantPosition := EnPassantPosition(board)
-	if enPassantPosition.IsEmpty() {
-		return pawns
-	}
-
-	rank := enPassantRank(board.Turn())
-	pawnPositions := [2]chess.Position{
-		chess.NewPosition(enPassantPosition.File-1, rank),
-		chess.NewPosition(enPassantPosition.File+1, rank),
-	}
-	for i, pawnPosition := range pawnPositions {
-		if p, err := board.Squares().FindByPosition(pawnPosition); err != nil {
-			if p.Notation() == piece.NotationPawn && p.Side() == board.Turn() {
-				pawns[i] = p
-			}
-		}
-	}
-
-	return pawns
-}
-
 func enPassantRank(side chess.Side) chess.Rank {
 	if side.IsBlack() {
-		return chess.Rank5
+		return chess.Rank4
 	}
 
-	return chess.Rank4
+	return chess.Rank5
+}
+
+func absRank(rank chess.Rank) chess.Rank {
+	if rank < 0 {
+		return -rank
+	}
+
+	return rank
 }

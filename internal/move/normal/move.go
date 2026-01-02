@@ -1,7 +1,6 @@
 package normal
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/elaxer/chess"
@@ -53,5 +52,5 @@ func (m *Move) Validate() error {
 }
 
 func (m *Move) String() string {
-	return fmt.Sprintf("%s%s%s", m.PieceNotation, m.From, m.To)
+	return m.PieceNotation + m.From.String() + m.To.String()
 }
