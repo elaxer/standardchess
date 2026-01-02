@@ -3,7 +3,6 @@ package piece
 import (
 	"encoding/json"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 )
 
@@ -20,11 +19,11 @@ func NewRook(side chess.Side) *Rook {
 	return &Rook{&sliding{&abstract{side, false}}}
 }
 
-func (r *Rook) PseudoMoves(from chess.Position, squares *chess.Squares) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](14)
+func (r *Rook) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
+	moves := make([]chess.Position, 0, 14)
 	for _, direction := range orthogonalDirections {
 		for move := range r.slide(from, direction, squares) {
-			moves.Add(move)
+			moves = append(moves, move)
 		}
 	}
 

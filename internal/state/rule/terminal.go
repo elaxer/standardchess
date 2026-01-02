@@ -6,7 +6,7 @@ import (
 )
 
 func Checkmate(board chess.Board, side chess.Side) chess.State {
-	if Check(board, side) != nil && board.Moves(side).Cardinality() == 0 {
+	if Check(board, side) != nil && len(board.Moves(side)) == 0 {
 		return state.Checkmate
 	}
 

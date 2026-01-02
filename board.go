@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"slices"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/mover"
@@ -123,16 +122,16 @@ func (b *board) MoveHistory() []chess.MoveResult {
 	return b.moveHistory
 }
 
-func (b *board) Moves(side chess.Side) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](32)
+func (b *board) Moves(side chess.Side) []chess.Position {
+	moves := make([]chess.Position, 0, 32)
 	for _, piece := range b.squares.GetAllPieces(side) {
-		moves = moves.Union(b.LegalMoves(piece))
+		moves = append(moves, b.LegalMoves(piece)...)
 	}
 
 	return moves
 }
 
-func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
+func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 	from := b.squares.GetByPiece(p)
 	if from.IsEmpty() {
 		return nil
@@ -144,20 +143,20 @@ func (b *board) LegalMoves(p chess.Piece) chess.PositionSet {
 		return pseudoMoves
 	}
 
-	legalMoves := mapset.NewSetWithSize[chess.Position](pseudoMoves.Cardinality())
-	for to := range pseudoMoves.Iter() {
+	legalMoves := make([]chess.Position, 0, cap(pseudoMoves))
+	for _, to := range pseudoMoves {
 		//nolint:errcheck,gosec
 		b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
-			if !b.Moves(!b.turn).ContainsOne(kingPosition) {
-				legalMoves.Add(to)
+			if !slices.Contains(b.Moves(!b.turn), kingPosition) {
+				legalMoves = append(legalMoves, to)
 			}
 		})
 	}
 
 	enPassantPosition := enpassant.EnPassantPosition(b)
 	if err := enpassant.ValidateMove(from, enPassantPosition, b); err == nil {
-		legalMoves.Add(enPassantPosition)
+		legalMoves = append(legalMoves, enPassantPosition)
 	}
 
 	return legalMoves
@@ -205,9 +204,9 @@ func (b *board) UndoLastMove() (chess.MoveResult, error) {
 
 func (b *board) MarshalJSON() ([]byte, error) {
 	type Placement struct {
-		Piece      chess.Piece       `json:"piece"`
-		Position   chess.Position    `json:"position"`
-		LegalMoves chess.PositionSet `json:"legal_moves"`
+		Piece      chess.Piece      `json:"piece"`
+		Position   chess.Position   `json:"position"`
+		LegalMoves []chess.Position `json:"legal_moves"`
 	}
 
 	placements := make([]*Placement, 0, 32)
@@ -216,7 +215,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 			continue
 		}
 
-		placement := &Placement{Piece: piece, LegalMoves: mapset.NewSet[chess.Position](), Position: pos}
+		placement := &Placement{Piece: piece, LegalMoves: make([]chess.Position, 0, 27), Position: pos}
 		if piece.Side() == b.turn {
 			placement.LegalMoves = b.LegalMoves(piece)
 		}

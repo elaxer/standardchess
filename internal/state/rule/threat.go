@@ -1,6 +1,8 @@
 package rule
 
 import (
+	"slices"
+
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/state/state"
@@ -8,7 +10,7 @@ import (
 
 func Check(board chess.Board, side chess.Side) chess.State {
 	_, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
-	if board.Moves(!side).ContainsOne(kingPosition) {
+	if slices.Contains(board.Moves(!side), kingPosition) {
 		return state.Check
 	}
 

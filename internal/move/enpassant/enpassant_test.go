@@ -22,5 +22,5 @@ func TestEnPassantPosition(t *testing.T) {
 	require.NoError(t, err)
 
 	pawnMoves := board.LegalMoves(pawn)
-	assert.Truef(t, pawnMoves.Contains(position), "en passant target - %s, got positions: %v", position, pawnMoves)
+	assert.Contains(t, pawnMoves, position)
 }

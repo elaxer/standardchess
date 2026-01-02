@@ -4,6 +4,7 @@ package piecemove
 import (
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/elaxer/chess"
 )
@@ -22,7 +23,7 @@ func ValidateMove(move PieceMove, movingPieceNotation string, board chess.Board)
 	if piece.Notation() != movingPieceNotation {
 		return fmt.Errorf("%w: moving piece doesn't found at this position", ErrValidation)
 	}
-	if !board.LegalMoves(piece).ContainsOne(move.To) {
+	if !slices.Contains(board.LegalMoves(piece), move.To) {
 		return fmt.Errorf("%w: piece doesn't have such move", ErrValidation)
 	}
 

@@ -3,8 +3,8 @@ package castling
 import (
 	"errors"
 	"fmt"
+	"slices"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/piece"
 )
@@ -45,9 +45,11 @@ func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board,
 		return fmt.Errorf("%w: an obstacle", ErrValidation)
 	}
 
-	positions := mapset.NewSet(pickPositions(castlingType, kingPosition.Rank))
-	if board.Moves(!side).Intersect(positions).Cardinality() > 0 {
+	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
+	oppositeMoves := board.Moves(!side)
+	if slices.Contains(oppositeMoves, kingNewPosition) || slices.Contains(oppositeMoves, rookNewPosition) {
 		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
+
 	}
 
 	return nil

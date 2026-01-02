@@ -2,12 +2,8 @@ github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 h1:DklsrG3d
 github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2/go.mod h1:WaHUgvxTVq04UNunO+XhnAqY/wQc+bxr74GqbsZ/Jqw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/deckarep/golang-set/v2 v2.8.0 h1:swm0rlPCmdWn9mESxKOjWk8hXSqoxOp+ZlfuyaAdFlQ=
-github.com/deckarep/golang-set/v2 v2.8.0/go.mod h1:VAky9rY/yGXJOLEDv3OMci+7wtDpOF4IN+y82NBOac4=
-github.com/elaxer/chess v1.0.7 h1:ZYJA52pRx+uPAXQh4b5jqJvtmJPSFeuVD6UBAr38Chs=
-github.com/elaxer/chess v1.0.7/go.mod h1:RoYd6t7SsjKOrcp6zBhMp/540efKZ3jQrUpMvtEbwYc=
-github.com/elaxer/chess v1.0.8 h1:PNHIk+P/9fQhOmOpfGdqbdiqpuHXdcblQ4UU1Vh0ZDc=
-github.com/elaxer/chess v1.0.8/go.mod h1:RoYd6t7SsjKOrcp6zBhMp/540efKZ3jQrUpMvtEbwYc=
+github.com/elaxer/chess v1.1.0 h1:fk66uz9BMz7qFUL+Pthz3UC6+UG5JUsdPqYdJ+OTnvY=
+github.com/elaxer/chess v1.1.0/go.mod h1:PHrPrHtUHUz++5e7PSSy086hbKCGl+5XORFZod/xKFw=
 github.com/elaxer/rgx v0.0.0-20250611140943-48f730656186 h1:jn71rfQtSzK7VRrAcnw+WhJfX0xgNyvvYnXnap3OzSM=
 github.com/elaxer/rgx v0.0.0-20250611140943-48f730656186/go.mod h1:0KnoxODrl3YpSdu9Oq3Szgdv3XAPAjmGdTNBbhLq7ck=
 github.com/go-ozzo/ozzo-validation v3.6.0+incompatible h1:msy24VGS42fKO9K1vLz82/GeYW1cILu7Nuuj1N3BBkE=

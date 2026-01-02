@@ -3,7 +3,6 @@ package piece
 import (
 	"encoding/json"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 )
 
@@ -20,11 +19,11 @@ func NewBishop(side chess.Side) *Bishop {
 	return &Bishop{&sliding{&abstract{side, false}}}
 }
 
-func (b *Bishop) PseudoMoves(from chess.Position, squares *chess.Squares) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](13)
+func (b *Bishop) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
+	moves := make([]chess.Position, 0, 13)
 	for _, direction := range diagonalDirections {
 		for move := range b.slide(from, direction, squares) {
-			moves.Add(move)
+			moves = append(moves, move)
 		}
 	}
 

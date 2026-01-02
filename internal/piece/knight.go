@@ -3,7 +3,6 @@ package piece
 import (
 	"encoding/json"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 )
 
@@ -20,7 +19,7 @@ func NewKnight(side chess.Side) *Knight {
 	return &Knight{&abstract{side, false}}
 }
 
-func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) chess.PositionSet {
+func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	positions := [8]chess.Position{
 		chess.NewPosition(from.File+1, from.Rank+2),
 		chess.NewPosition(from.File-1, from.Rank+2),
@@ -32,10 +31,10 @@ func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) chess.
 		chess.NewPosition(from.File+1, from.Rank-2),
 	}
 
-	moves := mapset.NewSetWithSize[chess.Position](len(positions))
+	moves := make([]chess.Position, 0, len(positions))
 	for _, move := range positions {
 		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.side) {
-			moves.Add(move)
+			moves = append(moves, move)
 		}
 	}
 

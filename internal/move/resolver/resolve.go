@@ -3,6 +3,7 @@ package resolver
 import (
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/elaxer/chess"
 )
@@ -23,7 +24,7 @@ func ResolveFrom(from, to chess.Position, pieceNotation string, board chess.Boar
 
 	pieces := make([]chess.Piece, 0, 8)
 	for _, piece := range board.Squares().GetPieces(pieceNotation, turn) {
-		if board.LegalMoves(piece).ContainsOne(to) {
+		if slices.Contains(board.LegalMoves(piece), to) {
 			pieces = append(pieces, piece)
 		}
 	}

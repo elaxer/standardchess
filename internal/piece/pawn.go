@@ -3,7 +3,6 @@ package piece
 import (
 	"encoding/json"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 )
 
@@ -28,10 +27,11 @@ func NewPawn(side chess.Side) *Pawn {
 	return &Pawn{&abstract{side, false}}
 }
 
-func (p *Pawn) PseudoMoves(from chess.Position, squares *chess.Squares) chess.PositionSet {
+func (p *Pawn) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	direction := PawnRankDirection(p.side)
+	moves := append(make([]chess.Position, 0, 4), p.movesForward(from, direction, squares)...)
 
-	return p.movesForward(from, direction, squares).Union(p.movesDiagonal(from, direction, squares))
+	return append(moves, p.movesDiagonal(from, direction, squares)...)
 }
 
 func (p *Pawn) Notation() string {
@@ -58,26 +58,27 @@ func (p *Pawn) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *chess.Squares) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](2)
+func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *chess.Squares) []chess.Position {
+	moves := make([]chess.Position, 0, 2)
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File, from.Rank+rankDir*1),
 		chess.NewPosition(from.File, from.Rank+rankDir*2),
 	}
+
 	for i, move := range positions {
 		piece, err := squares.FindByPosition(move)
 		if (err != nil || piece != nil) || (i == 1 && p.isMoved) {
 			break
 		}
 
-		moves.Add(move)
+		moves = append(moves, move)
 	}
 
 	return moves
 }
 
-func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *chess.Squares) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](2)
+func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *chess.Squares) []chess.Position {
+	moves := make([]chess.Position, 0, 2)
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File+1, from.Rank+rankDir),
 		chess.NewPosition(from.File-1, from.Rank+rankDir),
@@ -85,7 +86,7 @@ func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *c
 	for _, move := range positions {
 		piece, err := squares.FindByPosition(move)
 		if err == nil && piece != nil && piece.Side() != p.side {
-			moves.Add(move)
+			moves = append(moves, move)
 		}
 	}
 

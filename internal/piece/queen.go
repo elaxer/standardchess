@@ -3,7 +3,6 @@ package piece
 import (
 	"encoding/json"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/elaxer/chess"
 )
 
@@ -24,11 +23,11 @@ func (q *Queen) Side() chess.Side {
 	return q.side
 }
 
-func (q *Queen) PseudoMoves(from chess.Position, squares *chess.Squares) chess.PositionSet {
-	moves := mapset.NewSetWithSize[chess.Position](27)
+func (q *Queen) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
+	moves := make([]chess.Position, 0, 27)
 	for _, direction := range allDirections {
 		for move := range q.slide(from, direction, squares) {
-			moves.Add(move)
+			moves = append(moves, move)
 		}
 	}
 
