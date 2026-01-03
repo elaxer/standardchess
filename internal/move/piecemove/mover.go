@@ -16,7 +16,6 @@ func MakeMove(move PieceMove, movingPieceNotation string, board chess.Board) (Pi
 	if err != nil {
 		return PieceMoveResult{}, err
 	}
-
 	if err := ValidateMove(pieceMove, movingPieceNotation, board); err != nil {
 		return PieceMoveResult{}, err
 	}

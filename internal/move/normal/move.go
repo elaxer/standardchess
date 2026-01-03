@@ -1,13 +1,14 @@
 package normal
 
 import (
+	"errors"
 	"regexp"
+	"slices"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/rgx"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/piece"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 var regexpNormal = regexp.MustCompile("^(?P<piece>[KQBNR])?(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))[#+]?$")
@@ -39,16 +40,14 @@ func MoveFromString(notation string) (*Move, error) {
 }
 
 func (m *Move) Validate() error {
-	pieceNotations := make([]any, 0, len(piece.AllNotations))
-	for _, notation := range piece.AllNotations {
-		pieceNotations = append(pieceNotations, notation)
+	if err := m.PieceMove.Validate(); err != nil {
+		return err
+	}
+	if !slices.Contains(piece.AllNotations, m.PieceNotation) {
+		return errors.New("wrong notation")
 	}
 
-	return validation.ValidateStruct(
-		m,
-		validation.Field(&m.PieceMove),
-		validation.Field(&m.PieceNotation, validation.In(pieceNotations...)),
-	)
+	return nil
 }
 
 func (m *Move) String() string {

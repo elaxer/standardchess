@@ -23,7 +23,7 @@ func ResolveFrom(from, to chess.Position, pieceNotation string, board chess.Boar
 	}
 
 	pieces := make([]chess.Piece, 0, 8)
-	for _, piece := range board.Squares().GetPieces(pieceNotation, turn) {
+	for piece := range board.Squares().GetPieces(pieceNotation, turn) {
 		if slices.Contains(board.LegalMoves(piece), to) {
 			pieces = append(pieces, piece)
 		}

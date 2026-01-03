@@ -37,6 +37,7 @@ var stateRules = []rule.Rule{
 type board struct {
 	turn           chess.Side
 	squares        *chess.Squares
+	moves          map[chess.Side][]chess.Position
 	moveHistory    []chess.MoveResult
 	capturedPieces []chess.Piece
 	stateRules     []rule.Rule
@@ -53,9 +54,13 @@ func NewBoardSized(turn chess.Side, placement map[chess.Position]chess.Piece, ed
 	}
 
 	return &board{
-		turn:           turn,
-		squares:        squares,
-		moveHistory:    make([]chess.MoveResult, 0, 128),
+		turn:        turn,
+		squares:     squares,
+		moveHistory: make([]chess.MoveResult, 0, 128),
+		moves: map[chess.Side][]chess.Position{
+			chess.SideWhite: make([]chess.Position, 0, 64),
+			chess.SideBlack: make([]chess.Position, 0, 64),
+		},
 		capturedPieces: make([]chess.Piece, 0, 30),
 
 		stateRules: stateRules,
@@ -123,18 +128,27 @@ func (b *board) MoveHistory() []chess.MoveResult {
 }
 
 func (b *board) Moves(side chess.Side) []chess.Position {
-	moves := make([]chess.Position, 0, 32)
-	for _, piece := range b.squares.GetAllPieces(side) {
-		moves = append(moves, b.LegalMoves(piece)...)
+	uniqueMoves := make(map[chess.Position]bool, 32)
+
+	for piece := range b.squares.GetAllPieces(side) {
+		for _, move := range b.LegalMoves(piece) {
+			uniqueMoves[move] = true
+		}
 	}
 
-	return moves
+	if len(b.moves[side]) != 0 {
+		for move := range uniqueMoves {
+			b.moves[side] = append(b.moves[side], move)
+		}
+	}
+
+	return b.moves[side]
 }
 
 func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 	from := b.squares.GetByPiece(p)
 	if from.IsEmpty() {
-		return nil
+		return make([]chess.Position, 0)
 	}
 
 	pseudoMoves := p.PseudoMoves(from, b.squares)
@@ -148,8 +162,12 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 		//nolint:errcheck,gosec
 		b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
-			if !slices.Contains(b.Moves(!b.turn), kingPosition) {
-				legalMoves = append(legalMoves, to)
+			for piece := range b.squares.GetAllPieces(!b.turn) {
+				for _, move := range piece.PseudoMoves(from, b.squares) {
+					if move != kingPosition {
+						legalMoves = append(legalMoves, to)
+					}
+				}
 			}
 		})
 	}
@@ -178,6 +196,9 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 		b.capturedPieces = append(b.capturedPieces, moveResult.CapturedPiece())
 	}
 
+	b.moves[chess.SideWhite] = b.moves[chess.SideWhite][:0]
+	b.moves[chess.SideBlack] = b.moves[chess.SideWhite][:0]
+
 	return moveResult, nil
 }
 
@@ -198,6 +219,9 @@ func (b *board) UndoLastMove() (chess.MoveResult, error) {
 	if lastMove.CapturedPiece() != nil {
 		_ = slices.Delete(b.capturedPieces, len(b.capturedPieces)-1, len(b.capturedPieces))
 	}
+
+	b.moves[chess.SideWhite] = b.moves[chess.SideWhite][:0]
+	b.moves[chess.SideBlack] = b.moves[chess.SideWhite][:0]
 
 	return lastMove, nil
 }
