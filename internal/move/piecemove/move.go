@@ -1,8 +1,9 @@
 package piecemove
 
 import (
+	"errors"
+
 	"github.com/elaxer/chess"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type PieceMove struct {
@@ -15,9 +16,15 @@ func NewPieceMove(from, to chess.Position) PieceMove {
 }
 
 func (m PieceMove) Validate() error {
-	return validation.ValidateStruct(
-		&m,
-		validation.Field(&m.From),
-		validation.Field(&m.To, validation.By(chess.ValidationRulePositionIsEmpty)),
-	)
+	if err := m.From.Validate(); err != nil {
+		return err
+	}
+	if err := m.To.Validate(); err != nil {
+		return err
+	}
+	if !m.To.IsFull() {
+		return errors.New("not full todo")
+	}
+
+	return nil
 }

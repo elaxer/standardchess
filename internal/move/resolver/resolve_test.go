@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
@@ -105,5 +106,17 @@ func TestResolveFrom(t *testing.T) {
 				assert.Equal(t, tt.want, got)
 			}
 		})
+	}
+}
+
+func BenchmarkResolve(b *testing.B) {
+	board := standardchess.NewBoardFilled()
+
+	from, to := chess.NewPositionEmpty(), chess.PositionFromString("e4")
+	turn := board.Turn()
+
+	b.ResetTimer()
+	for range b.N {
+		_, _ = resolver.ResolveFrom(from, to, piece.NotationPawn, board, turn)
 	}
 }

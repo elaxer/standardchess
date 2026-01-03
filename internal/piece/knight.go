@@ -40,6 +40,7 @@ func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []ches
 
 	return moves
 }
+
 func (k *Knight) Notation() string {
 	return NotationKnight
 }

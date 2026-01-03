@@ -119,11 +119,13 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 			board := standardchess.NewBoardFilled()
 
 			for _, move := range standardtest.MovesFromPGN(tt.pgnStr) {
-				_, err := board.MakeMove(move)
+				result, err := board.MakeMove(move)
+				require.NotNil(t, result)
 				require.NoError(t, err)
 			}
 			for i := range board.MoveHistory() {
-				_, err := board.UndoLastMove()
+				result, err := board.UndoLastMove()
+				require.NotNil(t, result)
 				require.NoErrorf(t, err, "No %d", i+1)
 			}
 

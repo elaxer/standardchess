@@ -29,9 +29,11 @@ func NewPawn(side chess.Side) *Pawn {
 
 func (p *Pawn) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	direction := PawnRankDirection(p.side)
-	moves := append(make([]chess.Position, 0, 4), p.movesForward(from, direction, squares)...)
+	moves := make([]chess.Position, 0, 4)
+	p.appendMovesForward(&moves, from, direction, squares)
+	p.appendMovesDiagonal(&moves, from, direction, squares)
 
-	return append(moves, p.movesDiagonal(from, direction, squares)...)
+	return moves
 }
 
 func (p *Pawn) Notation() string {
@@ -58,8 +60,7 @@ func (p *Pawn) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *chess.Squares) []chess.Position {
-	moves := make([]chess.Position, 0, 2)
+func (p *Pawn) appendMovesForward(moves *[]chess.Position, from chess.Position, rankDir chess.Rank, squares *chess.Squares) {
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File, from.Rank+rankDir*1),
 		chess.NewPosition(from.File, from.Rank+rankDir*2),
@@ -71,14 +72,11 @@ func (p *Pawn) movesForward(from chess.Position, rankDir chess.Rank, squares *ch
 			break
 		}
 
-		moves = append(moves, move)
+		*moves = append(*moves, move)
 	}
-
-	return moves
 }
 
-func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *chess.Squares) []chess.Position {
-	moves := make([]chess.Position, 0, 2)
+func (p *Pawn) appendMovesDiagonal(moves *[]chess.Position, from chess.Position, rankDir chess.Rank, squares *chess.Squares) {
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File+1, from.Rank+rankDir),
 		chess.NewPosition(from.File-1, from.Rank+rankDir),
@@ -86,9 +84,7 @@ func (p *Pawn) movesDiagonal(from chess.Position, rankDir chess.Rank, squares *c
 	for _, move := range positions {
 		piece, err := squares.FindByPosition(move)
 		if err == nil && piece != nil && piece.Side() != p.side {
-			moves = append(moves, move)
+			*moves = append(*moves, move)
 		}
 	}
-
-	return moves
 }
