@@ -15,8 +15,8 @@ import (
 	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
-func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {
-	board, err := standardchess.NewBoard(turn, placement)
+func NewBoardEmpty8x8(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {
+	board, err := standardchess.NewBoardEmpty(turn, placement, chess.PositionFromString("h8"))
 	must(err)
 
 	return board

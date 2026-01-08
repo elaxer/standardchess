@@ -12,7 +12,7 @@ import (
 )
 
 func TestMakePromotion_White(t *testing.T) {
-	board := standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+	board := standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 		chess.PositionFromString("d7"): standardtest.NewPiece("P"),
 		chess.PositionFromString("a1"): standardtest.NewPiece("K"),
 		chess.PositionFromString("a8"): standardtest.NewPiece("k"),
@@ -31,7 +31,7 @@ func TestMakePromotion_White(t *testing.T) {
 }
 
 func TestMakePromotion_Black(t *testing.T) {
-	board := standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
+	board := standardtest.NewBoardEmpty8x8(chess.SideBlack, map[chess.Position]chess.Piece{
 		chess.PositionFromString("d2"): standardtest.NewPiece("p"),
 		chess.PositionFromString("a8"): standardtest.NewPiece("K"),
 		chess.PositionFromString("a1"): standardtest.NewPiece("k"),

@@ -6,7 +6,6 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
-	"github.com/elaxer/standardchess/internal/move/result"
 )
 
 var ErrUndoMove = errors.New("cannot undo normal move")
@@ -20,8 +19,6 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	pieceMoveResult.Abstract = result.NewAbstract(board)
 
 	return &MoveResult{PieceMoveResult: pieceMoveResult, InputMove: *move}, nil
 }

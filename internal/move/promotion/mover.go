@@ -7,7 +7,6 @@ import (
 	"github.com/elaxer/chess"
 
 	"github.com/elaxer/standardchess/internal/move/piecemove"
-	"github.com/elaxer/standardchess/internal/move/result"
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
@@ -34,8 +33,6 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 	if err := board.Squares().PlacePiece(promotedPiece, move.To); err != nil {
 		return nil, err
 	}
-
-	pieceResult.Abstract = result.NewAbstract(board)
 
 	return &MoveResult{PieceMoveResult: pieceResult, InputMove: *move}, nil
 }

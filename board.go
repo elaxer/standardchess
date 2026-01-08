@@ -37,38 +37,33 @@ var stateRules = []rule.Rule{
 type board struct {
 	turn           chess.Side
 	squares        *chess.Squares
-	moves          map[chess.Side][]chess.Position
 	moveHistory    []chess.MoveResult
 	capturedPieces []chess.Piece
 	stateRules     []rule.Rule
+
+	moves []chess.Position
+	state chess.State
 }
 
-func NewBoard(turn chess.Side, placement map[chess.Position]chess.Piece) (chess.Board, error) {
-	return NewBoardSized(turn, placement, edgePosition)
-}
-
-func NewBoardSized(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
+func NewBoardEmpty(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
 	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
 	if err != nil {
 		return nil, err
 	}
 
 	return &board{
-		turn:        turn,
-		squares:     squares,
-		moveHistory: make([]chess.MoveResult, 0, 128),
-		moves: map[chess.Side][]chess.Position{
-			chess.SideWhite: make([]chess.Position, 0, 64),
-			chess.SideBlack: make([]chess.Position, 0, 64),
-		},
+		turn:           turn,
+		squares:        squares,
+		moveHistory:    make([]chess.MoveResult, 0, 128),
+		moves:          make([]chess.Position, 0, 128),
 		capturedPieces: make([]chess.Piece, 0, 30),
 
 		stateRules: stateRules,
 	}, nil
 }
 
-func NewBoardFilled() chess.Board {
-	board, err := NewBoard(chess.SideWhite, nil)
+func NewBoard() chess.Board {
+	board, err := NewBoardEmpty(chess.SideWhite, nil, edgePosition)
 	must(err)
 
 	for i, notation := range firstRowPieceNotations {
@@ -91,7 +86,7 @@ func NewBoardFilled() chess.Board {
 }
 
 func NewBoardFromMoves(moves []chess.Move) (chess.Board, error) {
-	board := NewBoardFilled()
+	board := NewBoard()
 	for i, move := range moves {
 		if _, err := board.MakeMove(move); err != nil {
 			return nil, fmt.Errorf("%s#%d: %w", move, i+1, err)
@@ -109,14 +104,22 @@ func (b *board) Turn() chess.Side {
 	return b.turn
 }
 
-func (b *board) State(side chess.Side) chess.State {
+func (b *board) State() chess.State {
+	if b.state != nil {
+		return b.state
+	}
+
 	for _, rule := range b.stateRules {
-		if state := rule(b, side); state != nil {
-			return state
+		if state := rule(b, b.turn); state != nil {
+			b.state = state
+
+			return b.state
 		}
 	}
 
-	return chess.StateClear
+	b.state = chess.StateClear
+
+	return b.state
 }
 
 func (b *board) CapturedPieces() []chess.Piece {
@@ -127,21 +130,24 @@ func (b *board) MoveHistory() []chess.MoveResult {
 	return b.moveHistory
 }
 
-func (b *board) Moves(side chess.Side) []chess.Position {
+func (b *board) Moves() []chess.Position {
+	if len(b.moves) > 0 {
+		return b.moves
+	}
+
 	uniqueMoves := make(map[chess.Position]bool, 32)
 
-	for piece := range b.squares.GetAllPieces(side) {
+	for piece := range b.squares.GetAllPieces(b.turn) {
 		for _, move := range b.LegalMoves(piece) {
 			uniqueMoves[move] = true
 		}
 	}
 
-	moves := make([]chess.Position, 0, 32)
 	for move := range uniqueMoves {
-		moves = append(moves, move)
+		b.moves = append(b.moves, move)
 	}
 
-	return moves
+	return b.moves
 }
 
 func (b *board) LegalMoves(p chess.Piece) []chess.Position {
@@ -161,7 +167,7 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 		//nolint:errcheck,gosec
 		b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
-			if !slices.Contains(b.Moves(!b.turn), kingPosition) {
+			if !b.IsSquareAttacked(kingPosition) {
 				legalMoves = append(legalMoves, to)
 			}
 		})
@@ -175,8 +181,19 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 	return legalMoves
 }
 
+func (b *board) IsSquareAttacked(position chess.Position) bool {
+	for piece := range b.squares.GetAllPieces(!b.turn) {
+		from := b.squares.GetByPiece(piece)
+		if slices.Contains(piece.PseudoMoves(from, b.squares), position) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
-	if b.State(b.turn).Type().IsTerminal() {
+	if b.State().Type().IsTerminal() {
 		return nil, nil
 	}
 
@@ -191,8 +208,10 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 		b.capturedPieces = append(b.capturedPieces, moveResult.CapturedPiece())
 	}
 
-	b.moves[chess.SideWhite] = b.moves[chess.SideWhite][:0]
-	b.moves[chess.SideBlack] = b.moves[chess.SideWhite][:0]
+	b.moves = b.moves[:0]
+	b.state = nil
+
+	moveResult.SetBoardNewState(b.State())
 
 	return moveResult, nil
 }
@@ -215,8 +234,8 @@ func (b *board) UndoLastMove() (chess.MoveResult, error) {
 		_ = slices.Delete(b.capturedPieces, len(b.capturedPieces)-1, len(b.capturedPieces))
 	}
 
-	b.moves[chess.SideWhite] = b.moves[chess.SideWhite][:0]
-	b.moves[chess.SideBlack] = b.moves[chess.SideWhite][:0]
+	b.moves = b.moves[:0]
+	b.state = nil
 
 	return lastMove, nil
 }
@@ -244,7 +263,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(map[string]any{
 		"turn":            b.turn,
-		"state":           b.State(b.turn),
+		"state":           b.State(),
 		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
 		"captured_pieces": b.capturedPieces,
 		"move_history":    b.moveHistory,

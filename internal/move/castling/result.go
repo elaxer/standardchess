@@ -2,7 +2,7 @@ package castling
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/result"
@@ -10,7 +10,7 @@ import (
 )
 
 type MoveResult struct {
-	result.Abstract
+	*result.Abstract
 	CastlingType
 
 	InitRookPosition chess.Position
@@ -26,9 +26,12 @@ func (r *MoveResult) Move() chess.Move {
 }
 
 func (r *MoveResult) Validate() error {
+	if r.Abstract == nil || r.Abstract.NewState == nil {
+		return errors.New("aosdjfioj")
+	}
+
 	return validation.ValidateStruct(
 		r,
-		validation.Field(&r.Abstract),
 		validation.Field(&r.InitKingPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
 		validation.Field(&r.InitRookPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
 	)
@@ -45,5 +48,5 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 }
 
 func (r *MoveResult) String() string {
-	return fmt.Sprintf("%s%s", r.CastlingType, r.Suffix())
+	return r.CastlingType.String() + r.Suffix()
 }

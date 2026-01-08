@@ -3,7 +3,6 @@ package castling
 import (
 	"errors"
 	"fmt"
-	"slices"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/piece"
@@ -27,7 +26,7 @@ func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board,
 	if king.IsMoved() {
 		return fmt.Errorf("%w: the king already has been moved", ErrValidation)
 	}
-	if !board.State(side).Type().IsClear() {
+	if side == board.Turn() && !board.State().Type().IsClear() {
 		return fmt.Errorf("%w: the king is under threat", ErrValidation)
 	}
 
@@ -46,8 +45,8 @@ func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board,
 	}
 
 	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
-	oppositeMoves := board.Moves(!side)
-	if slices.Contains(oppositeMoves, kingNewPosition) || slices.Contains(oppositeMoves, rookNewPosition) {
+
+	if side == board.Turn() && (board.IsSquareAttacked(kingNewPosition) || board.IsSquareAttacked(rookNewPosition)) {
 		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
 
 	}

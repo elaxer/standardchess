@@ -24,7 +24,7 @@ func TestStalemate(t *testing.T) {
 		{
 			"stalemate",
 			args{
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a8"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("b6"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("c7"): piece.NewQueen(chess.SideBlack),
@@ -36,7 +36,7 @@ func TestStalemate(t *testing.T) {
 		{
 			"no_stalemate",
 			args{
-				standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a8"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("c7"): piece.NewQueen(chess.SideWhite),
 					chess.PositionFromString("b6"): piece.NewKing(chess.SideBlack),

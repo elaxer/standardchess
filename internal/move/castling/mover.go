@@ -42,7 +42,7 @@ func MakeMove(castlingType CastlingType, board chess.Board) (chess.MoveResult, e
 	rook.SetIsMoved(true)
 
 	return &MoveResult{
-		Abstract:         result.NewAbstract(board),
+		Abstract:         &result.Abstract{MoveSide: board.Turn()},
 		CastlingType:     castlingType,
 		InitKingPosition: kingPosition,
 		InitRookPosition: rookPosition,

@@ -1,8 +1,6 @@
 package enpassant
 
 import (
-	"fmt"
-
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -21,5 +19,5 @@ func (m *Move) Validate() error {
 }
 
 func (m *Move) String() string {
-	return fmt.Sprintf("%s%s", m.From, m.To)
+	return m.From.String() + m.To.String()
 }

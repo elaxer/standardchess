@@ -19,7 +19,7 @@ func TestUndoNormal(t *testing.T) {
 	pieceWillBeCaptured := standardtest.NewPiece("p")
 	movedPieceWillBeCaptured := standardtest.NewPieceM("p")
 
-	board := standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+	board := standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 		chess.PositionFromString("a1"): piece,
 		chess.PositionFromString("h1"): movedPieceWillBeCaptured,
 
@@ -34,6 +34,7 @@ func TestUndoNormal(t *testing.T) {
 		chess.PositionFromString("h1"),
 		piece.Notation(),
 	), board)
+	firstMoveResult.SetBoardNewState(chess.StateClear)
 	require.NoError(t, err)
 
 	secondMoveResult, err := normal.MakeMove(normal.NewMove(
@@ -41,6 +42,7 @@ func TestUndoNormal(t *testing.T) {
 		chess.PositionFromString("a8"),
 		movedPiece.Notation(),
 	), board)
+	secondMoveResult.SetBoardNewState(chess.StateClear)
 	require.NoError(t, err)
 
 	err = normal.UndoMove(secondMoveResult, board)
@@ -57,7 +59,7 @@ func TestUndoNormal(t *testing.T) {
 }
 
 func BenchmarkMakeMove(b *testing.B) {
-	board := standardchess.NewBoardFilled()
+	board := standardchess.NewBoard()
 
 	move := normal.NewMove(
 		chess.PositionFromString("e2"),
@@ -70,8 +72,9 @@ func BenchmarkMakeMove(b *testing.B) {
 
 		b.StopTimer()
 		require.NoError(b, err)
-		board.UndoLastMove()
-		board = standardchess.NewBoardFilled()
+		_, err = board.UndoLastMove()
+		require.NoError(b, err)
+		board = standardchess.NewBoard()
 		b.StartTimer()
 	}
 }

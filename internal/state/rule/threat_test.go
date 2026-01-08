@@ -24,7 +24,7 @@ func TestCheck(t *testing.T) {
 		{
 			"check",
 			args{
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("a8"): piece.NewRook(chess.SideBlack),
@@ -36,7 +36,7 @@ func TestCheck(t *testing.T) {
 		{
 			"check_bishop",
 			args{
-				standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("h8"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("b4"): piece.NewBishop(chess.SideWhite),
@@ -48,7 +48,7 @@ func TestCheck(t *testing.T) {
 		{
 			"check_pawns",
 			args{
-				standardtest.NewBoard(chess.SideBlack, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideBlack, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d4"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("c3"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("e3"): piece.NewBishop(chess.SideWhite),
@@ -60,7 +60,7 @@ func TestCheck(t *testing.T) {
 		{
 			"no_check",
 			args{
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("d4"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("a1"): piece.NewRook(chess.SideBlack),

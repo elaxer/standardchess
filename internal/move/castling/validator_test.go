@@ -24,7 +24,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"short",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("g8"): standardtest.NewPiece("Q"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
@@ -38,7 +38,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"long",
 			args{
 				castling.TypeLong,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("R"),
@@ -51,7 +51,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"king_is_walked",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPieceM("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("R"),
@@ -63,7 +63,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"rook_is_walked",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPieceM("R"),
@@ -75,7 +75,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"opposite_side_rook",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("r"),
@@ -87,7 +87,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"let",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("g1"): standardtest.NewPiece("N"),
@@ -100,7 +100,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"obstacle",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("R"),
@@ -113,7 +113,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"future_check",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("R"),
@@ -126,7 +126,7 @@ func TestValidateCastlingMove(t *testing.T) {
 			"attacked_castling_square",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 					chess.PositionFromString("a1"): standardtest.NewPiece("R"),
 					chess.PositionFromString("h1"): standardtest.NewPiece("R"),

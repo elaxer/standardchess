@@ -2,7 +2,6 @@ package promotion
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
@@ -43,12 +42,5 @@ func (r *MoveResult) String() string {
 		from.File = r.FromFull.File
 	}
 
-	return fmt.Sprintf(
-		"%s%s%s=%s%s",
-		from,
-		r.CaptureString(),
-		r.InputMove.To,
-		r.InputMove.PromotedPieceNotation,
-		r.Suffix(),
-	)
+	return from.String() + r.CaptureString() + r.InputMove.To.String() + "=" + r.InputMove.PromotedPieceNotation + r.Suffix()
 }

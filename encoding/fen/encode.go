@@ -48,7 +48,8 @@ func EncodeSquares(squares *chess.Squares) string {
 	fen := ""
 	var fenSb strings.Builder
 	for _, row := range squares.IterOverRows(true) {
-		fenSb.WriteString(encodeRow(row) + "/")
+		fenSb.WriteString(encodeRow(row))
+		fenSb.WriteRune('/')
 	}
 	fen += fenSb.String()
 
@@ -92,16 +93,16 @@ func callMetricFunc(metricFunc metric.MetricFunc, board chess.Board) any {
 func castlingMetric(board chess.Board) metric.Metric {
 	var str strings.Builder
 	if err := castling.ValidateMove(castling.TypeShort, chess.SideWhite, board, false); err == nil {
-		str.WriteString("K")
+		str.WriteRune('K')
 	}
 	if err := castling.ValidateMove(castling.TypeLong, chess.SideWhite, board, false); err == nil {
-		str.WriteString("Q")
+		str.WriteRune('Q')
 	}
 	if err := castling.ValidateMove(castling.TypeShort, chess.SideBlack, board, false); err == nil {
-		str.WriteString("k")
+		str.WriteRune('k')
 	}
 	if err := castling.ValidateMove(castling.TypeLong, chess.SideBlack, board, false); err == nil {
-		str.WriteString("q")
+		str.WriteRune('q')
 	}
 
 	result := str.String()

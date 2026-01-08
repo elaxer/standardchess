@@ -2,7 +2,6 @@ package normal
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
@@ -44,5 +43,5 @@ func (r *MoveResult) String() string {
 		from.File = r.FromFull.File
 	}
 
-	return fmt.Sprintf("%s%s%s%s%s", r.InputMove.PieceNotation, from, r.CaptureString(), r.InputMove.To, r.Suffix())
+	return r.InputMove.PieceNotation + from.String() + r.CaptureString() + r.InputMove.To.String() + r.Suffix()
 }

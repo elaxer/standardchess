@@ -25,7 +25,7 @@ func TestCheckmate(t *testing.T) {
 		{
 			"checkmate",
 			args{
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("a8"): piece.NewRook(chess.SideBlack),
@@ -39,7 +39,7 @@ func TestCheckmate(t *testing.T) {
 			// no checkmate because the black king can capture the threatening rook
 			"no_checkmate",
 			args{
-				standardtest.NewBoard(chess.SideWhite, map[chess.Position]chess.Piece{
+				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
 					chess.PositionFromString("a1"): piece.NewKing(chess.SideWhite),
 					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
 					chess.PositionFromString("a2"): piece.NewRook(chess.SideBlack),

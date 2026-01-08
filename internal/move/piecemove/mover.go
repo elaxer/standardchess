@@ -3,6 +3,7 @@ package piecemove
 import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/resolver"
+	"github.com/elaxer/standardchess/internal/move/result"
 )
 
 func MakeMove(move PieceMove, movingPieceNotation string, board chess.Board) (PieceMoveResult, error) {
@@ -39,5 +40,6 @@ func MakeMove(move PieceMove, movingPieceNotation string, board chess.Board) (Pi
 		FromFull:      fullFrom,
 		FromShortened: shortenedFrom,
 		Captured:      capturedPiece,
+		Abstract:      &result.Abstract{MoveSide: board.Turn()},
 	}, nil
 }

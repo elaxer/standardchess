@@ -22,6 +22,7 @@ func (m PieceMove) Validate() error {
 	if err := m.To.Validate(); err != nil {
 		return err
 	}
+	// todo
 	if !m.To.IsFull() {
 		return errors.New("not full todo")
 	}

@@ -2,7 +2,6 @@ package enpassant
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
@@ -44,5 +43,5 @@ func (r *MoveResult) String() string {
 		from.File = r.FromFull.File
 	}
 
-	return fmt.Sprintf("%sx%s%s", from, r.InputMove.To, r.Suffix())
+	return from.String() + "x" + r.InputMove.To.String() + r.Suffix()
 }
