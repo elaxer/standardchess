@@ -11,11 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// todo test opposite turn
 func TestCheckmate(t *testing.T) {
 	type args struct {
 		board chess.Board
-		side  chess.Side
 	}
 	tests := []struct {
 		name string
@@ -25,13 +23,12 @@ func TestCheckmate(t *testing.T) {
 		{
 			"checkmate",
 			args{
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("a1"): piece.NewKing(chess.SideWhite),
-					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
-					chess.PositionFromString("a8"): piece.NewRook(chess.SideBlack),
-					chess.PositionFromString("b8"): piece.NewRook(chess.SideBlack),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("a1"): piece.NewKing(chess.ColorWhite),
+					chess.PositionFromString("h8"): piece.NewKing(chess.ColorBlack),
+					chess.PositionFromString("a8"): piece.NewRook(chess.ColorBlack),
+					chess.PositionFromString("b8"): piece.NewRook(chess.ColorBlack),
 				}),
-				chess.SideWhite,
 			},
 			state.Checkmate,
 		},
@@ -39,13 +36,12 @@ func TestCheckmate(t *testing.T) {
 			// no checkmate because the black king can capture the threatening rook
 			"no_checkmate",
 			args{
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("a1"): piece.NewKing(chess.SideWhite),
-					chess.PositionFromString("h8"): piece.NewKing(chess.SideBlack),
-					chess.PositionFromString("a2"): piece.NewRook(chess.SideBlack),
-					chess.PositionFromString("b8"): piece.NewRook(chess.SideBlack),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("a1"): piece.NewKing(chess.ColorWhite),
+					chess.PositionFromString("h8"): piece.NewKing(chess.ColorBlack),
+					chess.PositionFromString("a2"): piece.NewRook(chess.ColorBlack),
+					chess.PositionFromString("b8"): piece.NewRook(chess.ColorBlack),
 				}),
-				chess.SideWhite,
 			},
 
 			nil,
@@ -53,7 +49,7 @@ func TestCheckmate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := rule.Checkmate(tt.args.board, tt.args.side)
+			got := rule.Checkmate(tt.args.board)
 			assert.Equal(t, tt.want, got)
 		})
 	}

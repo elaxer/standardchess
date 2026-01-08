@@ -46,7 +46,7 @@ func UndoPromotion(move *MoveResult, board chess.Board) error {
 	if err != nil {
 		return err
 	}
-	if p.Side() != move.MoveSide {
+	if p.Color() != move.MoveSide {
 		return fmt.Errorf("%w: cannot find promoted piece", ErrUndo)
 	}
 

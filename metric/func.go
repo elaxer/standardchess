@@ -15,10 +15,10 @@ var AllFuncs = []metric.MetricFunc{
 	HalfmoveClock,
 }
 
-type Castlings = map[string]map[chess.Side]map[string]bool
+type Castlings = map[string]map[chess.Color]map[string]bool
 
 func CastlingAbility(board chess.Board) metric.Metric {
-	callback := func(side chess.Side, board chess.Board, validateObstacle bool) map[string]bool {
+	callback := func(side chess.Color, board chess.Board, validateObstacle bool) map[string]bool {
 		return map[string]bool{
 			castling.TypeShort.String(): castling.ValidateMove(castling.TypeShort, side, board, validateObstacle) == nil,
 			castling.TypeLong.String():  castling.ValidateMove(castling.TypeLong, side, board, validateObstacle) == nil,
@@ -27,12 +27,12 @@ func CastlingAbility(board chess.Board) metric.Metric {
 
 	castlings := Castlings{
 		"theoretical": {
-			chess.SideWhite: callback(chess.SideWhite, board, false),
-			chess.SideBlack: callback(chess.SideBlack, board, false),
+			chess.ColorWhite: callback(chess.ColorWhite, board, false),
+			chess.ColorBlack: callback(chess.ColorBlack, board, false),
 		},
 		"practical": {
-			chess.SideWhite: callback(chess.SideWhite, board, true),
-			chess.SideBlack: callback(chess.SideBlack, board, true),
+			chess.ColorWhite: callback(chess.ColorWhite, board, true),
+			chess.ColorBlack: callback(chess.ColorBlack, board, true),
 		},
 	}
 

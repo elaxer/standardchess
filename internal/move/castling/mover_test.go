@@ -40,7 +40,7 @@ func TestMakeCastling(t *testing.T) {
 			"white_short",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, nil),
 			},
 			chess.PositionFromString("e1"),
 			chess.PositionFromString("h1"),
@@ -51,7 +51,7 @@ func TestMakeCastling(t *testing.T) {
 			"white_short_uncommon_position",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, nil),
 			},
 			chess.PositionFromString("f1"),
 			chess.PositionFromString("g1"),
@@ -62,7 +62,7 @@ func TestMakeCastling(t *testing.T) {
 			"white_long",
 			args{
 				castling.TypeLong,
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, nil),
 			},
 			chess.PositionFromString("e1"),
 			chess.PositionFromString("a1"),
@@ -73,7 +73,7 @@ func TestMakeCastling(t *testing.T) {
 			"white_long_uncommon_position",
 			args{
 				castling.TypeLong,
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, nil),
 			},
 			chess.PositionFromString("g1"),
 			chess.PositionFromString("a1"),
@@ -84,7 +84,7 @@ func TestMakeCastling(t *testing.T) {
 			"black_short",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoardEmpty8x8(chess.SideBlack, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorBlack, nil),
 			},
 			chess.PositionFromString("e8"),
 			chess.PositionFromString("h8"),
@@ -95,7 +95,7 @@ func TestMakeCastling(t *testing.T) {
 			"black_short_uncommon_position",
 			args{
 				castling.TypeShort,
-				standardtest.NewBoardEmpty8x8(chess.SideBlack, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorBlack, nil),
 			},
 			chess.PositionFromString("c8"),
 			chess.PositionFromString("h8"),
@@ -106,7 +106,7 @@ func TestMakeCastling(t *testing.T) {
 			"black_long",
 			args{
 				castling.TypeLong,
-				standardtest.NewBoardEmpty8x8(chess.SideBlack, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorBlack, nil),
 			},
 			chess.PositionFromString("e8"),
 			chess.PositionFromString("a8"),
@@ -117,7 +117,7 @@ func TestMakeCastling(t *testing.T) {
 			"black_long_uncommon_position",
 			args{
 				castling.TypeLong,
-				standardtest.NewBoardEmpty8x8(chess.SideBlack, nil),
+				standardtest.NewBoardEmpty8x8(chess.ColorBlack, nil),
 			},
 			chess.PositionFromString("b8"),
 			chess.PositionFromString("a8"),
@@ -157,7 +157,7 @@ func TestMakeCastling(t *testing.T) {
 func TestMakeCastling_Negative(t *testing.T) {
 	_, err := castling.MakeMove(
 		castling.TypeShort,
-		standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
+		standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
 			chess.PositionFromString("e1"): standardtest.NewPiece("K"),
 			chess.PositionFromString("h1"): standardtest.NewPiece("R"),
 			chess.PositionFromString("f1"): standardtest.NewPiece("N"),

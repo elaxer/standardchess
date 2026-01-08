@@ -15,7 +15,7 @@ import (
 	standardmetric "github.com/elaxer/standardchess/metric"
 )
 
-func NewBoardEmpty8x8(turn chess.Side, placement map[chess.Position]chess.Piece) chess.Board {
+func NewBoardEmpty8x8(turn chess.Color, placement map[chess.Position]chess.Piece) chess.Board {
 	board, err := standardchess.NewBoardEmpty(turn, placement, chess.PositionFromString("h8"))
 	must(err)
 
@@ -48,9 +48,9 @@ func NewPiece(str string) chess.Piece {
 		panic("invalid piece string")
 	}
 
-	side := chess.SideWhite
+	color := chess.ColorWhite
 	if strings.ToLower(str) == str {
-		side = chess.SideBlack
+		color = chess.ColorBlack
 	}
 
 	notation := strings.ToUpper(str)
@@ -58,7 +58,7 @@ func NewPiece(str string) chess.Piece {
 		notation = piece.NotationPawn
 	}
 
-	piece, err := piece.New(notation, side)
+	piece, err := piece.New(notation, color)
 	must(err)
 
 	return piece

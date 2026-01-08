@@ -22,20 +22,20 @@ var AllNotations = []string{
 // New creates a new chess piece based on the provided notation and side.
 // Returns nil if the piece cannot be created.
 // See chess.PieceFactory for more details.
-func New(notation string, side chess.Side) (chess.Piece, error) {
+func New(notation string, color chess.Color) (chess.Piece, error) {
 	switch notation {
 	case NotationPawn:
-		return NewPawn(side), nil
+		return NewPawn(color), nil
 	case NotationRook:
-		return NewRook(side), nil
+		return NewRook(color), nil
 	case NotationKnight:
-		return NewKnight(side), nil
+		return NewKnight(color), nil
 	case NotationBishop:
-		return NewBishop(side), nil
+		return NewBishop(color), nil
 	case NotationQueen:
-		return NewQueen(side), nil
+		return NewQueen(color), nil
 	case NotationKing:
-		return NewKing(side), nil
+		return NewKing(color), nil
 	}
 
 	return nil, fmt.Errorf("%w: unknown notation", ErrCreate)

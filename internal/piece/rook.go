@@ -15,8 +15,8 @@ type Rook struct {
 	*sliding
 }
 
-func NewRook(side chess.Side) *Rook {
-	return &Rook{&sliding{&abstract{side, false}}}
+func NewRook(color chess.Color) *Rook {
+	return &Rook{&sliding{&abstract{color, false}}}
 }
 
 func (r *Rook) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
@@ -39,7 +39,7 @@ func (r *Rook) Weight() uint8 {
 }
 
 func (r *Rook) String() string {
-	if r.side == chess.SideBlack {
+	if r.color == chess.ColorBlack {
 		return "r"
 	}
 
@@ -48,7 +48,7 @@ func (r *Rook) String() string {
 
 func (r *Rook) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     r.Side(),
+		"side":     r.Color(),
 		"notation": r.Notation(),
 		"is_moved": r.isMoved,
 	})

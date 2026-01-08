@@ -16,8 +16,8 @@ type King struct {
 	*abstract
 }
 
-func NewKing(side chess.Side) *King {
-	return &King{&abstract{side, false}}
+func NewKing(color chess.Color) *King {
+	return &King{&abstract{color, false}}
 }
 
 func (k *King) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
@@ -38,7 +38,7 @@ func (k *King) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.
 			continue
 		}
 
-		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.side) {
+		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.color) {
 			moves = append(moves, move)
 		}
 	}
@@ -55,7 +55,7 @@ func (k *King) Weight() uint8 {
 }
 
 func (k *King) String() string {
-	if k.side == chess.SideBlack {
+	if k.color == chess.ColorBlack {
 		return "k"
 	}
 
@@ -64,7 +64,7 @@ func (k *King) String() string {
 
 func (k *King) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     k.side,
+		"side":     k.color,
 		"notation": k.Notation(),
 		"is_moved": k.isMoved,
 	})

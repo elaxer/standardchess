@@ -35,7 +35,7 @@ var stateRules = []rule.Rule{
 }
 
 type board struct {
-	turn           chess.Side
+	turn           chess.Color
 	squares        *chess.Squares
 	moveHistory    []chess.MoveResult
 	capturedPieces []chess.Piece
@@ -45,7 +45,7 @@ type board struct {
 	state chess.State
 }
 
-func NewBoardEmpty(turn chess.Side, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
+func NewBoardEmpty(turn chess.Color, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
 	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
 	if err != nil {
 		return nil, err
@@ -63,23 +63,23 @@ func NewBoardEmpty(turn chess.Side, placement map[chess.Position]chess.Piece, ed
 }
 
 func NewBoard() chess.Board {
-	board, err := NewBoardEmpty(chess.SideWhite, nil, edgePosition)
+	board, err := NewBoardEmpty(chess.ColorWhite, nil, edgePosition)
 	must(err)
 
 	for i, notation := range firstRowPieceNotations {
 		file := chess.File(i + 1)
 
-		wPiece, err := piece.New(notation, chess.SideWhite)
+		wPiece, err := piece.New(notation, chess.ColorWhite)
 		must(err)
 
 		must(board.Squares().PlacePiece(wPiece, chess.NewPosition(file, chess.RankMin)))
-		must(board.Squares().PlacePiece(piece.NewPawn(chess.SideWhite), chess.NewPosition(file, chess.RankMin+1)))
+		must(board.Squares().PlacePiece(piece.NewPawn(chess.ColorWhite), chess.NewPosition(file, chess.RankMin+1)))
 
-		bPiece, err := piece.New(notation, chess.SideBlack)
+		bPiece, err := piece.New(notation, chess.ColorBlack)
 		must(err)
 
 		must(board.Squares().PlacePiece(bPiece, chess.NewPosition(file, edgePosition.Rank)))
-		must(board.Squares().PlacePiece(piece.NewPawn(chess.SideBlack), chess.NewPosition(file, edgePosition.Rank-1)))
+		must(board.Squares().PlacePiece(piece.NewPawn(chess.ColorBlack), chess.NewPosition(file, edgePosition.Rank-1)))
 	}
 
 	return board
@@ -100,7 +100,7 @@ func (b *board) Squares() *chess.Squares {
 	return b.squares
 }
 
-func (b *board) Turn() chess.Side {
+func (b *board) Turn() chess.Color {
 	return b.turn
 }
 
@@ -110,7 +110,7 @@ func (b *board) State() chess.State {
 	}
 
 	for _, rule := range b.stateRules {
-		if state := rule(b, b.turn); state != nil {
+		if state := rule(b); state != nil {
 			b.state = state
 
 			return b.state
@@ -158,7 +158,7 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 
 	pseudoMoves := p.PseudoMoves(from, b.squares)
 
-	if p.Side() != b.Turn() {
+	if p.Color() != b.Turn() {
 		return pseudoMoves
 	}
 
@@ -254,7 +254,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 		}
 
 		placement := &Placement{Piece: piece, LegalMoves: make([]chess.Position, 0, 27), Position: pos}
-		if piece.Side() == b.turn {
+		if piece.Color() == b.turn {
 			placement.LegalMoves = b.LegalMoves(piece)
 		}
 

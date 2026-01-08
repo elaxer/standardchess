@@ -21,30 +21,30 @@ const (
 	WeightPawn   = piece.WeightPawn
 )
 
-func NewPiece(notation string, side chess.Side) (chess.Piece, error) {
-	return piece.New(notation, side)
+func NewPiece(notation string, color chess.Color) (chess.Piece, error) {
+	return piece.New(notation, color)
 }
 
-func NewRook(side chess.Side) chess.Piece {
-	return piece.NewRook(side)
+func NewRook(color chess.Color) chess.Piece {
+	return piece.NewRook(color)
 }
 
-func NewKnight(side chess.Side) chess.Piece {
-	return piece.NewKnight(side)
+func NewKnight(color chess.Color) chess.Piece {
+	return piece.NewKnight(color)
 }
 
-func NewBishop(side chess.Side) chess.Piece {
-	return piece.NewBishop(side)
+func NewBishop(color chess.Color) chess.Piece {
+	return piece.NewBishop(color)
 }
 
-func NewQueen(side chess.Side) chess.Piece {
-	return piece.NewQueen(side)
+func NewQueen(color chess.Color) chess.Piece {
+	return piece.NewQueen(color)
 }
 
-func NewKing(side chess.Side) chess.Piece {
-	return piece.NewKing(side)
+func NewKing(color chess.Color) chess.Piece {
+	return piece.NewKing(color)
 }
 
-func NewPawn(side chess.Side) chess.Piece {
-	return piece.NewPawn(side)
+func NewPawn(color chess.Color) chess.Piece {
+	return piece.NewPawn(color)
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/result"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type MoveResult struct {
@@ -26,15 +25,17 @@ func (r *MoveResult) Move() chess.Move {
 }
 
 func (r *MoveResult) Validate() error {
-	if r.Abstract == nil || r.Abstract.NewState == nil {
+	if r.Abstract == nil || r.NewState == nil {
 		return errors.New("aosdjfioj")
 	}
+	if !r.InitKingPosition.IsFull() {
+		return errors.New("todo")
+	}
+	if !r.InitRookPosition.IsFull() {
+		return errors.New("todo")
+	}
 
-	return validation.ValidateStruct(
-		r,
-		validation.Field(&r.InitKingPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
-		validation.Field(&r.InitRookPosition, validation.By(chess.ValidationRulePositionIsEmpty)),
-	)
+	return nil
 }
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {

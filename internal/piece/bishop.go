@@ -15,8 +15,8 @@ type Bishop struct {
 	*sliding
 }
 
-func NewBishop(side chess.Side) *Bishop {
-	return &Bishop{&sliding{&abstract{side, false}}}
+func NewBishop(color chess.Color) *Bishop {
+	return &Bishop{&sliding{&abstract{color, false}}}
 }
 
 func (b *Bishop) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
@@ -39,7 +39,7 @@ func (b *Bishop) Weight() uint8 {
 }
 
 func (b *Bishop) String() string {
-	if b.side == chess.SideBlack {
+	if b.color == chess.ColorBlack {
 		return "b"
 	}
 
@@ -48,7 +48,7 @@ func (b *Bishop) String() string {
 
 func (b *Bishop) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     b.side,
+		"side":     b.color,
 		"notation": b.Notation(),
 		"is_moved": b.isMoved,
 	})

@@ -5,8 +5,8 @@ import (
 	"github.com/elaxer/standardchess/internal/state/state"
 )
 
-func Checkmate(board chess.Board, side chess.Side) chess.State {
-	if Check(board, side) != nil && len(board.Moves()) == 0 {
+func Checkmate(board chess.Board) chess.State {
+	if Check(board) != nil && len(board.Moves()) == 0 {
 		return state.Checkmate
 	}
 

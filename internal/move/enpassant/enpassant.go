@@ -31,7 +31,7 @@ func EnPassantPosition(board chess.Board) chess.Position {
 	)
 }
 
-func enPassantRank(side chess.Side) chess.Rank {
+func enPassantRank(side chess.Color) chess.Rank {
 	if side.IsBlack() {
 		return chess.Rank4
 	}

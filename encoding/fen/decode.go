@@ -112,19 +112,19 @@ func isArabDigit(char rune) bool {
 	return char >= '0' && char <= '9'
 }
 
-func side(str string) chess.Side {
+func side(str string) chess.Color {
 	switch strings.ToLower(str) {
 	case "w", "":
-		return chess.SideWhite
+		return chess.ColorWhite
 	default:
-		return chess.SideBlack
+		return chess.ColorBlack
 	}
 }
 
 func createPiece(char rune) (chess.Piece, error) {
-	side := chess.SideWhite
+	color := chess.ColorWhite
 	if char >= 'a' && char <= 'z' {
-		side = chess.SideBlack
+		color = chess.ColorBlack
 	}
 
 	notation := strings.ToUpper(string(char))
@@ -132,5 +132,5 @@ func createPiece(char rune) (chess.Piece, error) {
 		notation = piece.NotationPawn
 	}
 
-	return piece.New(notation, side)
+	return piece.New(notation, color)
 }

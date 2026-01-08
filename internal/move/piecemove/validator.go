@@ -17,7 +17,7 @@ func ValidateMove(move PieceMove, movingPieceNotation string, board chess.Board)
 		return fmt.Errorf("%w: no piece at square", ErrValidation)
 	}
 
-	if piece.Side() != board.Turn() {
+	if piece.Color() != board.Turn() {
 		return fmt.Errorf("%w: wrong side", ErrValidation)
 	}
 	if piece.Notation() != movingPieceNotation {

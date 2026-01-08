@@ -11,7 +11,7 @@ import (
 var ErrResolve = errors.New("resolving error")
 
 // ResolveFrom определяет стартовую позицию фигуры, которая будет ходить.
-func ResolveFrom(from, to chess.Position, pieceNotation string, board chess.Board, turn chess.Side) (chess.Position, error) {
+func ResolveFrom(from, to chess.Position, pieceNotation string, board chess.Board, turn chess.Color) (chess.Position, error) {
 	if from.IsFull() {
 		return from, nil
 	}

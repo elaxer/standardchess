@@ -92,16 +92,16 @@ func callMetricFunc(metricFunc metric.MetricFunc, board chess.Board) any {
 
 func castlingMetric(board chess.Board) metric.Metric {
 	var str strings.Builder
-	if err := castling.ValidateMove(castling.TypeShort, chess.SideWhite, board, false); err == nil {
+	if err := castling.ValidateMove(castling.TypeShort, chess.ColorWhite, board, false); err == nil {
 		str.WriteRune('K')
 	}
-	if err := castling.ValidateMove(castling.TypeLong, chess.SideWhite, board, false); err == nil {
+	if err := castling.ValidateMove(castling.TypeLong, chess.ColorWhite, board, false); err == nil {
 		str.WriteRune('Q')
 	}
-	if err := castling.ValidateMove(castling.TypeShort, chess.SideBlack, board, false); err == nil {
+	if err := castling.ValidateMove(castling.TypeShort, chess.ColorBlack, board, false); err == nil {
 		str.WriteRune('k')
 	}
-	if err := castling.ValidateMove(castling.TypeLong, chess.SideBlack, board, false); err == nil {
+	if err := castling.ValidateMove(castling.TypeLong, chess.ColorBlack, board, false); err == nil {
 		str.WriteRune('q')
 	}
 

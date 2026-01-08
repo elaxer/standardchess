@@ -5,7 +5,6 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type MoveResult struct {
@@ -19,11 +18,11 @@ func (r *MoveResult) Move() chess.Move {
 }
 
 func (r *MoveResult) Validate() error {
-	return validation.ValidateStruct(
-		r,
-		validation.Field(&r.PieceMoveResult),
-		validation.Field(&r.InputMove),
-	)
+	if err := r.PieceMoveResult.Validate(); err != nil {
+		return err
+	}
+
+	return r.InputMove.Validate()
 }
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {

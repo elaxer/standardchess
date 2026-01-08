@@ -5,7 +5,6 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/result"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type PieceMoveResult struct {
@@ -29,13 +28,16 @@ func (r PieceMoveResult) Validate() error {
 	if r.Abstract == nil {
 		return errors.New("sfoadi")
 	}
-	if r.Abstract.NewState == nil {
+	if err := r.Abstract.Validate(); err != nil {
+		return err
+	}
+	if err := r.FromFull.Validate(); err != nil {
+		return err
+	}
+	if !r.FromFull.IsFull() {
 		return errors.New("sfor333333333adi")
 	}
-	return validation.ValidateStruct(&r,
-		validation.Field(&r.FromFull, validation.By(chess.ValidationRulePositionIsEmpty)),
-		validation.Field(&r.FromShortened),
-	)
+	return r.FromShortened.Validate()
 }
 
 func (r PieceMoveResult) CaptureString() string {

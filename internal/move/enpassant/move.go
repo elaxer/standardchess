@@ -3,7 +3,6 @@ package enpassant
 import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type Move struct {
@@ -15,7 +14,7 @@ func NewEnPassant(from, to chess.Position) *Move {
 }
 
 func (m *Move) Validate() error {
-	return validation.ValidateStruct(m, validation.Field(&m.PieceMove))
+	return m.PieceMove.Validate()
 }
 
 func (m *Move) String() string {

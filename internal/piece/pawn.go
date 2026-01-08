@@ -15,20 +15,20 @@ type Pawn struct {
 	*abstract
 }
 
-func PawnRankDirection(side chess.Side) chess.Rank {
-	if side == chess.SideBlack {
+func PawnRankDirection(color chess.Color) chess.Rank {
+	if color == chess.ColorBlack {
 		return -1
 	}
 
 	return 1
 }
 
-func NewPawn(side chess.Side) *Pawn {
-	return &Pawn{&abstract{side, false}}
+func NewPawn(color chess.Color) *Pawn {
+	return &Pawn{&abstract{color, false}}
 }
 
 func (p *Pawn) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
-	direction := PawnRankDirection(p.side)
+	direction := PawnRankDirection(p.color)
 	moves := make([]chess.Position, 0, 4)
 	p.appendMovesForward(&moves, from, direction, squares)
 	p.appendMovesDiagonal(&moves, from, direction, squares)
@@ -45,7 +45,7 @@ func (p *Pawn) Weight() uint8 {
 }
 
 func (p *Pawn) String() string {
-	if p.side == chess.SideBlack {
+	if p.color == chess.ColorBlack {
 		return "p"
 	}
 
@@ -54,7 +54,7 @@ func (p *Pawn) String() string {
 
 func (p *Pawn) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     p.side,
+		"side":     p.color,
 		"notation": p.Notation(),
 		"is_moved": p.isMoved,
 	})
@@ -83,7 +83,7 @@ func (p *Pawn) appendMovesDiagonal(moves *[]chess.Position, from chess.Position,
 	}
 	for _, move := range positions {
 		piece, err := squares.FindByPosition(move)
-		if err == nil && piece != nil && piece.Side() != p.side {
+		if err == nil && piece != nil && piece.Color() != p.color {
 			*moves = append(*moves, move)
 		}
 	}

@@ -15,12 +15,12 @@ type Queen struct {
 	*sliding
 }
 
-func NewQueen(side chess.Side) *Queen {
-	return &Queen{&sliding{&abstract{side, false}}}
+func NewQueen(color chess.Color) *Queen {
+	return &Queen{&sliding{&abstract{color, false}}}
 }
 
-func (q *Queen) Side() chess.Side {
-	return q.side
+func (q *Queen) Side() chess.Color {
+	return q.color
 }
 
 func (q *Queen) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
@@ -43,7 +43,7 @@ func (q *Queen) Weight() uint8 {
 }
 
 func (q *Queen) String() string {
-	if q.side == chess.SideBlack {
+	if q.color == chess.ColorBlack {
 		return "q"
 	}
 
@@ -52,7 +52,7 @@ func (q *Queen) String() string {
 
 func (q *Queen) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     q.side,
+		"side":     q.color,
 		"notation": q.Notation(),
 		"is_moved": q.isMoved,
 	})

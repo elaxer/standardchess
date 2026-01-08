@@ -32,7 +32,7 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 	if err != nil {
 		return err
 	}
-	if p == nil || p.Notation() != move.InputMove.PieceNotation || p.Side() != move.MoveSide {
+	if p == nil || p.Notation() != move.InputMove.PieceNotation || p.Color() != move.MoveSide {
 		return fmt.Errorf("%w: cannot find moved piece", ErrUndoMove)
 	}
 

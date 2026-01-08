@@ -18,7 +18,7 @@ var (
 	rookFileAfterLongCastling = chess.FileD
 )
 
-func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board, validateObstacle bool) error {
+func ValidateMove(castlingType CastlingType, side chess.Color, board chess.Board, validateObstacle bool) error {
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
 	if king == nil {
 		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
@@ -54,13 +54,13 @@ func ValidateMove(castlingType CastlingType, side chess.Side, board chess.Board,
 	return nil
 }
 
-func getRook(fileDir chess.File, side chess.Side, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, bool, error) {
+func getRook(fileDir chess.File, side chess.Color, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, bool, error) {
 	hasObstacle := false
 	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(fileDir, 0)) {
 		if p == nil {
 			continue
 		}
-		if p.Side() != side || p.Notation() != piece.NotationRook {
+		if p.Color() != side || p.Notation() != piece.NotationRook {
 			hasObstacle = true
 
 			continue

@@ -1,16 +1,19 @@
 package promotion
 
 import (
+	"errors"
 	"regexp"
+	"slices"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/rgx"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/piece"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 var regexpPromotion = regexp.MustCompile("(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))=(?P<promoted_piece>[QBNR])[#+]?$")
+
+var allowedNotations = []string{piece.NotationQueen, piece.NotationRook, piece.NotationBishop, piece.NotationKnight}
 
 // Move представляет ход с превращением пешки в другую фигуру.
 // В шахматной нотации он записывается как "e8=Q" или "e7=R+".
@@ -41,15 +44,14 @@ func MoveFromString(notation string) (*Move, error) {
 }
 
 func (m *Move) Validate() error {
-	return validation.ValidateStruct(
-		m,
-		validation.Field(&m.PieceMove),
-		validation.Field(
-			&m.PromotedPieceNotation,
-			validation.Required,
-			validation.In(piece.NotationQueen, piece.NotationRook, piece.NotationBishop, piece.NotationKnight),
-		),
-	)
+	if err := m.PieceMove.Validate(); err != nil {
+		return err
+	}
+	if !slices.Contains(allowedNotations, m.PromotedPieceNotation) {
+		return errors.New("sdoifjsd")
+	}
+
+	return nil
 }
 
 func (m *Move) String() string {

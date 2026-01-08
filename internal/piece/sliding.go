@@ -35,7 +35,7 @@ func (s *sliding) slide(from, direction chess.Position, squares *chess.Squares) 
 			piece, err := squares.FindByPosition(move)
 			canContinue := err == nil && piece == nil
 
-			if (s.canMove(piece, s.side) && !yield(move)) || !canContinue {
+			if (s.canMove(piece, s.color) && !yield(move)) || !canContinue {
 				return
 			}
 		}

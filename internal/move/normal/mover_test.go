@@ -19,7 +19,7 @@ func TestUndoNormal(t *testing.T) {
 	pieceWillBeCaptured := standardtest.NewPiece("p")
 	movedPieceWillBeCaptured := standardtest.NewPieceM("p")
 
-	board := standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
+	board := standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
 		chess.PositionFromString("a1"): piece,
 		chess.PositionFromString("h1"): movedPieceWillBeCaptured,
 
@@ -66,6 +66,7 @@ func BenchmarkMakeMove(b *testing.B) {
 		chess.PositionFromString("e4"),
 		piece.NotationPawn,
 	)
+
 	b.ResetTimer()
 	for range b.N {
 		_, err := normal.MakeMove(move, board)

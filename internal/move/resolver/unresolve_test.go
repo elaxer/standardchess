@@ -27,9 +27,9 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("d1"),
 				chess.PositionFromString("d4"),
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("d1"): piece.NewQueen(chess.SideWhite),
-					chess.PositionFromString("d8"): piece.NewQueen(chess.SideWhite),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("d1"): piece.NewQueen(chess.ColorWhite),
+					chess.PositionFromString("d8"): piece.NewQueen(chess.ColorWhite),
 				}),
 			},
 			chess.Position{Rank: chess.Rank1},
@@ -40,9 +40,9 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("a1"),
 				chess.PositionFromString("d1"),
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("a1"): piece.NewRook(chess.SideBlack),
-					chess.PositionFromString("g1"): piece.NewRook(chess.SideBlack),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("a1"): piece.NewRook(chess.ColorBlack),
+					chess.PositionFromString("g1"): piece.NewRook(chess.ColorBlack),
 				}),
 			},
 			chess.Position{File: chess.FileA},
@@ -53,10 +53,10 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("b7"),
 				chess.PositionFromString("d5"),
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("b7"): piece.NewBishop(chess.SideWhite),
-					chess.PositionFromString("f7"): piece.NewBishop(chess.SideWhite),
-					chess.PositionFromString("b3"): piece.NewBishop(chess.SideWhite),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("b7"): piece.NewBishop(chess.ColorWhite),
+					chess.PositionFromString("f7"): piece.NewBishop(chess.ColorWhite),
+					chess.PositionFromString("b3"): piece.NewBishop(chess.ColorWhite),
 				}),
 			},
 			chess.PositionFromString("b7"),
@@ -67,9 +67,9 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("g1"),
 				chess.PositionFromString("e2"),
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("c3"): piece.NewKnight(chess.SideWhite),
-					chess.PositionFromString("g1"): piece.NewKnight(chess.SideWhite),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("c3"): piece.NewKnight(chess.ColorWhite),
+					chess.PositionFromString("g1"): piece.NewKnight(chess.ColorWhite),
 				}),
 			},
 			chess.PositionFromString("g"),
@@ -80,9 +80,9 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("e2"),
 				chess.PositionFromString("e4"),
-				standardtest.NewBoardEmpty8x8(chess.SideBlack, map[chess.Position]chess.Piece{
-					chess.PositionFromString("e2"): piece.NewPawn(chess.SideBlack),
-					chess.PositionFromString("f2"): piece.NewPawn(chess.SideBlack),
+				standardtest.NewBoardEmpty8x8(chess.ColorBlack, map[chess.Position]chess.Piece{
+					chess.PositionFromString("e2"): piece.NewPawn(chess.ColorBlack),
+					chess.PositionFromString("f2"): piece.NewPawn(chess.ColorBlack),
 				}),
 			},
 			chess.NewPositionEmpty(),
@@ -93,9 +93,9 @@ func TestUnresolveFrom(t *testing.T) {
 			args{
 				chess.PositionFromString("b7"),
 				chess.PositionFromString("c8"),
-				standardtest.NewBoardEmpty8x8(chess.SideWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("b7"): piece.NewPawn(chess.SideWhite),
-					chess.PositionFromString("c8"): piece.NewPawn(chess.SideBlack),
+				standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
+					chess.PositionFromString("b7"): piece.NewPawn(chess.ColorWhite),
+					chess.PositionFromString("c8"): piece.NewPawn(chess.ColorBlack),
 				}),
 			},
 			chess.NewPositionEmpty(),

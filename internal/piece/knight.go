@@ -15,8 +15,8 @@ type Knight struct {
 	*abstract
 }
 
-func NewKnight(side chess.Side) *Knight {
-	return &Knight{&abstract{side, false}}
+func NewKnight(color chess.Color) *Knight {
+	return &Knight{&abstract{color, false}}
 }
 
 func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
@@ -33,7 +33,7 @@ func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []ches
 
 	moves := make([]chess.Position, 0, len(positions))
 	for _, move := range positions {
-		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.side) {
+		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.color) {
 			moves = append(moves, move)
 		}
 	}
@@ -50,7 +50,7 @@ func (k *Knight) Weight() uint8 {
 }
 
 func (k *Knight) String() string {
-	if k.side == chess.SideBlack {
+	if k.color == chess.ColorBlack {
 		return "n"
 	}
 
@@ -59,7 +59,7 @@ func (k *Knight) String() string {
 
 func (k *Knight) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     k.side,
+		"side":     k.color,
 		"notation": k.Notation(),
 		"is_moved": k.isMoved,
 	})

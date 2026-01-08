@@ -1,17 +1,18 @@
 package result
 
 import (
+	"errors"
+
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/state/state"
-	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type Abstract struct {
-	MoveSide chess.Side
+	MoveSide chess.Color
 	NewState chess.State
 }
 
-func (r *Abstract) Side() chess.Side {
+func (r *Abstract) Side() chess.Color {
 	return r.MoveSide
 }
 
@@ -24,7 +25,12 @@ func (r *Abstract) BoardNewState() chess.State {
 }
 
 func (r *Abstract) Validate() error {
-	return validation.ValidateStruct(&r, validation.Field(&r.NewState, validation.Required))
+	if r.NewState == nil {
+		// todo
+		return errors.New("dfoios")
+	}
+
+	return nil
 }
 
 func (r *Abstract) Suffix() string {

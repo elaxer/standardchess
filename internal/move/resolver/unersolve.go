@@ -24,7 +24,7 @@ func UnresolveFrom(from, to chess.Position, board chess.Board) (chess.Position, 
 	}
 
 	hasSamePiece, hasSameFile, hasSameRank := false, false, false
-	for samePiece := range board.Squares().GetPieces(piece.Notation(), piece.Side()) {
+	for samePiece := range board.Squares().GetPieces(piece.Notation(), piece.Color()) {
 		samePiecePosition := board.Squares().GetByPiece(samePiece)
 		if samePiecePosition == from || !slices.Contains(board.LegalMoves(samePiece), to) {
 			continue
