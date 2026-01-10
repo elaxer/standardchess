@@ -2,12 +2,16 @@ package piecemove
 
 import (
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/move/result"
+	"github.com/elaxer/standardchess/internal/resolver"
 )
 
-func MakeMove(move PieceMove, movingPieceNotation string, board chess.Board) (PieceMoveResult, error) {
-	fullFrom, err := resolver.ResolveFrom(move.From, move.To, movingPieceNotation, board, board.Turn())
+func MakeMove(
+	move PieceMove,
+	movingPieceNotation string,
+	board chess.Board,
+) (PieceMoveResult, error) {
+	fullFrom, err := resolver.ResolveFrom(move.From, move.To, movingPieceNotation, board)
 	if err != nil {
 		return PieceMoveResult{}, err
 	}

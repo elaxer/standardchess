@@ -2,7 +2,7 @@ package rule
 
 import (
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/state/state"
+	"github.com/elaxer/standardchess/internal/state"
 )
 
 func Checkmate(board chess.Board) chess.State {

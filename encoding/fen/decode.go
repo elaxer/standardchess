@@ -60,6 +60,7 @@ func Decode(fen string) (chess.Board, error) {
 	return board.NewBoardEmpty(
 		side(data["side"]),
 		placement,
+		//nolint:gosec
 		chess.NewPosition(maxFile-1, chess.Rank(len(rows))),
 	)
 }
@@ -84,6 +85,7 @@ func placementFromRow(
 			pos.File += chess.File(emptySquaresLen)
 
 			i++
+
 			continue
 		}
 		if isArabDigit(char) {

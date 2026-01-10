@@ -12,7 +12,6 @@ import (
 
 var ErrUndo = errors.New("cannot undo promotion move")
 
-// MakeMove отвечает за логику, связанную с превращением пешки в другую фигуру на шахматной доске.
 func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 	if err := move.Validate(); err != nil {
 		return nil, err

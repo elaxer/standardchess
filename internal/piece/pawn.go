@@ -60,7 +60,12 @@ func (p *Pawn) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (p *Pawn) appendMovesForward(moves *[]chess.Position, from chess.Position, rankDir chess.Rank, squares *chess.Squares) {
+func (p *Pawn) appendMovesForward(
+	moves *[]chess.Position,
+	from chess.Position,
+	rankDir chess.Rank,
+	squares *chess.Squares,
+) {
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File, from.Rank+rankDir*1),
 		chess.NewPosition(from.File, from.Rank+rankDir*2),
@@ -76,7 +81,12 @@ func (p *Pawn) appendMovesForward(moves *[]chess.Position, from chess.Position, 
 	}
 }
 
-func (p *Pawn) appendMovesDiagonal(moves *[]chess.Position, from chess.Position, rankDir chess.Rank, squares *chess.Squares) {
+func (p *Pawn) appendMovesDiagonal(
+	moves *[]chess.Position,
+	from chess.Position,
+	rankDir chess.Rank,
+	squares *chess.Squares,
+) {
 	positions := [2]chess.Position{
 		chess.NewPosition(from.File+1, from.Rank+rankDir),
 		chess.NewPosition(from.File-1, from.Rank+rankDir),

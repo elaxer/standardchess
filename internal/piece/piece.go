@@ -1,3 +1,5 @@
+// Package piece contains the logic of chess pieces,
+// their variables and constants, and functions for creating pieces.
 package piece
 
 import (
@@ -19,9 +21,6 @@ var AllNotations = []string{
 	NotationKing,
 }
 
-// New creates a new chess piece based on the provided notation and side.
-// Returns nil if the piece cannot be created.
-// See chess.PieceFactory for more details.
 func New(notation string, color chess.Color) (chess.Piece, error) {
 	switch notation {
 	case NotationPawn:

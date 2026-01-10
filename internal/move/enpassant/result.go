@@ -3,10 +3,13 @@ package enpassant
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 )
+
+var ErrMoveResultValidation = errors.New("en passant move result validation error")
 
 type MoveResult struct {
 	piecemove.PieceMoveResult
@@ -23,7 +26,7 @@ func (r *MoveResult) Validate() error {
 		return err
 	}
 	if r.Captured == nil {
-		return errors.New("adsnfs")
+		return fmt.Errorf("%w: must have a captured piece", ErrMoveResultValidation)
 	}
 
 	return r.InputMove.Validate()

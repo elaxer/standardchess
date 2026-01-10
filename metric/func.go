@@ -1,3 +1,4 @@
+// Package metric contains metric functions for a chessboard.
 package metric
 
 import (
@@ -18,10 +19,32 @@ var AllFuncs = []metric.MetricFunc{
 type Castlings = map[string]map[chess.Color]map[string]bool
 
 func CastlingAbility(board chess.Board) metric.Metric {
-	callback := func(side chess.Color, board chess.Board, validateObstacle bool) map[string]bool {
+	callback := func(side chess.Color, board chess.Board, practical bool) map[string]bool {
+		if !practical {
+			return map[string]bool{
+				castling.TypeShort.String(): castling.ValidateMoveWithObstacle(
+					castling.TypeShort,
+					side,
+					board,
+				) == nil,
+				castling.TypeLong.String(): castling.ValidateMoveWithObstacle(
+					castling.TypeLong,
+					side,
+					board,
+				) == nil,
+			}
+		}
+
+		if board.Turn() != side {
+			return map[string]bool{
+				castling.TypeShort.String(): false,
+				castling.TypeLong.String():  false,
+			}
+		}
+
 		return map[string]bool{
-			castling.TypeShort.String(): castling.ValidateMove(castling.TypeShort, side, board, validateObstacle) == nil,
-			castling.TypeLong.String():  castling.ValidateMove(castling.TypeLong, side, board, validateObstacle) == nil,
+			castling.TypeShort.String(): castling.ValidateMove(castling.TypeShort, board) == nil,
+			castling.TypeLong.String():  castling.ValidateMove(castling.TypeLong, board) == nil,
 		}
 	}
 
@@ -52,7 +75,8 @@ func HalfmoveClock(board chess.Board) metric.Metric {
 	clock := 0
 	for _, m := range board.MoveHistory() {
 		normalMove, ok := m.(*normal.MoveResult)
-		if !ok || normalMove.InputMove.PieceNotation == piece.NotationPawn || normalMove.IsCapture() {
+		if !ok || normalMove.InputMove.PieceNotation == piece.NotationPawn ||
+			normalMove.IsCapture() {
 			clock = 0
 
 			continue

@@ -18,7 +18,11 @@ func TestMakePromotion_White(t *testing.T) {
 		chess.PositionFromString("a8"): standardtest.NewPiece("k"),
 	})
 
-	move := promotion.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("d8"), piece.NotationQueen)
+	move := promotion.NewMove(
+		chess.NewPositionEmpty(),
+		chess.PositionFromString("d8"),
+		piece.NotationQueen,
+	)
 
 	promotionRes, err := promotion.MakeMove(move, board)
 	require.NoError(t, err)
@@ -38,7 +42,11 @@ func TestMakePromotion_Black(t *testing.T) {
 		chess.PositionFromString("c1"): standardtest.NewPiece("B"),
 	})
 
-	move := promotion.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("c1"), piece.NotationRook)
+	move := promotion.NewMove(
+		chess.NewPositionEmpty(),
+		chess.PositionFromString("c1"),
+		piece.NotationRook,
+	)
 
 	promotionRes, err := promotion.MakeMove(move, board)
 	require.NoError(t, err)

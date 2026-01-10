@@ -1,3 +1,4 @@
+// Package mover contains code for executing and canceling any type of move.
 package mover
 
 import (
@@ -23,7 +24,8 @@ func MakeMove(move chess.Move, board chess.Board) (chess.MoveResult, error) {
 
 	if move, err := normal.MoveFromString(str); err == nil {
 		isPawn := move.PieceNotation == piece.NotationPawn
-		if enpassant.CanEnPassant(board) && isPawn && move.To == enpassant.EnPassantPosition(board) {
+		if enpassant.CanEnPassant(board) && isPawn &&
+			move.To == enpassant.EnPassantPosition(board) {
 			return enpassant.MakeMove(enpassant.NewEnPassant(move.From, move.To), board)
 		}
 

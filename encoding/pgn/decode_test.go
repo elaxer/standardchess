@@ -488,7 +488,13 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 		t.Run(tt.name, func(t *testing.T) {
 			gotHeaders, gotMoves, err := pgn.Decode(tt.args.pgn)
 
-			require.Truef(t, (err != nil) == tt.wantErr, "Decode() error = %v, wantErr %v", err, tt.wantErr)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"Decode() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 			if tt.wantErr {
 				return
 			}

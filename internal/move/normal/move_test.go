@@ -79,7 +79,13 @@ func TestNormalFromString(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := normal.MoveFromString(tt.args.str)
 
-			require.Truef(t, (err != nil) == tt.wantErr, "NormalFromString() error = %v, wantErr %v", err, tt.wantErr)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"NormalFromString() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 			if !tt.wantErr {
 				assert.Equal(t, tt.want, got.String())
 			}
@@ -95,12 +101,20 @@ func TestNormal_String(t *testing.T) {
 	}{
 		{
 			"queen",
-			normal.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("a8"), piece.NotationQueen),
+			normal.NewMove(
+				chess.NewPositionEmpty(),
+				chess.PositionFromString("a8"),
+				piece.NotationQueen,
+			),
 			"Qa8",
 		},
 		{
 			"pawn",
-			normal.NewMove(chess.NewPositionEmpty(), chess.PositionFromString("e4"), piece.NotationPawn),
+			normal.NewMove(
+				chess.NewPositionEmpty(),
+				chess.PositionFromString("e4"),
+				piece.NotationPawn,
+			),
 			"e4",
 		},
 	}

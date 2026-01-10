@@ -6,8 +6,8 @@ import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
+	"github.com/elaxer/standardchess/internal/state"
 	"github.com/elaxer/standardchess/internal/state/rule"
-	"github.com/elaxer/standardchess/internal/state/state"
 	"github.com/stretchr/testify/assert"
 )
 

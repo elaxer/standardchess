@@ -1,10 +1,14 @@
+// Package piecemove contains low-level logic for moving pieces on the board.
 package piecemove
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
 )
+
+var ErrMoveValidation = errors.New("piece move validation error")
 
 type PieceMove struct {
 	From chess.Position `json:"from"`
@@ -22,9 +26,8 @@ func (m PieceMove) Validate() error {
 	if err := m.To.Validate(); err != nil {
 		return err
 	}
-	// todo
 	if !m.To.IsFull() {
-		return errors.New("not full todo")
+		return fmt.Errorf("%w: to position is not full", ErrMoveValidation)
 	}
 
 	return nil

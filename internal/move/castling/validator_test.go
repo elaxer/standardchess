@@ -9,8 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// todo добавить тесты с новым параметром Side
-func TestValidateCastlingMove(t *testing.T) {
+func TestValidateMove(t *testing.T) {
 	type args struct {
 		castlingType castling.CastlingType
 		board        chess.Board
@@ -144,7 +143,7 @@ func TestValidateCastlingMove(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := castling.ValidateMove(tt.args.castlingType, tt.args.board.Turn(), tt.args.board, true)
+			err := castling.ValidateMove(tt.args.castlingType, tt.args.board)
 			assert.True(t, (err != nil) == tt.wantErr)
 		})
 	}

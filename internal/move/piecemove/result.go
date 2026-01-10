@@ -2,10 +2,13 @@ package piecemove
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/result"
 )
+
+var ErrMoveResultValidation = errors.New("piece move result validation error")
 
 type PieceMoveResult struct {
 	*result.Abstract
@@ -26,7 +29,7 @@ func (r PieceMoveResult) IsCapture() bool {
 
 func (r PieceMoveResult) Validate() error {
 	if r.Abstract == nil {
-		return errors.New("sfoadi")
+		return fmt.Errorf("%w: empty abstract result", ErrMoveResultValidation)
 	}
 	if err := r.Abstract.Validate(); err != nil {
 		return err
@@ -35,8 +38,9 @@ func (r PieceMoveResult) Validate() error {
 		return err
 	}
 	if !r.FromFull.IsFull() {
-		return errors.New("sfor333333333adi")
+		return fmt.Errorf("%w: from full position is not full", ErrMoveResultValidation)
 	}
+
 	return r.FromShortened.Validate()
 }
 

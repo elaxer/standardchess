@@ -1,7 +1,10 @@
+// Package normal contains the structure of the move, the result of the move,
+// and the logic for executing and cancelling a standard move on a chessboard.
 package normal
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"slices"
 
@@ -11,13 +14,15 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-var regexpNormal = regexp.MustCompile("^(?P<piece>[KQBNR])?(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))[#+]?$")
+var ErrMoveValidation = errors.New("normal move validation error")
 
-// Move представляет обычный ход фигурой в шахматах.
+var regexpNormal = regexp.MustCompile(
+	"^(?P<piece>[KQBNR])?(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))[#+]?$",
+)
+
 type Move struct {
 	piecemove.PieceMove
 
-	// PieceNotation обозначает фигуру, которая делает ход.
 	PieceNotation string `json:"piece_notation"`
 }
 
@@ -25,7 +30,6 @@ func NewMove(from, to chess.Position, pieceNotation string) *Move {
 	return &Move{piecemove.NewPieceMove(from, to), pieceNotation}
 }
 
-// MoveFromString создает новый ход из шахматной нотации.
 func MoveFromString(notation string) (*Move, error) {
 	data, err := rgx.Group(regexpNormal, notation)
 	if err != nil {
@@ -44,7 +48,7 @@ func (m *Move) Validate() error {
 		return err
 	}
 	if !slices.Contains(piece.AllNotations, m.PieceNotation) {
-		return errors.New("wrong notation")
+		return fmt.Errorf("%w: wrong piece notation", ErrMoveValidation)
 	}
 
 	return nil

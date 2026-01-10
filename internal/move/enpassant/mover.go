@@ -3,9 +3,9 @@ package enpassant
 import (
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
-	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/move/result"
 	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/elaxer/standardchess/internal/resolver"
 )
 
 func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
@@ -13,7 +13,7 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 		return nil, err
 	}
 
-	fullFrom, err := resolver.ResolveFrom(move.From, move.To, piece.NotationPawn, board, board.Turn())
+	fullFrom, err := resolver.ResolveFrom(move.From, move.To, piece.NotationPawn, board)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,10 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 		return nil, err
 	}
 
-	capturedPawnPosition := chess.NewPosition(move.To.File, move.To.Rank-piece.PawnRankDirection(board.Turn()))
+	capturedPawnPosition := chess.NewPosition(
+		move.To.File,
+		move.To.Rank-piece.PawnRankDirection(board.Turn()),
+	)
 	capturedPawn, err := board.Squares().FindByPosition(capturedPawnPosition)
 	if err != nil {
 		return nil, err

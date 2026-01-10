@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	regexpMoves   = regexp.MustCompile("([NBKRQ]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)|([0Oo]-[0Oo](-[0Oo])?)")
+	regexpMoves = regexp.MustCompile(
+		"([NBKRQ]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)|([0Oo]-[0Oo](-[0Oo])?)",
+	)
 	regexpHeaders = regexp.MustCompile(`\[(?P<name>[\w]+)\s+"(?P<value>[^"]*)"\]`)
 )
 

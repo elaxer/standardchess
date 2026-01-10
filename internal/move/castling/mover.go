@@ -12,12 +12,17 @@ import (
 var ErrUndoMove = errors.New("cannot undo castling move")
 
 func MakeMove(castlingType CastlingType, board chess.Board) (chess.MoveResult, error) {
-	if err := ValidateMove(castlingType, board.Turn(), board, true); err != nil {
+	if err := ValidateMove(castlingType, board); err != nil {
 		return nil, err
 	}
 
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, board.Turn())
-	rook, rookPosition, _, err := getRook(fileDirection(castlingType), board.Turn(), board.Squares(), kingPosition)
+	rook, rookPosition, _, err := getRook(
+		fileDirection(castlingType),
+		board.Turn(),
+		board.Squares(),
+		kingPosition,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +99,25 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 	return board.Squares().PlacePiece(rook, move.InitRookPosition)
 }
 
-func pickPositions(castlingType CastlingType, rank chess.Rank) (kingPosition, rookPosition chess.Position) {
+func pickPositions(
+	castlingType CastlingType,
+	rank chess.Rank,
+) (kingPosition, rookPosition chess.Position) {
 	if castlingType.IsLong() {
-		return chess.NewPosition(kingFileAfterLongCastling, rank), chess.NewPosition(rookFileAfterLongCastling, rank)
+		return chess.NewPosition(
+				kingFileAfterLongCastling,
+				rank,
+			), chess.NewPosition(
+				rookFileAfterLongCastling,
+				rank,
+			)
 	}
 
-	return chess.NewPosition(kingFileAfterShortCastling, rank), chess.NewPosition(rookFileAfterShortCastling, rank)
+	return chess.NewPosition(
+			kingFileAfterShortCastling,
+			rank,
+		), chess.NewPosition(
+			rookFileAfterShortCastling,
+			rank,
+		)
 }

@@ -3,10 +3,13 @@ package castling
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/result"
 )
+
+var ErrMoveResultValidation = errors.New("castling move result validation error")
 
 type MoveResult struct {
 	*result.Abstract
@@ -25,14 +28,17 @@ func (r *MoveResult) Move() chess.Move {
 }
 
 func (r *MoveResult) Validate() error {
-	if r.Abstract == nil || r.NewState == nil {
-		return errors.New("aosdjfioj")
+	if r.Abstract == nil {
+		return fmt.Errorf("%w: empty abstract", ErrMoveResultValidation)
+	}
+	if err := r.Abstract.Validate(); err != nil {
+		return fmt.Errorf("%w: %w", ErrMoveResultValidation, err)
 	}
 	if !r.InitKingPosition.IsFull() {
-		return errors.New("todo")
+		return fmt.Errorf("%w: not full initial king position", ErrMoveResultValidation)
 	}
 	if !r.InitRookPosition.IsFull() {
-		return errors.New("todo")
+		return fmt.Errorf("%w: not full initial rook position", ErrMoveResultValidation)
 	}
 
 	return nil

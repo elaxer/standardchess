@@ -1,3 +1,11 @@
+// Package standardchess contains logic for working with a chessboard.
+// The package has functions for creating boards in different ways:
+// empty boards, boards with a starting position, boards based on a list of moves.
+// The created boards have logic for executing or canceling moves, manipulating the board position,
+// as well as methods for obtaining various information about the board, such as its current state,
+// available moves, move history, and so on.
+//
+// The package also contains code for creating chess pieces: rook, knight, bishop, queen, king, pawns.
 package standardchess
 
 import (
@@ -45,41 +53,36 @@ type board struct {
 	state chess.State
 }
 
-func NewBoardEmpty(turn chess.Color, placement map[chess.Position]chess.Piece, edgePosition chess.Position) (chess.Board, error) {
-	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
-	if err != nil {
-		return nil, err
-	}
-
-	return &board{
-		turn:           turn,
-		squares:        squares,
-		moveHistory:    make([]chess.MoveResult, 0, 128),
-		moves:          make([]chess.Position, 0, 128),
-		capturedPieces: make([]chess.Piece, 0, 30),
-
-		stateRules: stateRules,
-	}, nil
-}
-
 func NewBoard() chess.Board {
 	board, err := NewBoardEmpty(chess.ColorWhite, nil, edgePosition)
 	must(err)
 
+	squares := board.Squares()
 	for i, notation := range firstRowPieceNotations {
+		//nolint:gosec
 		file := chess.File(i + 1)
 
 		wPiece, err := piece.New(notation, chess.ColorWhite)
 		must(err)
 
-		must(board.Squares().PlacePiece(wPiece, chess.NewPosition(file, chess.RankMin)))
-		must(board.Squares().PlacePiece(piece.NewPawn(chess.ColorWhite), chess.NewPosition(file, chess.RankMin+1)))
+		must(squares.PlacePiece(wPiece, chess.NewPosition(file, chess.RankMin)))
+		must(
+			squares.PlacePiece(
+				piece.NewPawn(chess.ColorWhite),
+				chess.NewPosition(file, chess.RankMin+1),
+			),
+		)
 
 		bPiece, err := piece.New(notation, chess.ColorBlack)
 		must(err)
 
-		must(board.Squares().PlacePiece(bPiece, chess.NewPosition(file, edgePosition.Rank)))
-		must(board.Squares().PlacePiece(piece.NewPawn(chess.ColorBlack), chess.NewPosition(file, edgePosition.Rank-1)))
+		must(squares.PlacePiece(bPiece, chess.NewPosition(file, edgePosition.Rank)))
+		must(
+			squares.PlacePiece(
+				piece.NewPawn(chess.ColorBlack),
+				chess.NewPosition(file, edgePosition.Rank-1),
+			),
+		)
 	}
 
 	return board
@@ -94,6 +97,27 @@ func NewBoardFromMoves(moves []chess.Move) (chess.Board, error) {
 	}
 
 	return board, nil
+}
+
+func NewBoardEmpty(
+	turn chess.Color,
+	placement map[chess.Position]chess.Piece,
+	edgePosition chess.Position,
+) (chess.Board, error) {
+	squares, err := chess.SquaresFromPlacement(edgePosition, placement)
+	if err != nil {
+		return nil, err
+	}
+
+	return &board{
+		turn:           turn,
+		squares:        squares,
+		moveHistory:    make([]chess.MoveResult, 0, 128),
+		moves:          make([]chess.Position, 0, 128),
+		capturedPieces: make([]chess.Piece, 0, 30),
+
+		stateRules: stateRules,
+	}, nil
 }
 
 func (b *board) Squares() *chess.Squares {
@@ -164,8 +188,7 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 
 	legalMoves := make([]chess.Position, 0, cap(pseudoMoves))
 	for _, to := range pseudoMoves {
-		//nolint:errcheck,gosec
-		b.squares.MovePieceTemporarily(from, to, func() {
+		_ = b.squares.MovePieceTemporarily(from, to, func() {
 			_, kingPosition := b.squares.FindPiece(piece.NotationKing, b.turn)
 			if !b.IsSquareAttacked(kingPosition) {
 				legalMoves = append(legalMoves, to)
@@ -253,7 +276,11 @@ func (b *board) MarshalJSON() ([]byte, error) {
 			continue
 		}
 
-		placement := &Placement{Piece: piece, LegalMoves: make([]chess.Position, 0, 27), Position: pos}
+		placement := &Placement{
+			Piece:      piece,
+			LegalMoves: make([]chess.Position, 0, 27),
+			Position:   pos,
+		}
 		if piece.Color() == b.turn {
 			placement.LegalMoves = b.LegalMoves(piece)
 		}

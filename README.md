@@ -59,7 +59,7 @@ func main() {
 
     result = "*"
 
-    pgnStr := pgn.Encode(headers, board, result)
+    pgnStr := pgn.Encode(headers, pgn.MoveHistoryToStrings(board.MoveHistory()), result)
 
     // Or decode only headers:
     pgnHeadersStr := pgn.EncodeHeaders(headers)
@@ -80,5 +80,5 @@ pgnStr := `
 1.e4 e5 2.Nf3 Nc6 *
 `
 
-header, board, err := pgn.Decode(pgnStr)
+header, moves, err := pgn.Decode(pgnStr)
 ```

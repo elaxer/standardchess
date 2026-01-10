@@ -138,7 +138,13 @@ func TestDecode(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := fen.Decode(tt.args.fen)
 
-			require.Truef(t, (err != nil) == tt.wantErr, "Decode() error = %v, wantErr %v", err, tt.wantErr)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"Decode() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 			if tt.wantErr {
 				return
 			}

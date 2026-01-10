@@ -5,8 +5,8 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess"
-	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/elaxer/standardchess/internal/resolver"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -29,11 +29,14 @@ func TestResolveFrom(t *testing.T) {
 			args{
 				to:            chess.PositionFromString("e4"),
 				pieceNotation: piece.NotationPawn,
-				board: standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("d2"): piece.NewPawn(chess.ColorWhite),
-					chess.PositionFromString("e2"): piece.NewPawn(chess.ColorWhite),
-					chess.PositionFromString("f2"): piece.NewPawn(chess.ColorWhite),
-				}),
+				board: standardtest.NewBoardEmpty8x8(
+					chess.ColorWhite,
+					map[chess.Position]chess.Piece{
+						chess.PositionFromString("d2"): piece.NewPawn(chess.ColorWhite),
+						chess.PositionFromString("e2"): piece.NewPawn(chess.ColorWhite),
+						chess.PositionFromString("f2"): piece.NewPawn(chess.ColorWhite),
+					},
+				),
 			},
 			chess.PositionFromString("e2"),
 			false,
@@ -44,10 +47,13 @@ func TestResolveFrom(t *testing.T) {
 				from:          chess.PositionFromString("a"),
 				to:            chess.PositionFromString("b8"),
 				pieceNotation: piece.NotationRook,
-				board: standardtest.NewBoardEmpty8x8(chess.ColorBlack, map[chess.Position]chess.Piece{
-					chess.PositionFromString("f8"): piece.NewRook(chess.ColorBlack),
-					chess.PositionFromString("a8"): piece.NewRook(chess.ColorBlack),
-				}),
+				board: standardtest.NewBoardEmpty8x8(
+					chess.ColorBlack,
+					map[chess.Position]chess.Piece{
+						chess.PositionFromString("f8"): piece.NewRook(chess.ColorBlack),
+						chess.PositionFromString("a8"): piece.NewRook(chess.ColorBlack),
+					},
+				),
 			},
 			chess.PositionFromString("a8"),
 			false,
@@ -58,10 +64,13 @@ func TestResolveFrom(t *testing.T) {
 				from:          chess.PositionFromString("g"),
 				to:            chess.PositionFromString("e2"),
 				pieceNotation: piece.NotationKnight,
-				board: standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("g1"): piece.NewKnight(chess.ColorWhite),
-					chess.PositionFromString("c3"): piece.NewKnight(chess.ColorWhite),
-				}),
+				board: standardtest.NewBoardEmpty8x8(
+					chess.ColorWhite,
+					map[chess.Position]chess.Piece{
+						chess.PositionFromString("g1"): piece.NewKnight(chess.ColorWhite),
+						chess.PositionFromString("c3"): piece.NewKnight(chess.ColorWhite),
+					},
+				),
 			},
 			chess.PositionFromString("g1"),
 			false,
@@ -72,10 +81,13 @@ func TestResolveFrom(t *testing.T) {
 				from:          chess.PositionFromString("1"),
 				to:            chess.PositionFromString("a5"),
 				pieceNotation: piece.NotationRook,
-				board: standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
-					chess.PositionFromString("a1"): piece.NewRook(chess.ColorWhite),
-					chess.PositionFromString("a8"): piece.NewRook(chess.ColorWhite),
-				}),
+				board: standardtest.NewBoardEmpty8x8(
+					chess.ColorWhite,
+					map[chess.Position]chess.Piece{
+						chess.PositionFromString("a1"): piece.NewRook(chess.ColorWhite),
+						chess.PositionFromString("a8"): piece.NewRook(chess.ColorWhite),
+					},
+				),
 			},
 			chess.PositionFromString("a1"),
 			false,
@@ -86,11 +98,14 @@ func TestResolveFrom(t *testing.T) {
 				from:          chess.PositionFromString("f2"),
 				to:            chess.PositionFromString("d4"),
 				pieceNotation: piece.NotationBishop,
-				board: standardtest.NewBoardEmpty8x8(chess.ColorBlack, map[chess.Position]chess.Piece{
-					chess.PositionFromString("b2"): piece.NewBishop(chess.ColorBlack),
-					chess.PositionFromString("f2"): piece.NewBishop(chess.ColorBlack),
-					chess.PositionFromString("b6"): piece.NewBishop(chess.ColorBlack),
-				}),
+				board: standardtest.NewBoardEmpty8x8(
+					chess.ColorBlack,
+					map[chess.Position]chess.Piece{
+						chess.PositionFromString("b2"): piece.NewBishop(chess.ColorBlack),
+						chess.PositionFromString("f2"): piece.NewBishop(chess.ColorBlack),
+						chess.PositionFromString("b6"): piece.NewBishop(chess.ColorBlack),
+					},
+				),
 			},
 			chess.PositionFromString("f2"),
 			false,
@@ -99,8 +114,19 @@ func TestResolveFrom(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := resolver.ResolveFrom(tt.args.from, tt.args.to, tt.args.pieceNotation, tt.args.board, tt.args.board.Turn())
-			require.Truef(t, (err != nil) == tt.wantErr, "ResolveNormal() error = %v, wantErr %v", err, tt.wantErr)
+			got, err := resolver.ResolveFrom(
+				tt.args.from,
+				tt.args.to,
+				tt.args.pieceNotation,
+				tt.args.board,
+			)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"ResolveNormal() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 
 			if tt.wantErr {
 				assert.Equal(t, tt.want, got)
@@ -113,10 +139,9 @@ func BenchmarkResolve(b *testing.B) {
 	board := standardchess.NewBoard()
 
 	from, to := chess.NewPositionEmpty(), chess.PositionFromString("e4")
-	turn := board.Turn()
 
 	b.ResetTimer()
 	for range b.N {
-		_, _ = resolver.ResolveFrom(from, to, piece.NotationPawn, board, turn)
+		_, _ = resolver.ResolveFrom(from, to, piece.NotationPawn, board)
 	}
 }

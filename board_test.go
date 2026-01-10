@@ -30,17 +30,34 @@ func Test_board_MakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
 		require.NoErrorf(t, err, "MakeMove failed (%s)", c.move)
 
 		if !c.expectCapture {
-			require.Nilf(t, res.CapturedPiece(), "expected no capture for move %s, but CapturedPiece is %v", c.move, res.CapturedPiece())
+			require.Nilf(
+				t,
+				res.CapturedPiece(),
+				"expected no capture for move %s, but CapturedPiece is %v",
+				c.move,
+				res.CapturedPiece(),
+			)
 			require.Equal(t, capturedCount, len(b.CapturedPieces()))
 
 			continue
 		}
 
-		require.NotNilf(t, res.CapturedPiece(), "expected move %s to capture a piece, but CapturedPiece is nil", c.move)
+		require.NotNilf(
+			t,
+			res.CapturedPiece(),
+			"expected move %s to capture a piece, but CapturedPiece is nil",
+			c.move,
+		)
 		capturedCount++
 
 		require.Equal(t, capturedCount, len(b.CapturedPieces()))
-		require.Equalf(t, b.CapturedPieces()[capturedCount-1], res.CapturedPiece(), "after %s captured piece in board does not match move result", c.move)
+		require.Equalf(
+			t,
+			b.CapturedPieces()[capturedCount-1],
+			res.CapturedPiece(),
+			"after %s captured piece in board does not match move result",
+			c.move,
+		)
 	}
 }
 
@@ -145,7 +162,8 @@ func BenchmarkNewBoard(b *testing.B) {
 }
 
 func BenchmarkNewBoardFromMoves(b *testing.B) {
-	moves := standardtest.MovesFromPGN(`1. e4 e5 2. Bb5 c6 3. Nc3 cxb5 4. Nxb5 Nf6 5. f3 d5 6. exd5 Nxd5 7. c4 a6 8.
+	moves := standardtest.MovesFromPGN(
+		`1. e4 e5 2. Bb5 c6 3. Nc3 cxb5 4. Nxb5 Nf6 5. f3 d5 6. exd5 Nxd5 7. c4 a6 8.
 Nd6+ Bxd6 9. cxd5 Bf5 10. d4 exd4 11. Qe2+ Qe7 12. Qxe7+ Bxe7 13. Bg5 Bxg5 14.
 Nh3 Bh4+ 15. g3 Bg5 16. Nxg5 O-O 17. b4 Nc6 18. b5 Ne5 19. b6 Nxf3+ 20. Kf2 Nxg5
 21. Rac1 Ne4+ 22. Kf3 Nd2+ 23. Kf4 Bb1 24. Rxb1 Nxb1 25. Rxb1 h6 26. g4 g5+ 27.
@@ -153,10 +171,11 @@ Kf3 d3 28. Rd1 Rad8 29. Rxd3 a5 30. d6 Rfe8 31. d7 Re1 32. a3 Rh1 33. h4 Rxh4
 34. Rd6 h5 35. gxh5 Rxh5 36. Kg4 Rh4+ 37. Kxg5 Ra4 38. Kf6 Rxa3 39. Re6 Kf8 40.
 Re7 Rf3+ 41. Ke5 a4 42. Re8+ Rxe8+ 43. dxe8=Q+ Kxe8 44. Kd6 a3 45. Kc7 Rb3 46.
 Kxb7 a2 47. Kc8 a1=Q 48. b7 Qc3+ 49. Kb8 Qe5+ 50. Ka7 Qd5 51. b8=Q+ Rxb8 52.
-Kxb8 Qc6 53. Ka7 Kd7 54. Kb8 Qc7+ 55. Ka8 Kc6 1/2-1/2`)
+Kxb8 Qc6 53. Ka7 Kd7 54. Kb8 Qc7+ 55. Ka8 Kc6 1/2-1/2`,
+	)
 
 	b.ResetTimer()
 	for range b.N {
-		standardchess.NewBoardFromMoves(moves)
+		_, _ = standardchess.NewBoardFromMoves(moves)
 	}
 }

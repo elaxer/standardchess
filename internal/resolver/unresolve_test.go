@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/move/resolver"
 	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/elaxer/standardchess/internal/resolver"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -105,7 +105,13 @@ func TestUnresolveFrom(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := resolver.UnresolveFrom(tt.args.from, tt.args.to, tt.args.board)
-			require.Truef(t, (err != nil) == tt.wantErr, "UnresolveFrom() error = %v, wantErr %v", err, tt.wantErr)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"UnresolveFrom() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 
 			if !tt.wantErr {
 				assert.Equal(t, tt.want, got)

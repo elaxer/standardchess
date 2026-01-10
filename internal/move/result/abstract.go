@@ -1,11 +1,15 @@
+// Package result contains abstract move result structure
 package result
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/state/state"
+	"github.com/elaxer/standardchess/internal/state"
 )
+
+var ErrValidation = errors.New("abstract result validation error")
 
 type Abstract struct {
 	MoveSide chess.Color
@@ -26,8 +30,7 @@ func (r *Abstract) BoardNewState() chess.State {
 
 func (r *Abstract) Validate() error {
 	if r.NewState == nil {
-		// todo
-		return errors.New("dfoios")
+		return fmt.Errorf("%w: empty new state", ErrValidation)
 	}
 
 	return nil

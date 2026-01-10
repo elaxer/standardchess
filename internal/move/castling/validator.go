@@ -18,7 +18,25 @@ var (
 	rookFileAfterLongCastling = chess.FileD
 )
 
-func ValidateMove(castlingType CastlingType, side chess.Color, board chess.Board, validateObstacle bool) error {
+func ValidateMove(castlingType CastlingType, board chess.Board) error {
+	return validateMove(castlingType, board.Turn(), board, true)
+}
+
+func ValidateMoveWithObstacle(
+	castlingType CastlingType,
+	side chess.Color,
+	board chess.Board,
+) error {
+	return validateMove(castlingType, side, board, false)
+}
+
+//nolint:cyclop
+func validateMove(
+	castlingType CastlingType,
+	side chess.Color,
+	board chess.Board,
+	validateObstacle bool,
+) error {
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
 	if king == nil {
 		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
@@ -46,7 +64,8 @@ func ValidateMove(castlingType CastlingType, side chess.Color, board chess.Board
 
 	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
 
-	if side == board.Turn() && (board.IsSquareAttacked(kingNewPosition) || board.IsSquareAttacked(rookNewPosition)) {
+	if side == board.Turn() &&
+		(board.IsSquareAttacked(kingNewPosition) || board.IsSquareAttacked(rookNewPosition)) {
 		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
 
 	}
@@ -54,7 +73,12 @@ func ValidateMove(castlingType CastlingType, side chess.Color, board chess.Board
 	return nil
 }
 
-func getRook(fileDir chess.File, side chess.Color, squares *chess.Squares, kingPosition chess.Position) (chess.Piece, chess.Position, bool, error) {
+func getRook(
+	fileDir chess.File,
+	side chess.Color,
+	squares *chess.Squares,
+	kingPosition chess.Position,
+) (chess.Piece, chess.Position, bool, error) {
 	hasObstacle := false
 	for position, p := range squares.IterByDirection(kingPosition, chess.NewPosition(fileDir, 0)) {
 		if p == nil {
@@ -69,7 +93,10 @@ func getRook(fileDir chess.File, side chess.Color, squares *chess.Squares, kingP
 		return p, position, hasObstacle, nil
 	}
 
-	return nil, chess.NewPositionEmpty(), hasObstacle, fmt.Errorf("%w: rook wasn't found", ErrValidation)
+	return nil, chess.NewPositionEmpty(), hasObstacle, fmt.Errorf(
+		"%w: rook wasn't found",
+		ErrValidation,
+	)
 }
 
 func fileDirection(castlingType CastlingType) chess.File {

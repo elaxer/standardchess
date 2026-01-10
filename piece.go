@@ -21,6 +21,8 @@ const (
 	WeightPawn   = piece.WeightPawn
 )
 
+// NewPiece creates a new chess piece based on the provided notation and side.
+// Returns nil if the piece cannot be created.
 func NewPiece(notation string, color chess.Color) (chess.Piece, error) {
 	return piece.New(notation, color)
 }

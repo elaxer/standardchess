@@ -1,7 +1,11 @@
+// Package promotion contains code for validating,
+// executing, and canceling pawn moves
+// to the farthest horizontal row of the board with promotion.
 package promotion
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"slices"
 
@@ -11,12 +15,19 @@ import (
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
-var regexpPromotion = regexp.MustCompile("(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))=(?P<promoted_piece>[QBNR])[#+]?$")
+var ErrMoveValidation = errors.New("promotion move validation error")
 
-var allowedNotations = []string{piece.NotationQueen, piece.NotationRook, piece.NotationBishop, piece.NotationKnight}
+var regexpPromotion = regexp.MustCompile(
+	"(?P<from>[a-p]?(1[0-6]|[1-9])?)x?(?P<to>[a-p](1[0-6]|[1-9]))=(?P<promoted_piece>[QBNR])[#+]?$",
+)
 
-// Move представляет ход с превращением пешки в другую фигуру.
-// В шахматной нотации он записывается как "e8=Q" или "e7=R+".
+var allowedNotations = []string{
+	piece.NotationQueen,
+	piece.NotationRook,
+	piece.NotationBishop,
+	piece.NotationKnight,
+}
+
 type Move struct {
 	piecemove.PieceMove
 
@@ -48,7 +59,7 @@ func (m *Move) Validate() error {
 		return err
 	}
 	if !slices.Contains(allowedNotations, m.PromotedPieceNotation) {
-		return errors.New("sdoifjsd")
+		return fmt.Errorf("%w: wrong new promoted piece notation", ErrMoveValidation)
 	}
 
 	return nil

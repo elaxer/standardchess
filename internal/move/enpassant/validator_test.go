@@ -15,5 +15,12 @@ func TestValidateMove(t *testing.T) {
 	_, err := board.MakeMove(chess.StringMove("g4"))
 	require.NoError(t, err)
 
-	assert.NoError(t, enpassant.ValidateMove(chess.PositionFromString("f4"), chess.PositionFromString("g3"), board))
+	assert.NoError(
+		t,
+		enpassant.ValidateMove(
+			chess.PositionFromString("f4"),
+			chess.PositionFromString("g3"),
+			board,
+		),
+	)
 }

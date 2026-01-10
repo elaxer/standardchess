@@ -1,3 +1,6 @@
+// Package enpassant contains the logic code for validating
+// a pawn move with a pass capture,
+// as well as the execution and cancelling of this move.
 package enpassant
 
 import (

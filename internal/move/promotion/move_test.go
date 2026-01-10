@@ -28,7 +28,11 @@ func TestPromotionFromString(t *testing.T) {
 		{
 			"from_file",
 			args{"fe8=R"},
-			NewMove(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook),
+			NewMove(
+				chess.PositionFromString("f"),
+				chess.PositionFromString("e8"),
+				piece.NotationRook,
+			),
 			false,
 		},
 		{
@@ -66,7 +70,13 @@ func TestPromotionFromString(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := MoveFromString(tt.args.notation)
 
-			require.Truef(t, (err != nil) == tt.wantErr, "PromotionFromString() error = %v, wantErr %v", err, tt.wantErr)
+			require.Truef(
+				t,
+				(err != nil) == tt.wantErr,
+				"PromotionFromString() error = %v, wantErr %v",
+				err,
+				tt.wantErr,
+			)
 			if !tt.wantErr {
 				require.Equal(t, tt.want, got)
 			}
@@ -85,17 +95,35 @@ func TestPromotion_String(t *testing.T) {
 	}{
 		{
 			"promotion",
-			fields{NewMove(chess.NewPositionEmpty(), chess.PositionFromString("a1"), piece.NotationRook)},
+			fields{
+				NewMove(
+					chess.NewPositionEmpty(),
+					chess.PositionFromString("a1"),
+					piece.NotationRook,
+				),
+			},
 			"a1=R",
 		},
 		{
 			"from_file",
-			fields{NewMove(chess.PositionFromString("f"), chess.PositionFromString("e8"), piece.NotationRook)},
+			fields{
+				NewMove(
+					chess.PositionFromString("f"),
+					chess.PositionFromString("e8"),
+					piece.NotationRook,
+				),
+			},
 			"fe8=R",
 		},
 		{
 			"full_from",
-			fields{NewMove(chess.PositionFromString("b2"), chess.PositionFromString("b1"), piece.NotationKnight)},
+			fields{
+				NewMove(
+					chess.PositionFromString("b2"),
+					chess.PositionFromString("b1"),
+					piece.NotationKnight,
+				),
+			},
 			"b2b1=N",
 		},
 	}

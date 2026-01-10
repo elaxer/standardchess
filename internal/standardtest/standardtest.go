@@ -1,3 +1,4 @@
+// Package standardtest contains helpers for writing tests.
 package standardtest
 
 import (

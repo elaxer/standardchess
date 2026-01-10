@@ -146,10 +146,24 @@ func TestMakeCastling(t *testing.T) {
 			assert.True(t, rook.IsMoved(), "rook should be marked as moved after castling")
 
 			kingNewPos := board.Squares().GetByPiece(king)
-			assert.Equalf(t, tt.wantKingNewPos, kingNewPos, "king should be on %s, got %s", tt.wantKingNewPos, kingNewPos)
+			assert.Equalf(
+				t,
+				tt.wantKingNewPos,
+				kingNewPos,
+				"king should be on %s, got %s",
+				tt.wantKingNewPos,
+				kingNewPos,
+			)
 
 			rookNewPos := board.Squares().GetByPiece(rook)
-			assert.Equal(t, tt.wantRookNewPos, rookNewPos, "rook should be on %s, got %s", tt.wantRookNewPos, rookNewPos)
+			assert.Equal(
+				t,
+				tt.wantRookNewPos,
+				rookNewPos,
+				"rook should be on %s, got %s",
+				tt.wantRookNewPos,
+				rookNewPos,
+			)
 		})
 	}
 }

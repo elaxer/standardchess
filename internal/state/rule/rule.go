@@ -1,3 +1,4 @@
+// Package rule contains functions that check boards for compliance with states.
 package rule
 
 import "github.com/elaxer/chess"

@@ -1,3 +1,5 @@
+// Package castling contains code for validating,
+// executing and cancelling castling moves on a chessboard.
 package castling
 
 import (

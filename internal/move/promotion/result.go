@@ -41,5 +41,6 @@ func (r *MoveResult) String() string {
 		from.File = r.FromFull.File
 	}
 
-	return from.String() + r.CaptureString() + r.InputMove.To.String() + "=" + r.InputMove.PromotedPieceNotation + r.Suffix()
+	return from.String() + r.CaptureString() + r.InputMove.To.String() +
+		"=" + r.InputMove.PromotedPieceNotation + r.Suffix()
 }

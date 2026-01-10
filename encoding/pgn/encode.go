@@ -1,27 +1,21 @@
-// Package pgn provides functionality to encode/decode chess games in the Portable Game Notation (PGN) format.
-// It includes encoding headers, moves, and results into a PGN string.
-// It also provides a way to decode PGN strings into headers and moves.
 package pgn
 
 import (
 	"fmt"
 	"strings"
-
-	"github.com/elaxer/chess"
 )
 
-// Encode encodes the given headers and board state into a PGN string.
+// Encode encodes the given headers, moves slice and board result into a PGN string.
 // It formats the headers, moves, and result according to the PGN standard.
 // The headers are encoded as a string with each header on a new line.
 // The moves are encoded as a single line with move numbers and piece notations.
 // The result is appended at the end of the PGN string.
-func Encode(headers []Header, board chess.Board, result string) string {
+func Encode(headers []Header, moves []string, result string) string {
 	var pgn strings.Builder
-	fmt.Fprintln(&pgn, EncodeHeaders(headers))
-	fmt.Fprintln(&pgn)
+	pgn.WriteString(EncodeHeaders(headers) + "\n\n")
 
-	movesStr := wrapText(EncodeMoves(board.MoveHistory()), 79)
-	fmt.Fprint(&pgn, movesStr)
+	movesStr := wrapText(EncodeMoves(moves), 79)
+	pgn.WriteString(movesStr)
 
 	return pgn.String() + " " + result
 }
@@ -43,7 +37,7 @@ func EncodeHeaders(headers []Header) string {
 // The first move is considered move 1, and the second move is considered move 1 as well (for white and black).
 // The move number is incremented for every two moves (one for white and one for black).
 // The moves are formatted as "1. e4 1... e5 2. Nf3 2... Nc6" for example.
-func EncodeMoves(moves []chess.MoveResult) string {
+func EncodeMoves(moves []string) string {
 	var str strings.Builder
 	currentMoveNumber := 0
 	for i, move := range moves {
@@ -52,7 +46,7 @@ func EncodeMoves(moves []chess.MoveResult) string {
 			fmt.Fprintf(&str, "%d. ", currentMoveNumber)
 		}
 
-		fmt.Fprintf(&str, "%s ", move)
+		str.WriteString(move + " ")
 	}
 
 	return str.String()
@@ -73,7 +67,7 @@ func wrapText(text string, maxWidth int) string {
 			result.WriteString("\n")
 			lineLen = 0
 		} else if i != 0 {
-			result.WriteString(" ")
+			result.WriteRune(' ')
 			lineLen++
 		}
 

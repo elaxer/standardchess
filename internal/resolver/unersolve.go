@@ -8,7 +8,7 @@ import (
 	"github.com/elaxer/chess"
 )
 
-var ErrUnresolve = errors.New("unresolving error")
+var ErrUnresolve = errors.New("unresolve error")
 
 func UnresolveFrom(from, to chess.Position, board chess.Board) (chess.Position, error) {
 	if !from.IsFull() {
@@ -20,9 +20,27 @@ func UnresolveFrom(from, to chess.Position, board chess.Board) (chess.Position, 
 		return chess.NewPositionEmpty(), err
 	}
 	if piece == nil {
-		return chess.NewPositionEmpty(), fmt.Errorf("%w: piece not found", ErrResolve)
+		return chess.NewPositionEmpty(), fmt.Errorf("%w: piece not found", ErrUnresolve)
 	}
 
+	hasSamePiece, hasSameFile, hasSameRank := comparePieces(board, piece, from, to)
+
+	unresolvedFrom := chess.NewPositionEmpty()
+	if hasSameRank || (hasSamePiece && !hasSameFile) {
+		unresolvedFrom.File = from.File
+	}
+	if hasSameFile {
+		unresolvedFrom.Rank = from.Rank
+	}
+
+	return unresolvedFrom, nil
+}
+
+func comparePieces(
+	board chess.Board,
+	piece chess.Piece,
+	from, to chess.Position,
+) (bool, bool, bool) {
 	hasSamePiece, hasSameFile, hasSameRank := false, false, false
 	for samePiece := range board.Squares().GetPieces(piece.Notation(), piece.Color()) {
 		samePiecePosition := board.Squares().GetByPiece(samePiece)
@@ -38,13 +56,5 @@ func UnresolveFrom(from, to chess.Position, board chess.Board) (chess.Position, 
 		}
 	}
 
-	unresolvedFrom := chess.NewPositionEmpty()
-	if hasSameRank || (hasSamePiece && !hasSameFile) {
-		unresolvedFrom.File = from.File
-	}
-	if hasSameFile {
-		unresolvedFrom.Rank = from.Rank
-	}
-
-	return unresolvedFrom, nil
+	return hasSamePiece, hasSameFile, hasSameRank
 }
