@@ -40,7 +40,7 @@ func decodeHeaders(pgn string) ([]Header, error) {
 }
 
 func decodeMoves(pgn string) []chess.Move {
-	moves := make([]chess.Move, 0)
+	moves := make([]chess.Move, 0, 100)
 	data := regexpMoves.FindAllString(pgn, -1)
 
 	for _, move := range data {
