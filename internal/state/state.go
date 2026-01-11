@@ -9,7 +9,7 @@ var (
 	Checkmate = chess.NewState("checkmate", chess.StateTypeTerminal)
 	Stalemate = chess.NewState("stalemate", chess.StateTypeTerminal)
 
-	FiftyMoves           = chess.NewState("fifty moves rule", chess.StateTypeClear)
-	ThreefoldRepetition  = chess.NewState("threefold repetition", chess.StateTypeClear)
+	FiftyMoves           = chess.NewState("fifty moves rule", chess.StateTypeTerminal)
+	ThreefoldRepetition  = chess.NewState("threefold repetition", chess.StateTypeTerminal)
 	InsufficientMaterial = chess.NewState("insufficient material", chess.StateTypeTerminal)
 )

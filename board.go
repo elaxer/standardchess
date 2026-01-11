@@ -21,7 +21,7 @@ import (
 	"github.com/elaxer/standardchess/metric"
 )
 
-var edgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
+var EdgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
 
 var firstRowPieceNotations = [...]string{
 	piece.NotationRook,
@@ -54,7 +54,7 @@ type board struct {
 }
 
 func NewBoard() chess.Board {
-	board, err := NewBoardEmpty(chess.ColorWhite, nil, edgePosition)
+	board, err := NewBoardEmpty(chess.ColorWhite, nil, EdgePosition)
 	must(err)
 
 	squares := board.Squares()
@@ -76,11 +76,11 @@ func NewBoard() chess.Board {
 		bPiece, err := piece.New(notation, chess.ColorBlack)
 		must(err)
 
-		must(squares.PlacePiece(bPiece, chess.NewPosition(file, edgePosition.Rank)))
+		must(squares.PlacePiece(bPiece, chess.NewPosition(file, EdgePosition.Rank)))
 		must(
 			squares.PlacePiece(
 				piece.NewPawn(chess.ColorBlack),
-				chess.NewPosition(file, edgePosition.Rank-1),
+				chess.NewPosition(file, EdgePosition.Rank-1),
 			),
 		)
 	}
@@ -294,7 +294,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
 		"captured_pieces": b.capturedPieces,
 		"move_history":    b.moveHistory,
-		"placements":      placements,
+		"placement":       placements,
 	})
 }
 

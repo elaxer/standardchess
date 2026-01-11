@@ -48,7 +48,7 @@ func (b *Bishop) String() string {
 
 func (b *Bishop) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     b.color,
+		"color":    b.color,
 		"notation": b.Notation(),
 		"is_moved": b.isMoved,
 	})

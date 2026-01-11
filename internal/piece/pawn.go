@@ -54,7 +54,7 @@ func (p *Pawn) String() string {
 
 func (p *Pawn) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     p.color,
+		"color":    p.color,
 		"notation": p.Notation(),
 		"is_moved": p.isMoved,
 	})

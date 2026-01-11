@@ -52,7 +52,7 @@ func (q *Queen) String() string {
 
 func (q *Queen) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     q.color,
+		"color":    q.color,
 		"notation": q.Notation(),
 		"is_moved": q.isMoved,
 	})

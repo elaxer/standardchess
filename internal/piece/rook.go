@@ -48,7 +48,7 @@ func (r *Rook) String() string {
 
 func (r *Rook) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"side":     r.Color(),
+		"color":    r.Color(),
 		"notation": r.Notation(),
 		"is_moved": r.isMoved,
 	})
