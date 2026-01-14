@@ -171,16 +171,18 @@ import (
 func main() {
     board := standardchess.NewBoard()
 
-    fenStr := fen.Encode(board)
-    fenStr == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    f := fen.Encode(board)
+    
+    f.Placement() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    f.Turn() == chess.ColorWhite
+    short, long := f.Castlings(chess.ColorBlack)
+    f.EnPassantSquare() == chess.NewPositionEmpty()
+    f.HalfmoveClock() == 0
+    f.MoveNumber() == 1
+
+    f.String() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 }
 
-```
-
-... or encode only piece placement:
-```go
-fenStr = fen.EncodePiecePlacement(board)
-fenStr == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 ```
 
 Decode a FEN string to your board:

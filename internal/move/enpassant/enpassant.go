@@ -10,10 +10,10 @@ import (
 )
 
 func CanEnPassant(board chess.Board) bool {
-	return !EnPassantPosition(board).IsEmpty()
+	return !EnPassantTargetSquare(board).IsEmpty()
 }
 
-func EnPassantPosition(board chess.Board) chess.Position {
+func EnPassantTargetSquare(board chess.Board) chess.Position {
 	if len(board.MoveHistory()) == 0 {
 		return chess.NewPositionEmpty()
 	}

@@ -11,7 +11,7 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/rgx"
-	board "github.com/elaxer/standardchess"
+	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/internal/piece"
 )
 
@@ -23,20 +23,20 @@ var errSquaresNumOverflowed = fmt.Errorf(
 	ErrDecoding,
 )
 
-var regexpFEN = regexp.MustCompile(
-	`(?i)^(?P<placement>(((1[0-6]|[1-9])|[PNBRQK])+/){5,15}((1[0-6]|[1-9])|[PNBRQK])+)\s?(?P<side>[WB])?`,
+var regexpFENDecode = regexp.MustCompile(
+	`(?i)^(?P<placement>(((1[0-6]|[1-9])|[PNBRQK])+/){5,15}((1[0-6]|[1-9])|[PNBRQK])+)\s?(?P<turn>[WB])?`,
 )
 
 // Decode decodes a FEN string into a chess board.
 // The FEN string should match the regular expression defined in Regexp.
 // It returns an error if the FEN string is invalid or if there is an error creating the board or pieces.
 func Decode(fen string) (chess.Board, error) {
-	data, err := rgx.Group(regexpFEN, fen)
+	data, err := rgx.Group(regexpFENDecode, fen)
 	if err != nil {
 		return nil, err
 	}
 
-	placement := make(map[chess.Position]chess.Piece, 256)
+	placement := make(map[chess.Position]chess.Piece, 128)
 
 	rows := strings.Split(data["placement"], "/")
 	if len(rows) > int(chess.RankMax) {
@@ -57,8 +57,8 @@ func Decode(fen string) (chess.Board, error) {
 		maps.Copy(placement, rowPlacement)
 	}
 
-	return board.NewBoardEmpty(
-		side(data["side"]),
+	return standardchess.NewBoardEmpty(
+		color(data["turn"]),
 		placement,
 		//nolint:gosec
 		chess.NewPosition(maxFile-1, chess.Rank(len(rows))),
@@ -112,15 +112,6 @@ func placementFromRow(
 
 func isArabDigit(char rune) bool {
 	return char >= '0' && char <= '9'
-}
-
-func side(str string) chess.Color {
-	switch strings.ToLower(str) {
-	case "w", "":
-		return chess.ColorWhite
-	default:
-		return chess.ColorBlack
-	}
 }
 
 func createPiece(char rune) (chess.Piece, error) {

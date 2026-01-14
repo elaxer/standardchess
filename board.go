@@ -196,7 +196,7 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 		})
 	}
 
-	enPassantPosition := enpassant.EnPassantPosition(b)
+	enPassantPosition := enpassant.EnPassantTargetSquare(b)
 	if err := enpassant.ValidateMove(from, enPassantPosition, b); err == nil {
 		legalMoves = append(legalMoves, enPassantPosition)
 	}

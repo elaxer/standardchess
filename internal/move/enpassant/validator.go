@@ -17,7 +17,7 @@ var (
 )
 
 func ValidateMove(from, to chess.Position, board chess.Board) error {
-	enPassantPosition := EnPassantPosition(board)
+	enPassantPosition := EnPassantTargetSquare(board)
 	if enPassantPosition.IsEmpty() {
 		return errValidationNoTargetSquare
 	}

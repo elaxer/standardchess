@@ -75,11 +75,11 @@ func NewPieceM(str string) chess.Piece {
 }
 
 func EncodeFEN(board chess.Board) string {
-	return fen.Encode(board)
+	return fen.Encode(board).String()
 }
 
 func EncodeFENRows(board chess.Board) string {
-	return fen.EncodeSquares(board.Squares())
+	return fen.Encode(board).Placement()
 }
 
 // DecodeFEN decodes a FEN string into a chess.Board instance with the specified edge position.

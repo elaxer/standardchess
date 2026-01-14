@@ -13,7 +13,6 @@ import (
 func Test_board_MakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
 	b := standardtest.DecodeFEN("r3k2r/ppp2ppp/B1n2n1B/3pp2Q/3PP2q/b1N2N1b/PPP2PPP/R3K2R")
 	require.Equal(t, 0, len(b.CapturedPieces()))
-
 	cases := []struct {
 		move          string
 		expectCapture bool

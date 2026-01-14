@@ -137,20 +137,16 @@ func TestDecode(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := fen.Decode(tt.args.fen)
-
-			require.Truef(
-				t,
-				(err != nil) == tt.wantErr,
-				"Decode() error = %v, wantErr %v",
-				err,
-				tt.wantErr,
-			)
 			if tt.wantErr {
+				require.Error(t, err)
+
 				return
+			} else {
+				require.NoError(t, err)
 			}
 
 			assert.Equal(t, tt.wantColor, got.Turn())
-			assert.Equal(t, tt.wantFEN, fen.EncodeSquares(got.Squares()))
+			assert.Equal(t, tt.wantFEN, fen.Encode(got).Placement())
 		})
 	}
 }

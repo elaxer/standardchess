@@ -63,7 +63,7 @@ func CastlingAbility(board chess.Board) metric.Metric {
 }
 
 func EnPassantTargetSquare(board chess.Board) metric.Metric {
-	targetPosition := enpassant.EnPassantPosition(board)
+	targetPosition := enpassant.EnPassantTargetSquare(board)
 	if targetPosition.IsEmpty() {
 		return nil
 	}
