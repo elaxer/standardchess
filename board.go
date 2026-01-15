@@ -10,6 +10,7 @@ package standardchess
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"slices"
 
@@ -17,11 +18,16 @@ import (
 	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/mover"
 	"github.com/elaxer/standardchess/internal/piece"
-	"github.com/elaxer/standardchess/internal/state/rule"
+	"github.com/elaxer/standardchess/internal/rule"
 	"github.com/elaxer/standardchess/metric"
 )
 
 var EdgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
+
+var (
+	ErrCannotMoveInTerminalState = errors.New("cannot make a move when the board is in a terminal state")
+	ErrNoMovesToUndo             = errors.New("there are no moves to undo")
+)
 
 var firstRowPieceNotations = [...]string{
 	piece.NotationRook,
@@ -217,7 +223,7 @@ func (b *board) IsSquareAttacked(position chess.Position) bool {
 
 func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 	if b.State().Type().IsTerminal() {
-		return nil, nil
+		return nil, ErrCannotMoveInTerminalState
 	}
 
 	moveResult, err := mover.MakeMove(move, b)
@@ -242,7 +248,7 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 func (b *board) UndoLastMove() (chess.MoveResult, error) {
 	movesCount := len(b.moveHistory)
 	if movesCount == 0 {
-		return nil, nil
+		return nil, ErrNoMovesToUndo
 	}
 
 	lastMove := b.moveHistory[movesCount-1]

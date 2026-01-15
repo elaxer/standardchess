@@ -29,16 +29,16 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 		return nil, err
 	}
 
-	capturedPawnPosition := chess.NewPosition(
+	pawnToCapturePosition := chess.NewPosition(
 		move.To.File,
 		move.To.Rank-piece.PawnRankDirection(board.Turn()),
 	)
-	capturedPawn, err := board.Squares().FindByPosition(capturedPawnPosition)
+	capturedPawn, err := board.Squares().FindByPosition(pawnToCapturePosition)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := board.Squares().PlacePiece(nil, capturedPawnPosition); err != nil {
+	if err := board.Squares().PlacePiece(nil, pawnToCapturePosition); err != nil {
 		return nil, err
 	}
 

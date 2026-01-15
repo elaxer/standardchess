@@ -24,3 +24,17 @@ func TestValidateMove(t *testing.T) {
 		),
 	)
 }
+
+func TestValidateMove_CheckAfterMove(t *testing.T) {
+	board := standardtest.DecodeFEN("rnbqkbnr/ppp2ppp/8/3P4/8/8/PPP2PPP/RNBK1BNR b kq - 0 1")
+	_, err := board.MakeMove(chess.StringMove("c5"))
+	require.NoError(t, err)
+
+	err = enpassant.ValidateMove(
+		chess.PositionFromString("d5"),
+		chess.PositionFromString("c6"),
+		board,
+	)
+	require.Error(t, err)
+	assert.Equal(t, "en passant move validation error: there is a check after the move", err.Error())
+}
