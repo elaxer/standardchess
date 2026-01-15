@@ -14,3 +14,19 @@ func Check(board chess.Board) chess.State {
 
 	return nil
 }
+
+func Checkmate(board chess.Board) chess.State {
+	if Check(board) != nil && len(board.Moves()) == 0 {
+		return state.Checkmate
+	}
+
+	return nil
+}
+
+func Stalemate(board chess.Board) chess.State {
+	if Check(board) == nil && len(board.Moves()) == 0 {
+		return state.Stalemate
+	}
+
+	return nil
+}

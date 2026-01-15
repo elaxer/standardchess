@@ -151,6 +151,24 @@ Lower-level stuff such as placing/moving/removing pieces from the board,
 iterations over the board, and so on are described in the documentation
 [github.com/elaxer/chess](https://github.com/elaxer/chess)
 
+### Board player
+
+Use `*BoardPlayer` to rewind the board position to see past board positions:
+
+```go
+player := standardchess.NewBoardPlayer(board)
+
+// Use this methods for navigation:
+player.Reset() // Sets the cursor at the init board position
+ok := player.Prev() // Moves the cursor back one position
+ok = player.GoTo(4) // Sets the cursor to a specific position
+ok = player.Next() // Moves the cursor forward one position
+player.End() // Sets the cursor at the last board position
+
+// Get a snapshot of the board after moving the cursor:
+boardSnapshot := player.Board() 
+```
+
 ### Board encoding/decoding
 #### FEN
 

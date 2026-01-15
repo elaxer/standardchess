@@ -30,7 +30,6 @@ func ValidateMoveWithObstacle(
 	return validateMove(castlingType, side, board, false)
 }
 
-//nolint:cyclop
 func validateMove(
 	castlingType CastlingType,
 	side chess.Color,
@@ -38,16 +37,9 @@ func validateMove(
 	validateObstacle bool,
 ) error {
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
-	if king == nil {
-		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
+	if err := validateKing(king, side, board); err != nil {
+		return err
 	}
-	if king.IsMoved() {
-		return fmt.Errorf("%w: the king already has been moved", ErrValidation)
-	}
-	if side == board.Turn() && !board.State().Type().IsClear() {
-		return fmt.Errorf("%w: the king is under threat", ErrValidation)
-	}
-
 	fileDir := fileDirection(castlingType)
 
 	rook, _, hasObstacle, err := getRook(fileDir, side, board.Squares(), kingPosition)
@@ -68,6 +60,22 @@ func validateMove(
 		(board.IsSquareAttacked(kingNewPosition) || board.IsSquareAttacked(rookNewPosition)) {
 		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
 
+	}
+
+	return nil
+}
+
+func validateKing(king chess.Piece,
+	side chess.Color,
+	board chess.Board) error {
+	if king == nil {
+		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
+	}
+	if king.IsMoved() {
+		return fmt.Errorf("%w: the king already has been moved", ErrValidation)
+	}
+	if side == board.Turn() && !board.State().Type().IsClear() {
+		return fmt.Errorf("%w: the king is under threat", ErrValidation)
 	}
 
 	return nil

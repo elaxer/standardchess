@@ -5,6 +5,8 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess"
+	"github.com/elaxer/standardchess/encoding/fen"
+	"github.com/elaxer/standardchess/encoding/pgn"
 	"github.com/elaxer/standardchess/internal/standardtest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -129,18 +131,20 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 			"8/K7/1Q6/Q3P3/k4P2/8/8/8 b - - 14 60"},
 	}
 
-	initFEN := standardtest.EncodeFEN(standardchess.NewBoard())
+	initFEN := fen.Encode(standardchess.NewBoard())
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			board := standardchess.NewBoard()
 
-			for _, move := range standardtest.MovesFromPGN(tt.pgnStr) {
+			_, moves, err := pgn.Decode(tt.pgnStr)
+			require.NoError(t, err)
+			for _, move := range moves {
 				result, err := board.MakeMove(move)
 				require.NotNil(t, result)
 				require.NoError(t, err)
 			}
 
-			require.Equal(t, tt.wantFEN, standardtest.EncodeFEN(board))
+			require.Equal(t, tt.wantFEN, fen.Encode(board).String())
 
 			for i := range board.MoveHistory() {
 				result, err := board.UndoLastMove()
@@ -148,7 +152,7 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 				require.NotNil(t, result, "No %d", i+1)
 			}
 
-			afterFEN := standardtest.EncodeFEN(board)
+			afterFEN := fen.Encode(board)
 			assert.Equal(t, initFEN, afterFEN)
 		})
 	}
@@ -161,7 +165,7 @@ func BenchmarkNewBoard(b *testing.B) {
 }
 
 func BenchmarkNewBoardFromMoves(b *testing.B) {
-	moves := standardtest.MovesFromPGN(
+	_, moves, err := pgn.Decode(
 		`1. e4 e5 2. Bb5 c6 3. Nc3 cxb5 4. Nxb5 Nf6 5. f3 d5 6. exd5 Nxd5 7. c4 a6 8.
 Nd6+ Bxd6 9. cxd5 Bf5 10. d4 exd4 11. Qe2+ Qe7 12. Qxe7+ Bxe7 13. Bg5 Bxg5 14.
 Nh3 Bh4+ 15. g3 Bg5 16. Nxg5 O-O 17. b4 Nc6 18. b5 Ne5 19. b6 Nxf3+ 20. Kf2 Nxg5
@@ -172,6 +176,7 @@ Re7 Rf3+ 41. Ke5 a4 42. Re8+ Rxe8+ 43. dxe8=Q+ Kxe8 44. Kd6 a3 45. Kc7 Rb3 46.
 Kxb7 a2 47. Kc8 a1=Q 48. b7 Qc3+ 49. Kb8 Qe5+ 50. Ka7 Qd5 51. b8=Q+ Rxb8 52.
 Kxb8 Qc6 53. Ka7 Kd7 54. Kb8 Qc7+ 55. Ka8 Kc6 1/2-1/2`,
 	)
+	require.NoError(b, err)
 
 	b.ResetTimer()
 	for range b.N {

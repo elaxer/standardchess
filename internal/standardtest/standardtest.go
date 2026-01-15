@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/elaxer/chess"
-	"github.com/elaxer/chess/chesstest"
 	"github.com/elaxer/chess/metric"
 	"github.com/elaxer/chess/visualizer"
 	"github.com/elaxer/standardchess"
@@ -23,20 +22,14 @@ func NewBoardEmpty8x8(turn chess.Color, placement map[chess.Position]chess.Piece
 	return board
 }
 
-func NewBoardFromMoves(moveStrings ...string) chess.Board {
-	moves := chesstest.MoveStrings(moveStrings...)
+func NewBoardFromPGN(pgnStr string) chess.Board {
+	_, moves, err := pgn.Decode(pgnStr)
+	must(err)
 
 	board, err := standardchess.NewBoardFromMoves(moves)
 	must(err)
 
 	return board
-}
-
-func MovesFromPGN(pgnStr string) []chess.Move {
-	_, moves, err := pgn.Decode(pgnStr)
-	must(err)
-
-	return moves
 }
 
 // NewPiece creates a new piece by string.
@@ -72,14 +65,6 @@ func NewPieceM(str string) chess.Piece {
 	piece.SetIsMoved(true)
 
 	return piece
-}
-
-func EncodeFEN(board chess.Board) string {
-	return fen.Encode(board).String()
-}
-
-func EncodeFENRows(board chess.Board) string {
-	return fen.Encode(board).Placement()
 }
 
 // DecodeFEN decodes a FEN string into a chess.Board instance with the specified edge position.

@@ -5,6 +5,7 @@ import (
 
 	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess"
+	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/internal/move/normal"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/standardtest"
@@ -27,7 +28,7 @@ func TestUndoNormal(t *testing.T) {
 		chess.PositionFromString("a8"): pieceWillBeCaptured,
 	})
 
-	initFEN := standardtest.EncodeFEN(board)
+	initFEN := fen.Encode(board)
 
 	firstMoveResult, err := normal.MakeMove(normal.NewMove(
 		chess.PositionFromString("a1"),
@@ -51,7 +52,7 @@ func TestUndoNormal(t *testing.T) {
 	err = normal.UndoMove(firstMoveResult, board)
 	require.NoError(t, err)
 
-	assert.Equal(t, initFEN, standardtest.EncodeFEN(board))
+	assert.Equal(t, initFEN, fen.Encode(board))
 	assert.False(t, piece.IsMoved())
 	assert.True(t, movedPiece.IsMoved())
 	assert.False(t, pieceWillBeCaptured.IsMoved())

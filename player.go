@@ -3,21 +3,21 @@ package standardchess
 import "github.com/elaxer/chess"
 
 type BoardPlayer struct {
-	moveHistory []chess.Move
-	cursor      int
+	board  chess.Board
+	cursor uint16
 }
 
 func NewBoardPlayer(board chess.Board) *BoardPlayer {
-	moveHistory := make([]chess.Move, 0, len(board.MoveHistory()))
-	for _, move := range board.MoveHistory() {
-		moveHistory = append(moveHistory, move.Move())
-	}
+	player := &BoardPlayer{board: board}
+	player.End()
 
-	return &BoardPlayer{moveHistory: moveHistory, cursor: len(moveHistory) - 1}
+	return player
 }
 
 func (p *BoardPlayer) Board() chess.Board {
-	copy, err := NewBoardFromMoves(p.moveHistory[:p.cursor])
+	cursor := min(p.cursor, p.moveHistoryLen())
+
+	copy, err := NewBoardFromMoves(p.moveHistory()[:cursor])
 	must(err)
 
 	return copy
@@ -31,8 +31,8 @@ func (p *BoardPlayer) Prev() (ok bool) {
 	return p.GoTo(p.cursor - 1)
 }
 
-func (p *BoardPlayer) GoTo(n int) (ok bool) {
-	if n < 0 || n >= len(p.moveHistory) {
+func (p *BoardPlayer) GoTo(n uint16) (ok bool) {
+	if n > p.moveHistoryLen() {
 		return false
 	}
 
@@ -46,5 +46,19 @@ func (p *BoardPlayer) Next() (ok bool) {
 }
 
 func (p *BoardPlayer) End() {
-	p.cursor = len(p.moveHistory) - 1
+	p.cursor = p.moveHistoryLen()
+}
+
+func (p *BoardPlayer) moveHistory() []chess.Move {
+	moveHistory := make([]chess.Move, 0, p.moveHistoryLen())
+	for _, move := range p.board.MoveHistory() {
+		moveHistory = append(moveHistory, move.Move())
+	}
+
+	return moveHistory
+}
+
+func (p *BoardPlayer) moveHistoryLen() uint16 {
+	//nolint:gosec
+	return uint16(len(p.board.MoveHistory()))
 }
