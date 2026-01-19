@@ -136,9 +136,9 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 		t.Run(tt.name, func(t *testing.T) {
 			board := standardchess.NewBoard()
 
-			_, moves, err := pgn.Decode(tt.pgnStr)
+			pgn, err := pgn.FromString(tt.pgnStr)
 			require.NoError(t, err)
-			for _, move := range moves {
+			for _, move := range pgn.Moves() {
 				result, err := board.MakeMove(move)
 				require.NotNil(t, result)
 				require.NoError(t, err)
@@ -165,7 +165,7 @@ func BenchmarkNewBoard(b *testing.B) {
 }
 
 func BenchmarkNewBoardFromMoves(b *testing.B) {
-	_, moves, err := pgn.Decode(
+	pgn, err := pgn.FromString(
 		`1. e4 e5 2. Bb5 c6 3. Nc3 cxb5 4. Nxb5 Nf6 5. f3 d5 6. exd5 Nxd5 7. c4 a6 8.
 Nd6+ Bxd6 9. cxd5 Bf5 10. d4 exd4 11. Qe2+ Qe7 12. Qxe7+ Bxe7 13. Bg5 Bxg5 14.
 Nh3 Bh4+ 15. g3 Bg5 16. Nxg5 O-O 17. b4 Nc6 18. b5 Ne5 19. b6 Nxf3+ 20. Kf2 Nxg5
@@ -180,6 +180,6 @@ Kxb8 Qc6 53. Ka7 Kd7 54. Kb8 Qc7+ 55. Ka8 Kc6 1/2-1/2`,
 
 	b.ResetTimer()
 	for range b.N {
-		_, _ = standardchess.NewBoardFromMoves(moves)
+		_, _ = standardchess.NewBoardFromMoves(pgn.Moves())
 	}
 }

@@ -231,22 +231,16 @@ func main() {
         pgn.NewHeader("Date", time.Now().Format("2006.01.02")),
     }
 
-    result = "*"
+    result = pgn.ResultFromBoard(board)
 
-    pgnStr := pgn.Encode(headers, pgn.MoveHistoryToStrings(board.MoveHistory()), result)
-
-    // Or decode only headers:
-    pgnHeadersStr := pgn.EncodeHeaders(headers)
-
-    // ... or only moves:
-    pgnMovesStr := pgn.EncodeMoves(pgn.MoveHistoryToStrings(board.MoveHistory()))
+    pgnStr := pgn.Encode(headers, board, result)
 }
 
 ```
 
-Let's try to decode a PGN string into headers with a board:
+Let's try to create a PGN from a string:
 ```go
-pgnStr := `
+const pgnStr = `
 [Event "F/S Return Match"]
 [Site "Belgrade, Serbia JUG"]
 [Date "1992.11.04"]
@@ -254,7 +248,11 @@ pgnStr := `
 1.e4 e5 2.Nf3 Nc6 *
 `
 
-header, moves, err := pgn.Decode(pgnStr)
+pgn, err := pgn.FromString(pgnStr)
+pgn.Headers()
+pgn.Moves()
+pgn.Result()
+pgn.String()
 ```
 
 #### JSON

@@ -3,26 +3,20 @@ package pgn
 import (
 	"fmt"
 	"strings"
+
+	"github.com/elaxer/chess"
 )
 
-// Encode encodes the given headers, moves slice and board result into a PGN string.
-// It formats the headers, moves, and result according to the PGN standard.
-// The headers are encoded as a string with each header on a new line.
-// The moves are encoded as a single line with move numbers and piece notations.
-// The result is appended at the end of the PGN string.
-func Encode(headers []Header, moves []string, result string) string {
-	var pgn strings.Builder
-	pgn.WriteString(EncodeHeaders(headers) + "\n\n")
+func Encode(headers []Header, board chess.Board, result Result) PGN {
+	moves := make([]chess.Move, 0, len(board.MoveHistory()))
+	for _, move := range board.MoveHistory() {
+		moves = append(moves, chess.StringMove(move.String()))
+	}
 
-	movesStr := wrapText(EncodeMoves(moves), 79)
-	pgn.WriteString(movesStr)
-
-	return pgn.String() + " " + result
+	return NewPGN(headers, moves, result)
 }
 
-// EncodeHeaders encodes the given headers into a PGN string.
-// Each header is formatted as "[name "value"]" and joined by newlines.
-func EncodeHeaders(headers []Header) string {
+func encodeHeaders(headers []Header) string {
 	headerStrings := make([]string, 0, len(headers))
 	for _, header := range headers {
 		headerStrings = append(headerStrings, header.String())
@@ -31,13 +25,7 @@ func EncodeHeaders(headers []Header) string {
 	return strings.Join(headerStrings, "\n")
 }
 
-// EncodeMoves encodes the given moves into a PGN string.
-// It formats the moves with move numbers and piece notations.
-// Each move is separated by a space, and move numbers are added every two moves.
-// The first move is considered move 1, and the second move is considered move 1 as well (for white and black).
-// The move number is incremented for every two moves (one for white and one for black).
-// The moves are formatted as "1. e4 1... e5 2. Nf3 2... Nc6" for example.
-func EncodeMoves(moves []string) string {
+func encodeMoves(moves []chess.Move) string {
 	var str strings.Builder
 	currentMoveNumber := 0
 	for i, move := range moves {
@@ -46,7 +34,7 @@ func EncodeMoves(moves []string) string {
 			fmt.Fprintf(&str, "%d. ", currentMoveNumber)
 		}
 
-		str.WriteString(move + " ")
+		str.WriteString(move.String() + " ")
 	}
 
 	return str.String()

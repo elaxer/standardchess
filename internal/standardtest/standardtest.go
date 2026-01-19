@@ -23,10 +23,10 @@ func NewBoardEmpty8x8(turn chess.Color, placement map[chess.Position]chess.Piece
 }
 
 func NewBoardFromPGN(pgnStr string) chess.Board {
-	_, moves, err := pgn.Decode(pgnStr)
+	pgn, err := pgn.FromString(pgnStr)
 	must(err)
 
-	board, err := standardchess.NewBoardFromMoves(moves)
+	board, err := standardchess.NewBoardFromMoves(pgn.Moves())
 	must(err)
 
 	return board

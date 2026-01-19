@@ -1,7 +1,6 @@
 package pgn_test
 
 import (
-	"slices"
 	"testing"
 
 	"github.com/elaxer/chess"
@@ -11,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDecode(t *testing.T) {
+func TestFromString(t *testing.T) {
 	type args struct {
 		pgn string
 	}
@@ -20,6 +19,7 @@ func TestDecode(t *testing.T) {
 		args        args
 		wantHeaders []pgn.Header
 		wantMoves   []chess.Move
+		wantResult  pgn.Result
 		wantErr     bool
 	}{
 		{
@@ -33,19 +33,26 @@ func TestDecode(t *testing.T) {
 [Result "0-1"]
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"]`},
-			[]pgn.Header{
-				pgn.NewHeader("Event", "It (open)"),
-				pgn.NewHeader("Site", "Sevilla (Spain)"),
-				pgn.NewHeader("Date", "1992.??.??"),
-				pgn.NewHeader("Round", "?"),
-				pgn.NewHeader("White", "Gonzalez Raul"),
-				pgn.NewHeader("Black", "Mikhail Tal"),
-				pgn.NewHeader("Result", "0-1"),
-				pgn.NewHeader("TimeControl", ""),
-				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082964"),
-			},
+			[]pgn.Header{},
 			[]chess.Move{},
-			false,
+			"",
+			true,
+		},
+		{
+			"headers_and_result",
+			args{`[Event "It (open)"]
+[Site "Sevilla (Spain)"]
+[Date "1992.??.??"]
+[Round "?"]
+[White "Gonzalez Raul"]
+[Black "Mikhail Tal"]
+[Result "0-1"]
+[TimeControl ""]
+[Link "https://www.chess.com/games/view/4082964"] *`},
+			[]pgn.Header{},
+			[]chess.Move{},
+			"",
+			true,
 		},
 		{
 			"only_moves",
@@ -53,6 +60,17 @@ func TestDecode(t *testing.T) {
 a6 9. Be2 b5 10. O-O Be7 11. Bd3 O-O 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 Qxc2 25. Nf2 Bd5 26. Nd3 h5`},
+			[]pgn.Header{},
+			chesstest.MoveStrings(),
+			"",
+			true,
+		},
+		{
+			"moves_and_result",
+			args{`1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Qb6 5. Nb3 Nf6 6. Nc3 e6 7. Be3 Qc7 8. a3
+a6 9. Be2 b5 10. O-O+ Be7 11. Bd3 O-O# 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
+h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
+22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 bxc8=Q# 25. Nf2 Bd5 26. Nd3 h5 0-1`},
 			[]pgn.Header{},
 			chesstest.MoveStrings(
 				"e4",
@@ -73,10 +91,10 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				"a6",
 				"Be2",
 				"b5",
-				"O-O",
+				"O-O+",
 				"Be7",
 				"Bd3",
-				"O-O",
+				"O-O#",
 				"f4",
 				"d6",
 				"Nd2",
@@ -102,12 +120,13 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				"Nxe4",
 				"Bxe4",
 				"bxa3",
-				"Qxc2",
+				"bxc8=Q#",
 				"Nf2",
 				"Bd5",
 				"Nd3",
 				"h5",
 			),
+			pgn.ResultWinBlack,
 			false,
 		},
 		{
@@ -191,6 +210,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				"Nd3",
 				"h5",
 			),
+			pgn.ResultWinBlack,
 			false,
 		},
 		{
@@ -262,12 +282,12 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				"Rxc6",
 				"a5",
 				"Rd1",
-				"Rxd1",
+				"Rxd1+",
 				"Qxd1",
 				"h6",
-				"Rc8",
+				"Rc8+",
 				"Kh7",
-				"Qc2",
+				"Qc2+",
 				"Qf5",
 				"Qc6",
 				"Qd5",
@@ -281,7 +301,7 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				"Kf5",
 				"Rc6",
 				"a4",
-				"g4",
+				"g4+",
 				"Kg6",
 				"h4",
 				"Kf7",
@@ -299,16 +319,16 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				"Ke6",
 				"f4",
 				"f5",
-				"Rc6",
+				"Rc6+",
 				"Kd7",
 				"Rg6",
 				"fxg4",
-				"Rxg7",
+				"Rxg7+",
 				"Kc6",
 				"Rxg4",
 				"Re7",
 				"e3",
-				"Re4",
+				"Re4+",
 				"Kd3",
 				"Kc5",
 				"Rg6",
@@ -319,7 +339,7 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				"Rh8",
 				"h6",
 			),
-
+			pgn.ResultWinWhite,
 			false,
 		},
 		{
@@ -386,7 +406,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"e5",
 				"Bxe5",
 				"fxe5",
-				"Qxe5",
+				"Qxe5+",
 				"Be7",
 				"Nd4",
 				"Bxg2",
@@ -399,18 +419,18 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"Rxa6",
 				"Qb7",
 				"Rfa1",
-				"Nb4",
+				"Nb4+",
 				"Kg1",
 				"Nxa6",
 				"Qxe7",
 				"Qb6",
 				"Qa3",
 				"Rhf8",
-				"Nd6",
+				"Nd6+",
 				"Kc7",
 				"Qxa6",
 				"Ra8",
-				"Qxb6",
+				"Qxb6+",
 				"Kxb6",
 				"Rd1",
 				"Ra2",
@@ -423,7 +443,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"Rc2",
 				"Kc5",
 				"Nc3",
-				"Ra1",
+				"Ra1+",
 				"Kf2",
 				"Rxc4",
 				"Rd2",
@@ -449,10 +469,10 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"Nxb4",
 				"Rxb2",
 				"Nc2",
-				"Rb3",
+				"Rb3+",
 				"Kc4",
 				"Rh3",
-				"Nd4",
+				"Nd4+",
 				"Kf7",
 				"f5",
 				"Rxh4",
@@ -460,17 +480,17 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"Rg4",
 				"Nf3",
 				"Rg3",
-				"Ne5",
+				"Ne5+",
 				"Kg8",
 				"f6",
 				"Rxg5",
 				"Ke6",
 				"Rg1",
-				"f7",
+				"f7+",
 				"Kg7",
 				"Nd7",
 				"Rf1",
-				"f8=Q",
+				"f8=Q+",
 				"Rxf8",
 				"Nxf8",
 				"h6",
@@ -478,29 +498,51 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"h5",
 				"Ne5",
 				"h4",
-				"Nf3",
+				"Nf3#",
 			),
+			pgn.ResultWinWhite,
 			false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotHeaders, gotMoves, err := pgn.Decode(tt.args.pgn)
+			got, err := pgn.FromString(tt.args.pgn)
 
-			require.Truef(
-				t,
-				(err != nil) == tt.wantErr,
-				"Decode() error = %v, wantErr %v",
-				err,
-				tt.wantErr,
-			)
+			require.True(t, (err != nil) == tt.wantErr)
 			if tt.wantErr {
 				return
 			}
 
-			assert.True(t, slices.Equal(gotHeaders, tt.wantHeaders))
-			assert.True(t, slices.Equal(gotMoves, tt.wantMoves))
+			assert.Equal(t, tt.wantHeaders, got.Headers())
+			assert.Equal(t, tt.wantMoves, got.Moves())
+			assert.Equal(t, tt.wantResult, got.Result())
 		})
 	}
+}
+
+func TestPGN_String(t *testing.T) {
+	const pgnStr = `[Event "Saint Louis Rapid 2017"]
+[Site "Saint Louis USA"]
+[Date "2017.08.14"]
+[Round "?"]
+[White "Garry Kasparov"]
+[Black "Navara, David"]
+[Result "*"]
+[TimeControl ""]
+[Link "https://www.chess.com/games/view/14842105"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nc3 e6 5. g4 Bg6 6. Nge2 c5 7. Be3 Ne7 8. f4 h5
+9. f5 exf5 10. g5 Nbc6 11. Nf4 a6 12. Bg2 cxd4 13. Bxd4 Nxd4 14. Qxd4 Nc6 15.
+Qf2 Bb4 16. O-O-O Bxc3 17. bxc3 Qa5 18. Rxd5 Qxc3 19. Qc5 Qxc5 20. Rxc5 O-O 21.
+Bxc6 bxc6 22. Rd1 Rab8 23. c4 Rfd8 24. Rd6 Kf8 25. Rcxc6 Rdc8 26. Kc2 h4 27.
+Rxc8+ Rxc8 28. Kc3 a5 29. Ra6 Rb8 30. Rxa5 Rb1 31. c5 Re1 32. Ra8+ Ke7 33. Ra7+
+Ke8 34. Nd3 Re3 35. Kd2 Rh3 36. c6 Rxh2+ 37. Ke3 Rc2 38. e6 h3 39. Nb4 f4+ 40.
+Kd4 h2 41. Ra8+ Ke7 42. Rh8 Rd2+ 43. Kc5 Be4 44. c7 Bb7 45. Kb6 Bc8 46. Rxc8
+h1=Q 47. Re8+ Kxe8 48. c8=Q+ Ke7 49. Nc6+ Qxc6+ 50. Qxc6 Rd6 *`
+
+	pgn, err := pgn.FromString(pgnStr)
+	require.NoError(t, err)
+
+	assert.Equal(t, pgnStr, pgn.String())
 }
