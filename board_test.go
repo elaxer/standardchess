@@ -180,6 +180,9 @@ Kxb8 Qc6 53. Ka7 Kd7 54. Kb8 Qc7+ 55. Ka8 Kc6 1/2-1/2`,
 
 	b.ResetTimer()
 	for range b.N {
-		_, _ = standardchess.NewBoardFromMoves(pgn.Moves())
+		_, err = standardchess.NewBoardFromMoves(pgn.Moves())
+		b.StopTimer()
+		require.NoError(b, err)
+		b.StartTimer()
 	}
 }

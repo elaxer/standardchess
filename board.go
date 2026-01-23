@@ -119,7 +119,7 @@ func NewBoardEmpty(
 		turn:           turn,
 		squares:        squares,
 		moveHistory:    make([]chess.MoveResult, 0, 128),
-		moves:          make([]chess.Position, 0, 128),
+		moves:          make([]chess.Position, 0, 64),
 		capturedPieces: make([]chess.Piece, 0, 30),
 
 		stateRules: stateRules,

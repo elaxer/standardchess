@@ -74,8 +74,6 @@ func BenchmarkMakeMove(b *testing.B) {
 
 		b.StopTimer()
 		require.NoError(b, err)
-		_, err = board.UndoLastMove()
-		require.NoError(b, err)
 		board = standardchess.NewBoard()
 		b.StartTimer()
 	}
