@@ -6,21 +6,23 @@ import (
 	"testing"
 
 	"github.com/elaxer/standardchess/encoding/pgn"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestParse(t *testing.T) {
 	reader := strings.NewReader(pgnStr)
 
-	pgns, err := pgn.Parse(reader)
-	require.NoError(t, err)
-	require.NotEmpty(t, pgns)
-
-	for i, pgn := range pgns {
+	i := 1
+	for pgn, err := range pgn.Parse(reader) {
 		t.Run("No. "+strconv.Itoa(i), func(t *testing.T) {
-			require.Equal(t, expected[i], pgn.Format(0))
+			require.NoError(t, err)
+			require.Equal(t, expected[i-1], pgn.Format(0))
 		})
+		i++
 	}
+
+	assert.Equal(t, len(expected), i-1)
 }
 
 //nolint:decorder
