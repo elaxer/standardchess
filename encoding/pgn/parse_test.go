@@ -14,38 +14,35 @@ func TestParse(t *testing.T) {
 
 	pgns, err := pgn.Parse(reader)
 	require.NoError(t, err)
+	require.NotEmpty(t, pgns)
 
 	for i, pgn := range pgns {
 		t.Run("No. "+strconv.Itoa(i), func(t *testing.T) {
-			require.Equal(t, expectedSingleLine[i], pgn.Format(0))
+			require.Equal(t, expected[i], pgn.Format(0))
 		})
 	}
 }
 
 //nolint:decorder
-var expectedSingleLine = [...]string{
+var expected = [...]string{
 	//nolint:lll
-	`
-	
-	[Event "Rated Blitz game"]
-  [Site "https://lichess.org/l68uct88"]
+	`[Event "Rated Blitz game"]
+[Site "https://lichess.org/l68uct88"]
 [White "Alik"]
 [Black "ioi"]
 [Result "0-1"]
 [UTCDate "2013.01.31"]
- [UTCTime "21:44:47"]
+[UTCTime "21:44:47"]
 [WhiteElo "1534"]
 [BlackElo "1299"]
 [WhiteRatingDiff "-19"]
 [BlackRatingDiff "+20"]
 [ECO "D00"]
 [Opening "Queen's Pawn Game: Mason Attack"]
-[TimeControl "360+0"]        
-[Termination "Normal"].  
+[TimeControl "360+0"]
+[Termination "Normal"]
 
-
-
-    1. d4 d5 2. Bf4 Nf6 3. e3 e6 4. Nc3 a6 5. Nh3 Ne4 6. Nxe4 dxe4 7. a3 Bd6 8. Bg5 f6 9. Qh5+ g6 10. Qh6 fxg5 11. Nxg5 Bf8 12. Qh4 Nc6 13. Bc4 b5 14. Bxe6 Be7 15. Qxe4 Bxe6 16. Nxe6 Qd7 17. Nc5 Qf5 18. Qxc6+ Kf7 19. Qd5+ Qxd5 0-1`,
+1. d4 d5 2. Bf4 Nf6 3. e3 e6 4. Nc3 a6 5. Nh3 Ne4 6. Nxe4 dxe4 7. a3 Bd6 8. Bg5 f6 9. Qh5+ g6 10. Qh6 fxg5 11. Nxg5 Bf8 12. Qh4 Nc6 13. Bc4 b5 14. Bxe6 Be7 15. Qxe4 Bxe6 16. Nxe6 Qd7 17. Nc5 Qf5 18. Qxc6+ Kf7 19. Qd5+ Qxd5 0-1`,
 
 	//nolint:lll
 	`[Event "Rated Classical game"]
@@ -272,10 +269,7 @@ var expectedSingleLine = [...]string{
 [TimeControl "180+0"]
 [Termination "Normal"]
 
-1. e4 g6 2. d4 Bg7 3. c4 b6 4. Nc3 Bb7 5. f4 d6 6. Nf3 e6 7. Bd3 h6 8. O-O Ne7 9. Qc2 O-O 10. Be3 f5 11. exf5 Nxf5
-12. Rae1 Bxf3 13. Rxf3 Nxe3 14. Rfxe3 Bxd4 15. Bxg6 Bxe3+ 16. Rxe3 e5
-17. Rg3 Kh8 18. Ne4 Nd7 19. f5 Nf6 20. Nf2 Rg8 21. Qe2 Qe7 22. Qe3 Rxg6 23. Rxg6 Ng8
-24. Ng4 Qh4 25. f6 Rf8 26. Nxh6 Rxf6 27. Rxg8+ Kh7 28. Qd3+ e4 29. Rg4 Qf2+ 30. Kh1 Qe1+ 0-1`,
+1. e4 g6 2. d4 Bg7 3. c4 b6 4. Nc3 Bb7 5. f4 d6 6. Nf3 e6 7. Bd3 h6 8. O-O Ne7 9. Qc2 O-O 10. Be3 f5 11. exf5 Nxf5 12. Rae1 Bxf3 13. Rxf3 Nxe3 14. Rfxe3 Bxd4 15. Bxg6 Bxe3+ 16. Rxe3 e5 17. Rg3 Kh8 18. Ne4 Nd7 19. f5 Nf6 20. Nf2 Rg8 21. Qe2 Qe7 22. Qe3 Rxg6 23. Rxg6 Ng8 24. Ng4 Qh4 25. f6 Rf8 26. Nxh6 Rxf6 27. Rxg8+ Kh7 28. Qd3+ e4 29. Rg4 Qf2+ 30. Kh1 Qe1+ 0-1`,
 
 	`[Event "Rated Blitz game"]
 [Site "https://lichess.org/u160ism9"]
@@ -312,14 +306,7 @@ var expectedSingleLine = [...]string{
 [TimeControl "120+2"]
 [Termination "Normal"]
 
-1. c4 c6 2. b3 d5 3. Bb2 d4 4. d3 c5 5. g3 e5 6. Bg2 Be7 7. Nf3 Nf6 8. Nxe5 Nc6 9.
-Nxc6 bxc6 10. O-O Rb8 11. Re1 Bb7 12. e4 dxe3 13. Rxe3 O-O 14. Nd2 Bd6 15. Qc2 Bc8 16. Rae1 Bf5 17.
-Be4 Nxe4 18. dxe4 Bh3 19. Qc3 f6 20. Qc2 Be5 21. Nf3 Qe7 22. Bxe5 fxe5 23. Qc3 Qf6 24. Qxe5 Qg6
-25. Qxc5 Bg4 26. e5 Qh5 27. Nh4 Qf7 28. Re4 g5 29. Ng2 Bf3 30. Re4e2 Bxe2 31. Rxe2 Qf3 32. Kf1 Rbd8 33. e6 Rd1+
-34. Re1 Rxe1+ 35. Nxe1 Qh1+ 36. Ke2 Qe4+ 37. Qe3 Qg4+ 38. Kf1 Qh3+ 39. Ng2 Qxh2 40. Qxg5+ Kh8 41.
-e7 Re8 42. Qf6+ Kg8 43. Nf4 Qh1+ 44. Ke2 Qe4+ 45. Kd2 Rxe7 46. Qg5+ Rg7 47. Qd8+
-Kf7 48. Qd7+ Kf6 49. Nh5+ Kg5 50. Qxg7+ Kxh5 51. g4+ Qxg4 52. Qxg4+ Kxg4 53. Ke3 h5 54. Ke2 h4 55. Kf1 h3 56. Kg1 Kf3 57. a4 a6 58. b4 Ke4 59. b5 axb5 60. cxb5 c5 61. b6 c4 62. b7 c3 63. b8=Q c2 64. Qe8+ Kf3 65. Qc6+ Kg4 66.
-Qxc2 h2+ 67. Kxh2 1-0`,
+1. c4 c6 2. b3 d5 3. Bb2 d4 4. d3 c5 5. g3 e5 6. Bg2 Be7 7. Nf3 Nf6 8. Nxe5 Nc6 9. Nxc6 bxc6 10. O-O Rb8 11. Re1 Bb7 12. e4 dxe3 13. Rxe3 O-O 14. Nd2 Bd6 15. Qc2 Bc8 16. Rae1 Bf5 17. Be4 Nxe4 18. dxe4 Bh3 19. Qc3 f6 20. Qc2 Be5 21. Nf3 Qe7 22. Bxe5 fxe5 23. Qc3 Qf6 24. Qxe5 Qg6 25. Qxc5 Bg4 26. e5 Qh5 27. Nh4 Qf7 28. Re4 g5 29. Ng2 Bf3 30. Re4e2 Bxe2 31. Rxe2 Qf3 32. Kf1 Rbd8 33. e6 Rd1+ 34. Re1 Rxe1+ 35. Nxe1 Qh1+ 36. Ke2 Qe4+ 37. Qe3 Qg4+ 38. Kf1 Qh3+ 39. Ng2 Qxh2 40. Qxg5+ Kh8 41. e7 Re8 42. Qf6+ Kg8 43. Nf4 Qh1+ 44. Ke2 Qe4+ 45. Kd2 Rxe7 46. Qg5+ Rg7 47. Qd8+ Kf7 48. Qd7+ Kf6 49. Nh5+ Kg5 50. Qxg7+ Kxh5 51. g4+ Qxg4 52. Qxg4+ Kxg4 53. Ke3 h5 54. Ke2 h4 55. Kf1 h3 56. Kg1 Kf3 57. a4 a6 58. b4 Ke4 59. b5 axb5 60. cxb5 c5 61. b6 c4 62. b7 c3 63. b8=Q c2 64. Qe8+ Kf3 65. Qc6+ Kg4 66. Qxc2 h2+ 67. Kxh2 1-0`,
 
 	//nolint:lll
 	`[Event "Rated Classical game"]
@@ -393,8 +380,6 @@ Qxc2 h2+ 67. Kxh2 1-0`,
 [Opening "Caro-Kann Defense: Exchange Variation"]
 [TimeControl "420+8"]
 [Termination "Normal"]
-
-
 
 1. d4 c6 2. e4 d5 3. exd5 Qxd5 4. Nc3 Qa5 5. Bd2 Qc7 6. Qf3 Nf6 7. Bc4 e6 8. O-O-O b5 9. Bb3 Bb7 10. Qe3 Be7 11. f3 a5 12. a3 b4 13. Ne4 Nbd7 14. c3 bxa3 15. bxa3 c5 16. Kb2 Nxe4 17. fxe4 cxd4 18. cxd4 a4 19. Rc1 Qb6 20. Rc3 axb3 21. Rxb3 Qc6 22. Bb4 Bxb4 23. Rxb4 Qxe4 24. Qb3 Rb8 25. Nf3 Qe2+ 26. Qc2 Qxc2+ 27. Kxc2 Be4+ 0-1`,
 
@@ -789,6 +774,5 @@ Qd3 O-O 11. Ng6 Re8 12. Be2 Nc6 13. Bh5 Bxd4 14. Nf4 Qg5 15. g3 e5 16. Bxe8 exf4
 [Termination "Normal"]
 
 1. e4 e5 2. Nc3 Nc6 3. Nf3 Bc5 4. Nxe5 Nxe5 5. d4 Bxd4 6. Qxd4 d6 7. Bd3 c5 8. Bb5+ Bd7 9. Qxd6 Bxb5 10. Qxe5+ Qe7 11. Qxe7+ Nxe7 12. Nxb5 O-O 13. Be3 a6 14. Bxc5 axb5 15. Bxe7 Rfe8 16. Bc5 Rxe4+ 17. Be3 f5 18. O-O f4 19. Bd2 Rd8 20. Bc3 b4 21. Rad1 Rxd1 22. Rxd1 bxc3 23. bxc3 Re2 24. Rc1 Kf7 25. Kf1 Rd2 26. Ke1 Rd6 27. Rb1 b6 28. Rb4 Rc6 29. Rxf4+ Ke6 30. Rf3 g5 31. Kd2 g4 32. Rg3 h5 33. Re3+ Kd5 34. Rd3+ Kc4 35. Rd4+ Kb5 36. Kd3 Rf6 37. Rd5+ Ka4 38. Rxh5 Rxf2 39. h3 Rxg2 40. Rh4 Rg3+ 41. Kd2 Rxh3 42. Rxg4+ Ka3 43. Rg6 Rh2+ 44. Kd3 Rh3+ 45. Kc4 Rh4+ 46. Kb5 Kxa2 47. Rxb6 Kb2 48. c4 Kxc2 49. c5 Rh5 50. Rc6 Kb3 51. Kb6 Ka4 52. Rc8 Kb4 53. c6 Rb5+ 54. Kc7 Kc5 55. Kd7 Kb6 56. Rb8+ Kc5 57. Rxb5+ Kxb5 58. c7 Kb4 59. c8=Q Kb5 60. Qc6+ Kb4 61. Kd6 Ka3 62. Qc5+ Kb2 63. Qc4 Kb1 64. Qc3 Ka2 65. Kc5 Kb1 66. Kb4 Ka2 67. Ka4 Kb1 68. Kb4 Ka2 69. Kc4 Kb1 70. Kd3 Ka2 71. Kd2 Kb1 72. Kd1 Ka2 73. Qc2+ Ka3 74. Kd2 Kb4 75. Kd3 Kb5 76. Kd4 Kb6 77. Qc5+ Ka6 78. Kd5 Kb7 79. Qc6+ Ka7 80. Kc5 Kb8 81. Kb6 1/2-1/2
-
 
 `

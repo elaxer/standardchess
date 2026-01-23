@@ -16,35 +16,36 @@ func Parse(r io.Reader) ([]PGN, error) {
 	pgns := make([]PGN, 0)
 	var pgnStr strings.Builder
 
-	var lineBreaks uint8
 	wasLineBreak := false
 	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "\n" {
-			if !wasLineBreak {
-				lineBreaks++
-			}
-			wasLineBreak = true
-		} else {
-			wasLineBreak = false
-		}
+		line := scanner.Text()
 
-		if lineBreaks == 2 {
-			pgn, err := FromString(pgnStr.String())
-			if err != nil {
-				return nil, err
-			}
-
-			pgns = append(pgns, pgn)
-
-			pgnStr.Reset()
+		if strings.TrimSpace(line) != "" {
+			pgnStr.WriteString(line + "\n")
 
 			continue
 		}
 
-		if _, err := pgnStr.WriteString(line); err != nil {
+		if pgnStr.Len() == 0 {
+			continue
+		}
+
+		if !wasLineBreak {
+			wasLineBreak = true
+			pgnStr.WriteString("\n")
+
+			continue
+		}
+
+		pgn, err := FromString(pgnStr.String())
+		if err != nil {
 			return nil, err
 		}
+
+		pgns = append(pgns, pgn)
+
+		wasLineBreak = false
+		pgnStr.Reset()
 	}
 
 	return pgns, nil

@@ -34,6 +34,12 @@ func encodeMoves(moves []chess.Move) string {
 			fmt.Fprintf(&str, "%d. ", currentMoveNumber)
 		}
 
+		if i == len(moves)-1 {
+			str.WriteString(move.String())
+
+			break
+		}
+
 		str.WriteString(move.String() + " ")
 	}
 
