@@ -12,8 +12,16 @@ const (
 	ResultDraw      Result = "1/2-1/2"
 )
 
+// Result represents the outcome of a chess game in PGN notation.
 type Result string
 
+// ResultFromBoard determines the Result of a game given a chess.Board state.
+//
+// It returns:
+//   - ResultWinWhite if White has won
+//   - ResultWinBlack if Black has won
+//   - ResultDraw if the game is drawn
+//   - ResultInProcess if the game is still ongoing
 func ResultFromBoard(board chess.Board) Result {
 	if !board.State().Type().IsTerminal() {
 		return ResultInProcess

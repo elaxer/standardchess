@@ -248,11 +248,25 @@ const pgnStr = `
 1.e4 e5 2.Nf3 Nc6 *
 `
 
-pgn, err := pgn.FromString(pgnStr)
-pgn.Headers()
-pgn.Moves()
-pgn.Result()
-pgn.String()
+p, err := pgn.FromString(pgnStr)
+p.Headers()
+p.Moves()
+p.Result()
+p.String()
+```
+
+Now let's parse several PGNs from a reader:
+```go
+f, err := os.Open("games.pgn")
+if err != nil {
+    panic(err)
+}
+defer f.Close()
+
+pgns, err := pgn.Parse(f)
+if err != nil {
+    // ...
+}
 ```
 
 #### JSON

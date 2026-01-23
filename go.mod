@@ -3,7 +3,7 @@ module github.com/elaxer/standardchess
 go 1.23.7
 
 require (
-	github.com/elaxer/chess v1.2.2
+	github.com/elaxer/chess v1.3.0
 	github.com/elaxer/rgx v0.0.0-20250611140943-48f730656186
 	github.com/stretchr/testify v1.11.1
 )
