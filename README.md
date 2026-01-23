@@ -1,4 +1,4 @@
-# standardchess - well tested and well performed chess engine
+# standardchess - golang chess engine
 
 [![godoc](https://godoc.org/github.com/elaxer/standardchess?status.svg)](https://godoc.org/github.com/elaxer/standardchess)
 [![go report card](https://goreportcard.com/badge/elaxer/standardchess)](https://goreportcard.com/report/elaxer/standardchess)

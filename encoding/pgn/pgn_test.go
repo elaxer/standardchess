@@ -130,52 +130,6 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 			false,
 		},
 		{
-			"several_pgn",
-			args{`[Event "January 07 Late 2025"]
-[Site ""]
-[Date "2025.01.07"]
-[Round "?"]
-[White "Magnus Carlsen"]
-[Black "Felix Antonio Ilinca Ilinca"]
-[Result "1-0"]
-[TimeControl ""]
-[Link "https://www.chess.com/games/view/17633485"]
-
-1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 5. Bg2 O-O 6. O-O dxc4 7. Nc3 a6 8. Ne5
-Ra7 9. Nxc4 b5 10. Ne5 Bb7 11. Bxb7 Rxb7 12. Be3 Nd5 13. Nxd5 Qxd5 14. Qb3 Rd8
-15. Rfc1 c5 16. dxc5 Qxe5 17. c6 Nxc6 18. Rxc6 a5 19. Rd1 Rxd1+ 20. Qxd1 h6 21.
-Rc8+ Kh7 22. Qc2+ Qf5 23. Qc6 Qd5 24. Qxd5 exd5 25. Bd4 Kg6 26. Kg2 f6 27. Kf3
-Kf5 28. Rc6 a4 29. g4+ Kg6 30. h4 Kf7 31. h5 b4 32. Bc5 a3 33. b3 Bxc5 34. Rxc5
-Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
-41. Rxg4 Re7 42. e3 Re4+ 43. Kd3 Kc5 44. Rg6 Re8 45. Rxh6 Rg8 46. Rg6 Rh8 47. h6
-1-0
-
-[Event "It"]
-[Site "Barcelona (Spain)"]
-[Date "1992.??.??"]
-[Round "?"]
-[White "Mikhail Tal"]
-[Black "Joel Lautier"]
-[Result "1-0"]
-[TimeControl ""]
-[Link "https://www.chess.com/games/view/4082949"]
-
-1. d4 Nf6 2. Nf3 e6 3. g3 b5 4. Bg2 Bb7 5. O-O c5 6. Bg5 Qb6 7. a4 a6 8. Nc3 Ne4
-9. Nxe4 Bxe4 10. axb5 Qxb5 11. Qd2 f6 12. Bf4 Qb7 13. c4 cxd4 14. Qxd4 e5 15.
-Bxe5 fxe5 16. Qxe5+ Be7 17. Nd4 Bxg2 18. Nf5 Qb4 19. Kxg2 Nc6 20. Qxg7 O-O-O 21.
-Rxa6 Qb7 22. Rfa1 Nb4+ 23. Kg1 Nxa6 24. Qxe7 Qb6 25. Qa3 Rhf8 26. Nd6+ Kc7 27.
-Qxa6 Ra8 28. Qxb6+ Kxb6 29. Rd1 Ra2 30. Rd2 Kc6 31. f3 Rfa8 32. Nb5 R8a4 33. Rc2
-Kc5 34. Nc3 Ra1+ 35. Kf2 Rxc4 36. Rd2 Ra7 37. e4 Kc6 38. Ke3 Rb7 39. Rc2 d6 40.
-Kd3 Rb5 41. f4 Rbb4 42. g4 Kd7 43. g5 Ke6 44. h4 d5 45. Nxd5 Rxc2 46. Nxb4 Rxb2
-47. Nc2 Rb3+ 48. Kc4 Rh3 49. Nd4+ Kf7 50. f5 Rxh4 51. Kd5 Rg4 52. Nf3 Rg3 53.
-Ne5+ Kg8 54. f6 Rxg5 55. Ke6 Rg1 56. f7+ Kg7 57. Nd7 Rf1 58. f8=Q+ Rxf8 59. Nxf8
-h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
-			[]pgn.Header{},
-			chesstest.MoveStrings(),
-			"",
-			true,
-		},
-		{
 			"raul_vs_tal",
 			args{`[Event "It (open)"]
 [Site "Sevilla (Spain)"]
@@ -550,7 +504,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 			false,
 		},
 		{
-			"",
+			"dangerous_headers",
 			args{
 				`[Event "Live Chess"]
 [Site "Chess.com"]

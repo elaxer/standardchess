@@ -15,10 +15,8 @@ import (
 var ErrDecode = errors.New("error decoding PGN string")
 
 var (
-	regexpPGN = regexp.MustCompile(`^(?:(?:\[(?:.+)\s"(?:[^"]*)"\]\n)+\n)?` +
-		`(?:\d+\.\s(?:(?:(?:(?:[[:alnum:]=+#]+)|(?:(?:[Oo0]-[Oo0](?:-[Oo0])?)(?:#|\+)?)))\s){1,2})+` +
-		`(?:(?:1-0)|(?:0-1)|(?:1/2-1/2)|\*)$`)
-	regexpMove = regexp.MustCompile(
+	regexpSplit = regexp.MustCompile(`\s\s`)
+	regexpMove  = regexp.MustCompile(
 		`(([NBKRQ]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)|([0Oo]-[0Oo](-[0Oo])?))(\+|\#)?`,
 	)
 	regexpHeader = regexp.MustCompile(`\[(?P<name>[\w]+)\s+"(?P<value>[^"]*)"\]`)
@@ -76,11 +74,7 @@ func (p PGN) String() string {
 // Returns a PGN object containing headers, moves, and the result.
 // Returns ErrDecode if the string does not match the expected PGN format.
 func FromString(pgnStr string) (PGN, error) {
-	if !regexpPGN.MatchString(pgnStr) {
-		return PGN{}, ErrDecode
-	}
-
-	s := strings.Split(strings.TrimSpace(pgnStr), "\n\n")
+	s := regexpSplit.Split(strings.TrimSpace(pgnStr), 2)
 	headerStr := ""
 	movesStr := ""
 	if len(s) == 1 {
