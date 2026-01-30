@@ -59,12 +59,7 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 		return err
 	}
 
-	rank := chess.Rank1
-	if move.Side().IsBlack() {
-		rank = chess.Rank8
-	}
-
-	kingPosition, rookPosition := pickPositions(move.CastlingType, rank)
+	kingPosition, rookPosition := pickPositions(move.CastlingType, rank(move.Side()))
 
 	king, err := board.Squares().FindByPosition(kingPosition)
 	if err != nil {

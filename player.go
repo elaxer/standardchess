@@ -23,6 +23,10 @@ func (p *BoardPlayer) Board() chess.Board {
 	return copy
 }
 
+func (p *BoardPlayer) Cursor() uint16 {
+	return p.cursor
+}
+
 func (p *BoardPlayer) Reset() {
 	p.cursor = 0
 }

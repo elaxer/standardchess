@@ -26,17 +26,17 @@ var (
 // PGN represents a single chess game in PGN format.
 // It contains headers, moves, and the result of the game.
 type PGN struct {
-	headers []Header
+	headers Headers
 	moves   []chess.Move
 	result  Result
 }
 
-func NewPGN(headers []Header, moves []chess.Move, result Result) PGN {
+func NewPGN(headers Headers, moves []chess.Move, result Result) PGN {
 	return PGN{headers, moves, result}
 }
 
 // Headers returns the list of headers for the PGN game.
-func (p PGN) Headers() []Header {
+func (p PGN) Headers() Headers {
 	return p.headers
 }
 
@@ -74,6 +74,8 @@ func (p PGN) String() string {
 // Returns a PGN object containing headers, moves, and the result.
 // Returns ErrDecode if the string does not match the expected PGN format.
 func FromString(pgnStr string) (PGN, error) {
+	pgnStr = strings.TrimSpace(strings.ReplaceAll(pgnStr, "\r\n", "\n"))
+
 	s := regexpSplit.Split(strings.TrimSpace(pgnStr), 2)
 	headerStr := ""
 	movesStr := ""
@@ -96,8 +98,8 @@ func FromString(pgnStr string) (PGN, error) {
 	return PGN{decodeHeaders(headerStr), moves, result}, nil
 }
 
-func decodeHeaders(pgnStr string) []Header {
-	headers := make([]Header, 0)
+func decodeHeaders(pgnStr string) Headers {
+	headers := make(Headers, 0)
 
 	data, err := rgx.Groups(regexpHeader, pgnStr)
 	if err != nil {

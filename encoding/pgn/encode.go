@@ -7,7 +7,7 @@ import (
 	"github.com/elaxer/chess"
 )
 
-func Encode(headers []Header, board chess.Board, result Result) PGN {
+func Encode(headers Headers, board chess.Board, result Result) PGN {
 	moves := make([]chess.Move, 0, len(board.MoveHistory()))
 	for _, move := range board.MoveHistory() {
 		moves = append(moves, chess.StringMove(move.String()))
@@ -16,7 +16,7 @@ func Encode(headers []Header, board chess.Board, result Result) PGN {
 	return NewPGN(headers, moves, result)
 }
 
-func encodeHeaders(headers []Header) string {
+func encodeHeaders(headers Headers) string {
 	headerStrings := make([]string, 0, len(headers))
 	for _, header := range headers {
 		headerStrings = append(headerStrings, header.String())

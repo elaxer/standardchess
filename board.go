@@ -15,7 +15,10 @@ import (
 	"slices"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/move/castling"
 	"github.com/elaxer/standardchess/internal/move/enpassant"
+	"github.com/elaxer/standardchess/internal/move/normal"
+	"github.com/elaxer/standardchess/internal/move/promotion"
 	"github.com/elaxer/standardchess/internal/mover"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/rule"
@@ -294,6 +297,39 @@ func (b *board) MarshalJSON() ([]byte, error) {
 		placements = append(placements, placement)
 	}
 
+	lastMovements := make([]map[string]string, 0, 2)
+	if len(b.moveHistory) > 0 {
+		switch move := b.moveHistory[len(b.moveHistory)-1].(type) {
+		case *normal.MoveResult:
+			lastMovements = append(lastMovements, map[string]string{
+				"from": move.FromFull.String(),
+				"to":   move.InputMove.To.String(),
+			})
+		case *promotion.MoveResult:
+			lastMovements = append(lastMovements, map[string]string{
+				"from": move.FromFull.String(),
+				"to":   move.InputMove.To.String(),
+			})
+		case *enpassant.MoveResult:
+			lastMovements = append(lastMovements, map[string]string{
+				"from": move.FromFull.String(),
+				"to":   move.InputMove.To.String(),
+			})
+		case *castling.MoveResult:
+			lastMovements = append(
+				lastMovements,
+				map[string]string{
+					"from": castling.KingInitPosition(move.Side()).String(),
+					"to":   castling.KingCastledPosition(move.CastlingType, move.Side()).String(),
+				},
+				map[string]string{
+					"from": castling.RookInitPosition(move.CastlingType, move.Side()).String(),
+					"to":   castling.RookCastledPosition(move.CastlingType, move.Side()).String(),
+				},
+			)
+		}
+	}
+
 	return json.Marshal(map[string]any{
 		"turn":            b.turn,
 		"state":           b.State(),
@@ -301,6 +337,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 		"captured_pieces": b.capturedPieces,
 		"move_history":    b.moveHistory,
 		"placement":       placements,
+		"last_movements":  lastMovements,
 	})
 }
 

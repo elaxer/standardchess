@@ -225,7 +225,7 @@ func main() {
     board, err := standardchess.NewBoardFromMoves(
         // ...
     )
-    headers := []pgn.Header{
+    headers := pgn.Headers{
         pgn.NewHeader("Event", "F/S Return Match"),
         pgn.NewHeader("Site", "Belgrade, Serbia JUG"),
         pgn.NewHeader("Date", time.Now().Format("2006.01.02")),
@@ -315,7 +315,13 @@ It encodes your board into the format:
         { "file": "string", "rank": 0 },
       ]
     }
-  ]
+  ],
+  "last_movements": [
+    {
+      "from": "string",
+      "to": "string",
+    },
+  ],
 }
 ```
 

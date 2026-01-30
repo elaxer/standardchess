@@ -17,7 +17,7 @@ func TestFromString(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        args
-		wantHeaders []pgn.Header
+		wantHeaders pgn.Headers
 		wantMoves   []chess.Move
 		wantResult  pgn.Result
 		wantErr     bool
@@ -33,7 +33,7 @@ func TestFromString(t *testing.T) {
 [Result "0-1"]
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"]`},
-			[]pgn.Header{},
+			pgn.Headers{},
 			[]chess.Move{},
 			"",
 			true,
@@ -49,7 +49,7 @@ func TestFromString(t *testing.T) {
 [Result "0-1"]
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"] *`},
-			[]pgn.Header{},
+			pgn.Headers{},
 			[]chess.Move{},
 			"",
 			true,
@@ -60,7 +60,7 @@ func TestFromString(t *testing.T) {
 a6 9. Be2 b5 10. o-o-o+ Be7 11. Bd3 0-0# 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 bxc8=Q# 25. Nf2 Bd5 26. Nd3 h5`},
-			[]pgn.Header{},
+			pgn.Headers{},
 			chesstest.MoveStrings(),
 			"",
 			true,
@@ -71,7 +71,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 a6 9. Be2 b5 10. O-O# Be7 11. Bd3 O-O-O+ 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 bxc8=Q# 25. Nf2 Bd5 26. Nd3 h5 0-1`},
-			[]pgn.Header{},
+			pgn.Headers{},
 			chesstest.MoveStrings(
 				"e4",
 				"c5",
@@ -145,7 +145,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 a6 9. Be2 b5 10. O-O# Be7 11. Bd3 O-O-O+ 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. Ng5
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 Qxc2 25. Nf2 Bd5 26. Nd3 h5 0-1`},
-			[]pgn.Header{
+			pgn.Headers{
 				pgn.NewHeader("Event", "It (open)"),
 				pgn.NewHeader("Site", "Sevilla (Spain)"),
 				pgn.NewHeader("Date", "1992.??.??"),
@@ -233,7 +233,7 @@ Kf5 28. Rc6 a4 29. g4+ Kg6 30. h4 Kf7 31. h5 b4 32. Bc5 a3 33. b3 Bxc5 34. Rxc5
 Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 41. Rxg4 Re7 42. e3 Re4+ 43. Kd3 Kc5 44. Rg6 Re8 45. Rxh6 Rg8 46. Rg6 Rh8 47. h6
 1-0`},
-			[]pgn.Header{
+			pgn.Headers{
 				pgn.NewHeader("Event", "January 07 Late 2025"),
 				pgn.NewHeader("Site", ""),
 				pgn.NewHeader("Date", "2025.01.07"),
@@ -364,7 +364,7 @@ Kd3 Rb5 41. f4 Rbb4 42. g4 Kd7 43. g5 Ke6 44. h4 d5 45. Nxd5 Rxc2 46. Nxb4 Rxb2
 47. Nc2 Rb3+ 48. Kc4 Rh3 49. Nd4+ Kf7 50. f5 Rxh4 51. Kd5 Rg4 52. Nf3 Rg3 53.
 Ne5+ Kg8 54. f6 Rxg5 55. Ke6 Rg1 56. f7+ Kg7 57. Nd7 Rf1 58. f8=Q+ Rxf8 59. Nxf8
 h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
-			[]pgn.Header{
+			pgn.Headers{
 				pgn.NewHeader("Event", "It"),
 				pgn.NewHeader("Site", "Barcelona (Spain)"),
 				pgn.NewHeader("Date", "1992.??.??"),
@@ -523,7 +523,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 1. e4 d6 2. d4 e6 3. Nc3 Nc6 4. Nf3 Nf6 5. e5 dxe5 6. dxe5 g5 7. Nxg5 b6 8. Bb5
 Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 			},
-			[]pgn.Header{
+			pgn.Headers{
 				pgn.NewHeader("Event", "Live Chess"),
 				pgn.NewHeader("Site", "Chess.com"),
 				pgn.NewHeader("Date", "2025.02.25"),
@@ -561,6 +561,74 @@ Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 				"fxe6",
 			),
 			pgn.ResultWinBlack,
+			false,
+		},
+		//nolint:lll
+		{
+			"dangerous_headers_2",
+			args{`[Event "Rated Classical game"]
+[Site "https://lichess.org/j1dkb5dw"]
+[White "BFG9k"]
+[Black "mamalak"]
+[Result "1-0"]
+[UTCDate "2012.12.31"]
+[UTCTime "23:01:03"]
+[WhiteElo "1639"]
+[BlackElo "1403"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-8"]
+[ECO "C00"]
+[Opening "French Defense: Normal Variation"]
+[TimeControl "600+8"]
+[Termination "Normal"]
+
+1. e4 e6 2. d4 b6 3. a3 Bb7 4. Nc3 Nh6 5. Bxh6 gxh6 6. Be2 Qg5 7. Bg4 h5 8. Nf3 Qg6 9. Nh4 Qg5 10. Bxh5 Qxh4 11. Qf3 Kd8 12. Qxf7 Nc6 13. Qe8# 1-0`},
+
+			pgn.Headers{
+				pgn.NewHeader("Event", "Rated Classical game"),
+				pgn.NewHeader("Site", "https://lichess.org/j1dkb5dw"),
+				pgn.NewHeader("White", "BFG9k"),
+				pgn.NewHeader("Black", "mamalak"),
+				pgn.NewHeader("Result", "1-0"),
+				pgn.NewHeader("UTCDate", "2012.12.31"),
+				pgn.NewHeader("UTCTime", "23:01:03"),
+				pgn.NewHeader("WhiteElo", "1639"),
+				pgn.NewHeader("BlackElo", "1403"),
+				pgn.NewHeader("WhiteRatingDiff", "+5"),
+				pgn.NewHeader("BlackRatingDiff", "-8"),
+				pgn.NewHeader("ECO", "C00"),
+				pgn.NewHeader("Opening", "French Defense: Normal Variation"),
+				pgn.NewHeader("TimeControl", "600+8"),
+				pgn.NewHeader("Termination", "Normal"),
+			},
+			chesstest.MoveStrings(
+				"e4",
+				"e6",
+				"d4",
+				"b6",
+				"a3",
+				"Bb7",
+				"Nc3",
+				"Nh6",
+				"Bxh6",
+				"gxh6",
+				"Be2",
+				"Qg5",
+				"Bg4",
+				"h5",
+				"Nf3",
+				"Qg6",
+				"Nh4",
+				"Qg5",
+				"Bxh5",
+				"Qxh4",
+				"Qf3",
+				"Kd8",
+				"Qxf7",
+				"Nc6",
+				"Qe8#",
+			),
+			pgn.ResultWinWhite,
 			false,
 		},
 	}
