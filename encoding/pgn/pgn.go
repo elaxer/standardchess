@@ -113,17 +113,12 @@ func decodeHeaders(pgnStr string) Headers {
 }
 
 func decodeMoves(pgnStr string) ([]string, error) {
-	moves := make([]string, 0, 100)
 	data := regexpMove.FindAllString(pgnStr, -1)
 	if len(data) == 0 {
 		return nil, ErrDecode
 	}
 
-	for _, move := range data {
-		moves = append(moves, move)
-	}
-
-	return moves, nil
+	return data, nil
 }
 
 func decodeResult(pgnStr string) (Result, error) {
