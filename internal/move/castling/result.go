@@ -23,8 +23,8 @@ func (r *MoveResult) CapturedPiece() chess.Piece {
 	return nil
 }
 
-func (r *MoveResult) Move() chess.Move {
-	return r.CastlingType
+func (r *MoveResult) Input() string {
+	return r.CastlingType.String()
 }
 
 func (r *MoveResult) Validate() error {

@@ -3,7 +3,6 @@ package standardchess_test
 import (
 	"testing"
 
-	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/encoding/pgn"
@@ -27,7 +26,7 @@ func Test_board_MakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
 
 	capturedCount := 0
 	for _, c := range cases {
-		res, err := b.MakeMove(chess.StringMove(c.move))
+		res, err := b.MakeMove(c.move)
 		require.NoErrorf(t, err, "MakeMove failed (%s)", c.move)
 
 		if !c.expectCapture {

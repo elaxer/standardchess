@@ -8,9 +8,9 @@ import (
 )
 
 func Encode(headers Headers, board chess.Board, result Result) PGN {
-	moves := make([]chess.Move, 0, len(board.MoveHistory()))
+	moves := make([]string, 0, len(board.MoveHistory()))
 	for _, move := range board.MoveHistory() {
-		moves = append(moves, chess.StringMove(move.String()))
+		moves = append(moves, move.String())
 	}
 
 	return NewPGN(headers, moves, result)
@@ -25,7 +25,7 @@ func encodeHeaders(headers Headers) string {
 	return strings.Join(headerStrings, "\n")
 }
 
-func encodeMoves(moves []chess.Move) string {
+func encodeMoves(moves []string) string {
 	var str strings.Builder
 	currentMoveNumber := 0
 	for i, move := range moves {
@@ -35,12 +35,12 @@ func encodeMoves(moves []chess.Move) string {
 		}
 
 		if i == len(moves)-1 {
-			str.WriteString(move.String())
+			str.WriteString(move)
 
 			break
 		}
 
-		str.WriteString(move.String() + " ")
+		str.WriteString(move + " ")
 	}
 
 	return str.String()

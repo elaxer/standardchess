@@ -40,7 +40,7 @@ func (p *Pawn) Notation() string {
 	return NotationPawn
 }
 
-func (p *Pawn) Weight() uint8 {
+func (p *Pawn) Weight() uint16 {
 	return WeightPawn
 }
 

@@ -11,7 +11,7 @@ import (
 
 var ErrUndoMove = errors.New("cannot undo castling move")
 
-func MakeMove(castlingType CastlingType, board chess.Board) (chess.MoveResult, error) {
+func MakeMove(castlingType CastlingType, board chess.Board) (chess.Move, error) {
 	if err := ValidateMove(castlingType, board); err != nil {
 		return nil, err
 	}

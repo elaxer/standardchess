@@ -3,8 +3,6 @@ package pgn_test
 import (
 	"testing"
 
-	"github.com/elaxer/chess"
-	"github.com/elaxer/chess/chesstest"
 	"github.com/elaxer/standardchess/encoding/pgn"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -18,7 +16,7 @@ func TestFromString(t *testing.T) {
 		name        string
 		args        args
 		wantHeaders pgn.Headers
-		wantMoves   []chess.Move
+		wantMoves   []string
 		wantResult  pgn.Result
 		wantErr     bool
 	}{
@@ -34,7 +32,7 @@ func TestFromString(t *testing.T) {
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"]`},
 			pgn.Headers{},
-			[]chess.Move{},
+			[]string{},
 			"",
 			true,
 		},
@@ -50,7 +48,7 @@ func TestFromString(t *testing.T) {
 [TimeControl ""]
 [Link "https://www.chess.com/games/view/4082964"] *`},
 			pgn.Headers{},
-			[]chess.Move{},
+			[]string{},
 			"",
 			true,
 		},
@@ -61,7 +59,7 @@ a6 9. Be2 b5 10. o-o-o+ Be7 11. Bd3 0-0# 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. 
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 bxc8=Q# 25. Nf2 Bd5 26. Nd3 h5`},
 			pgn.Headers{},
-			chesstest.MoveStrings(),
+			[]string{},
 			"",
 			true,
 		},
@@ -72,7 +70,7 @@ a6 9. Be2 b5 10. O-O# Be7 11. Bd3 O-O-O+ 12. f4 d6 13. Nd2 Bb7 14. Nf3 Rad8 15. 
 h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 22. Rxd1 Bxa3 23. Nxe4 Bxe4 24. bxa3 bxc8=Q# 25. Nf2 Bd5 26. Nd3 h5 0-1`},
 			pgn.Headers{},
-			chesstest.MoveStrings(
+			[]string{
 				"e4",
 				"c5",
 				"Nf3",
@@ -125,7 +123,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				"Bd5",
 				"Nd3",
 				"h5",
-			),
+			},
 			pgn.ResultWinBlack,
 			false,
 		},
@@ -156,7 +154,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				pgn.NewHeader("TimeControl", ""),
 				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082964"),
 			},
-			chesstest.MoveStrings(
+			[]string{
 				"e4",
 				"c5",
 				"Nf3",
@@ -209,7 +207,7 @@ h6 16. Nh3 d5 17. e5 Ne4 18. Bxe4 dxe4 19. Qg4 Nd4 20. Bxd4 Rxd4 21. Rad1 Rxd1
 				"Bd5",
 				"Nd3",
 				"h5",
-			),
+			},
 			pgn.ResultWinBlack,
 			false,
 		},
@@ -244,7 +242,7 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				pgn.NewHeader("TimeControl", ""),
 				pgn.NewHeader("Link", "https://www.chess.com/games/view/17633485"),
 			},
-			chesstest.MoveStrings(
+			[]string{
 				"d4",
 				"d5",
 				"c4",
@@ -338,7 +336,7 @@ Ke6 35. Ke3 Kd6 36. Kd4 Ke6 37. f4 f5 38. Rc6+ Kd7 39. Rg6 fxg4 40. Rxg7+ Kc6
 				"Rg6",
 				"Rh8",
 				"h6",
-			),
+			},
 			pgn.ResultWinWhite,
 			false,
 		},
@@ -375,7 +373,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				pgn.NewHeader("TimeControl", ""),
 				pgn.NewHeader("Link", "https://www.chess.com/games/view/4082949"),
 			},
-			chesstest.MoveStrings(
+			[]string{
 				"d4",
 				"Nf6",
 				"Nf3",
@@ -499,7 +497,7 @@ h6 60. Nd7 h5 61. Ne5 h4 62. Nf3# 1-0`},
 				"Ne5",
 				"h4",
 				"Nf3#",
-			),
+			},
 			pgn.ResultWinWhite,
 			false,
 		},
@@ -538,7 +536,7 @@ Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 				pgn.NewHeader("WhiteUrl", "35.f144aa58.50x50o.618459b7a2.jpg"),
 				pgn.NewHeader("BlackTitle", ""),
 			},
-			chesstest.MoveStrings(
+			[]string{
 				"e4",
 				"d6",
 				"d4",
@@ -559,7 +557,7 @@ Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 				"Qxc6",
 				"Nxe6",
 				"fxe6",
-			),
+			},
 			pgn.ResultWinBlack,
 			false,
 		},
@@ -601,7 +599,7 @@ Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 				pgn.NewHeader("TimeControl", "600+8"),
 				pgn.NewHeader("Termination", "Normal"),
 			},
-			chesstest.MoveStrings(
+			[]string{
 				"e4",
 				"e6",
 				"d4",
@@ -627,7 +625,7 @@ Qd7 9. Bxc6 Qxc6 10. Nxe6 fxe6 0-1`,
 				"Qxf7",
 				"Nc6",
 				"Qe8#",
-			),
+			},
 			pgn.ResultWinWhite,
 			false,
 		},

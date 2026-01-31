@@ -9,7 +9,7 @@ import (
 
 const (
 	NotationKing = "K"
-	WeightKing   = math.MaxUint8
+	WeightKing   = math.MaxUint16
 )
 
 type King struct {
@@ -50,7 +50,7 @@ func (k *King) Notation() string {
 	return NotationKing
 }
 
-func (k *King) Weight() uint8 {
+func (k *King) Weight() uint16 {
 	return WeightKing
 }
 

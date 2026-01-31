@@ -45,7 +45,7 @@ func (k *Knight) Notation() string {
 	return NotationKnight
 }
 
-func (k *Knight) Weight() uint8 {
+func (k *Knight) Weight() uint16 {
 	return WeightKnight
 }
 

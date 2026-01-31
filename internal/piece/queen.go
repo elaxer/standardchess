@@ -38,7 +38,7 @@ func (q *Queen) Notation() string {
 	return NotationQueen
 }
 
-func (q *Queen) Weight() uint8 {
+func (q *Queen) Weight() uint16 {
 	return WeightQueen
 }
 

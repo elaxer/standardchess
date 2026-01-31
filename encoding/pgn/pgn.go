@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/elaxer/chess"
 	"github.com/elaxer/rgx"
 )
 
@@ -27,11 +26,11 @@ var (
 // It contains headers, moves, and the result of the game.
 type PGN struct {
 	headers Headers
-	moves   []chess.Move
+	moves   []string
 	result  Result
 }
 
-func NewPGN(headers Headers, moves []chess.Move, result Result) PGN {
+func NewPGN(headers Headers, moves []string, result Result) PGN {
 	return PGN{headers, moves, result}
 }
 
@@ -41,7 +40,7 @@ func (p PGN) Headers() Headers {
 }
 
 // Moves returns the list of moves in the PGN game.
-func (p PGN) Moves() []chess.Move {
+func (p PGN) Moves() []string {
 	return p.moves
 }
 
@@ -113,15 +112,15 @@ func decodeHeaders(pgnStr string) Headers {
 	return headers
 }
 
-func decodeMoves(pgnStr string) ([]chess.Move, error) {
-	moves := make([]chess.Move, 0, 100)
+func decodeMoves(pgnStr string) ([]string, error) {
+	moves := make([]string, 0, 100)
 	data := regexpMove.FindAllString(pgnStr, -1)
 	if len(data) == 0 {
 		return nil, ErrDecode
 	}
 
 	for _, move := range data {
-		moves = append(moves, chess.StringMove(move))
+		moves = append(moves, move)
 	}
 
 	return moves, nil

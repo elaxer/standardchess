@@ -34,7 +34,7 @@ func (r *Rook) Notation() string {
 	return NotationRook
 }
 
-func (r *Rook) Weight() uint8 {
+func (r *Rook) Weight() uint16 {
 	return WeightRook
 }
 

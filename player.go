@@ -53,10 +53,10 @@ func (p *BoardPlayer) End() {
 	p.cursor = p.moveHistoryLen()
 }
 
-func (p *BoardPlayer) moveHistory() []chess.Move {
-	moveHistory := make([]chess.Move, 0, p.moveHistoryLen())
+func (p *BoardPlayer) moveHistory() []string {
+	moveHistory := make([]string, 0, p.moveHistoryLen())
 	for _, move := range p.board.MoveHistory() {
-		moveHistory = append(moveHistory, move.Move())
+		moveHistory = append(moveHistory, move.Input())
 	}
 
 	return moveHistory

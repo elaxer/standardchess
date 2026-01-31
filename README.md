@@ -37,9 +37,9 @@ board := standardchess.NewBoardEmpty(chess.SideBlack, piecesPosition, standardch
 
 ```go
 // Create a new board from moves list:
-board, err := standardchess.NewBoardFromMoves([]chess.Move{
-    chess.StringMove("e4"),
-    chess.StringMove("e5"),
+board, err := standardchess.NewBoardFromMoves([]string{
+    "e4",
+    "e5",
     // ...
 })
 ```
@@ -48,7 +48,7 @@ board, err := standardchess.NewBoardFromMoves([]chess.Move{
 
 After you create a filled one, you can perform and cancel moves:
 ```go
-moveResult, err := board.MakeMove(chess.StringMove("Nc3"))
+moveResult, err := board.MakeMove("Nc3")
 if err != nil {
     // ...
 }
@@ -62,12 +62,12 @@ if err != nil {
 
 Also make/undo castling moves and pawn promotions:
 ```go
-moveResult, err := board.MakeMove(chess.StringMove("0-0"))
+moveResult, err := board.MakeMove("0-0")
 if err != nil {
     // ...
 }
 
-moveResult, err = board.MakeMove(chess.StringMove("c8=Q"))
+moveResult, err = board.MakeMove("c8=Q")
 if err != nil {
     // ...
 }
@@ -191,16 +191,15 @@ func main() {
 
     f := fen.Encode(board)
     
-    f.Placement() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-    f.Turn() == chess.ColorWhite
+    f.Placement() // == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    f.Turn() // == chess.ColorWhite
     short, long := f.Castlings(chess.ColorBlack)
-    f.EnPassantSquare() == chess.NewPositionEmpty()
-    f.HalfmoveClock() == 0
-    f.MoveNumber() == 1
+    f.EnPassantSquare() // == chess.NewPositionEmpty()
+    f.HalfmoveClock() // == 0
+    f.MoveNumber() // == 1
 
-    f.String() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    f.String() // == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 }
-
 ```
 
 Decode a FEN string to your board:
@@ -233,9 +232,8 @@ func main() {
 
     result = pgn.ResultFromBoard(board)
 
-    pgnStr := pgn.Encode(headers, board, result)
+    var pgn pgn.PGN = pgn.Encode(headers, board, result)
 }
-
 ```
 
 Let's try to create a PGN from a string:

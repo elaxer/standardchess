@@ -34,7 +34,7 @@ func (b *Bishop) Notation() string {
 	return NotationBishop
 }
 
-func (b *Bishop) Weight() uint8 {
+func (b *Bishop) Weight() uint16 {
 	return WeightBishop
 }
 

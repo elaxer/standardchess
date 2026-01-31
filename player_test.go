@@ -3,7 +3,6 @@ package standardchess_test
 import (
 	"testing"
 
-	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/internal/standardtest"
@@ -103,11 +102,11 @@ func TestBoardPlayer_AfterNewMoves(t *testing.T) {
 	board := standardchess.NewBoard()
 	player := standardchess.NewBoardPlayer(board)
 
-	_, err := board.MakeMove(chess.StringMove("e4"))
+	_, err := board.MakeMove("e4")
 	require.NoError(t, err)
-	_, err = board.MakeMove(chess.StringMove("e5"))
+	_, err = board.MakeMove("e5")
 	require.NoError(t, err)
-	_, err = board.MakeMove(chess.StringMove("Nf3"))
+	_, err = board.MakeMove("Nf3")
 	require.NoError(t, err)
 
 	player.Reset()

@@ -64,9 +64,6 @@ func CastlingAbility(board chess.Board) metric.Metric {
 
 func EnPassantTargetSquare(board chess.Board) metric.Metric {
 	targetPosition := enpassant.EnPassantTargetSquare(board)
-	if targetPosition.IsEmpty() {
-		return nil
-	}
 
 	return metric.New("En passant target square", targetPosition)
 }

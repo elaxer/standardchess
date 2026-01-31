@@ -12,7 +12,7 @@ import (
 
 func TestEnPassantTargetSquare(t *testing.T) {
 	board := standardtest.DecodeFEN("rnQ4r/pp2p1kp/3p2pn/1BpP2N1/5P2/2BK4/P1P3qP/8 b - - 5 18")
-	_, err := board.MakeMove(chess.StringMove("e5"))
+	_, err := board.MakeMove("e5")
 	require.NoError(t, err)
 
 	position := enpassant.EnPassantTargetSquare(board)

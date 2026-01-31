@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/elaxer/chess"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 )
 
@@ -17,8 +16,8 @@ type MoveResult struct {
 	InputMove Move
 }
 
-func (r *MoveResult) Move() chess.Move {
-	return &r.InputMove
+func (r *MoveResult) Input() string {
+	return r.InputMove.String()
 }
 
 func (r *MoveResult) Validate() error {

@@ -54,7 +54,7 @@ var stateRules = []rule.Rule{
 type board struct {
 	turn           chess.Color
 	squares        *chess.Squares
-	moveHistory    []chess.MoveResult
+	moveHistory    []chess.Move
 	capturedPieces []chess.Piece
 	stateRules     []rule.Rule
 
@@ -97,7 +97,7 @@ func NewBoard() chess.Board {
 	return board
 }
 
-func NewBoardFromMoves(moves []chess.Move) (chess.Board, error) {
+func NewBoardFromMoves(moves []string) (chess.Board, error) {
 	board := NewBoard()
 	for i, move := range moves {
 		if _, err := board.MakeMove(move); err != nil {
@@ -121,7 +121,7 @@ func NewBoardEmpty(
 	return &board{
 		turn:           turn,
 		squares:        squares,
-		moveHistory:    make([]chess.MoveResult, 0, 128),
+		moveHistory:    make([]chess.Move, 0, 128),
 		moves:          make([]chess.Position, 0, 64),
 		capturedPieces: make([]chess.Piece, 0, 30),
 
@@ -159,7 +159,7 @@ func (b *board) CapturedPieces() []chess.Piece {
 	return b.capturedPieces
 }
 
-func (b *board) MoveHistory() []chess.MoveResult {
+func (b *board) MoveHistory() []chess.Move {
 	return b.moveHistory
 }
 
@@ -224,7 +224,7 @@ func (b *board) IsSquareAttacked(position chess.Position) bool {
 	return false
 }
 
-func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
+func (b *board) MakeMove(move string) (chess.Move, error) {
 	if b.State().Type().IsTerminal() {
 		return nil, ErrCannotMoveInTerminalState
 	}
@@ -248,7 +248,7 @@ func (b *board) MakeMove(move chess.Move) (chess.MoveResult, error) {
 	return moveResult, nil
 }
 
-func (b *board) UndoLastMove() (chess.MoveResult, error) {
+func (b *board) UndoLastMove() (chess.Move, error) {
 	movesCount := len(b.moveHistory)
 	if movesCount == 0 {
 		return nil, ErrNoMovesToUndo
