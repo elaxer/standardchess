@@ -20,19 +20,19 @@ board := standardchess.NewBoard()
 
 ```go
 // Create a new empty board 8x8 with White's turn:
-board, err := standardchess.NewBoardEmpty(chess.SideWhite, nil, standardchess.EdgePosition)
+board, err := standardchess.NewBoardEmpty(chess.ColorWhite, nil, standardchess.EdgePosition)
 ```
 
 ```go
 // ... or create a board with the position of the pieces specified by you:
 piecesPosition := map[chess.Position]chess.Piece{
-    chess.PositionFromString("d3"): standardchess.NewPawn(chess.SideWhite),
-    chess.PositionFromString("c1"): standardchess.NewKing(chess.SideWhite),
+    chess.PositionFromString("d3"): standardchess.NewPawn(chess.ColorWhite),
+    chess.PositionFromString("c1"): standardchess.NewKing(chess.ColorWhite),
 
-    chess.PositionFromString("a2"): standardchess.NewRook(chess.SideBlack),
-    chess.PositionFromString("h8"): standardchess.NewKing(chess.SideBlack),
+    chess.PositionFromString("a2"): standardchess.NewRook(chess.ColorBlack),
+    chess.PositionFromString("h8"): standardchess.NewKing(chess.ColorBlack),
 }
-board := standardchess.NewBoardEmpty(chess.SideBlack, piecesPosition, standardchess.EdgePosition)
+board, err := standardchess.NewBoardEmpty(chess.ColorBlack, piecesPosition, standardchess.EdgePosition)
 ```
 
 ```go
@@ -105,12 +105,12 @@ case standardchess.StateInsufficientMaterial:
 ... or check the type of the state:
 ```go
 switch {
-case state.IsTerminal():
+case state.Type().IsTerminal():
     fmt.Print("Checkmate, stalemate, fifty moves rule draw, ")
     fmt.Println("threefold repetition draw or insufficient material")
-case state.IsThreat():
+case state.Type().IsThreat():
     fmt.Println("Check")
-case state.IsClear():
+case state.Type().IsClear():
     fmt.Println("Nothing special on the board")
 }
 ```
@@ -120,24 +120,24 @@ case state.IsClear():
 You can create any chess piece of any color:
 
 ```go
-wKing := standardchess.NewKing(chess.SideWhite)
-bKing := standardchess.NewKing(chess.SideBlack)
+wKing := standardchess.NewKing(chess.ColorWhite)
+bKing := standardchess.NewKing(chess.ColorBlack)
 
-pawn := standardchess.NewPawn(chess.SideWhite)
-rook := standardchess.NewRook(chess.SideBlack)
-knight := standardchess.NewKnight(chess.SideWhite)
-bishop := standardchess.NewBishop(chess.SideBlack)
-queen := standardchess.NewQueen(chess.SideWhite)
+pawn := standardchess.NewPawn(chess.ColorWhite)
+rook := standardchess.NewRook(chess.ColorBlack)
+knight := standardchess.NewKnight(chess.ColorWhite)
+bishop := standardchess.NewBishop(chess.ColorBlack)
+queen := standardchess.NewQueen(chess.ColorWhite)
 ```
 
 ... or create via the universal function:
 ```go
-pawn, err := standardchess.NewPiece(standardchess.NotationPawn, chess.SideWhite)
+pawn, err := standardchess.NewPiece(standardchess.NotationPawn, chess.ColorWhite)
 if err != nil {
     // ...
 }
 
-rook, err := standardchess.NewPiece(standardchess.NotationRook, chess.SideBlack)
+rook, err := standardchess.NewPiece(standardchess.NotationRook, chess.ColorBlack)
 if err != nil {
     // ...
 }
@@ -189,7 +189,7 @@ import (
 func main() {
     board := standardchess.NewBoard()
 
-    f := fen.Encode(board)
+    var f fen.FEN = fen.Encode(board)
     
     f.Placement() // == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     f.Turn() // == chess.ColorWhite
@@ -221,18 +221,18 @@ import (
  )
 
 func main() {
-    board, err := standardchess.NewBoardFromMoves(
-        // ...
-    )
-    headers := pgn.Headers{
-        pgn.NewHeader("Event", "F/S Return Match"),
-        pgn.NewHeader("Site", "Belgrade, Serbia JUG"),
-        pgn.NewHeader("Date", time.Now().Format("2006.01.02")),
-    }
+    board, err := standardchess.NewBoardFromMoves([]string{
+		// ...
+	})
+	headers := pgn.Headers{
+		pgn.NewHeader("Event", "F/S Return Match"),
+		pgn.NewHeader("Site", "Belgrade, Serbia JUG"),
+		pgn.NewHeader("Date", time.Now().Format("2006.01.02")),
+	}
 
-    result = pgn.ResultFromBoard(board)
+	result := pgn.ResultFromBoard(board)
 
-    var pgn pgn.PGN = pgn.Encode(headers, board, result)
+	var p pgn.PGN = pgn.Encode(headers, board, result)
 }
 ```
 
@@ -253,7 +253,7 @@ p.Result()
 p.String()
 ```
 
-Now let's parse several PGNs from a reader:
+Now let's parse several PGNs from a reader. Note that `pgn.Parse` returns an iterator:
 ```go
 f, err := os.Open("games.pgn")
 if err != nil {
@@ -261,9 +261,10 @@ if err != nil {
 }
 defer f.Close()
 
-pgns, err := pgn.Parse(f)
-if err != nil {
-    // ...
+for p, err := range pgn.Parse(f) {
+    if err != nil {
+        //...
+    }
 }
 ```
 
