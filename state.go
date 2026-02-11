@@ -19,9 +19,9 @@ var (
 
 	// StateFiftyMoves is used if fifty consecutive moves occur without a pawn move or any capture.
 	StateFiftyMoves = state.FiftyMoves
-	// StateThreefoldRepetition means a case when the same position occurs three times
+	// StateFivefoldRepetition means a case when the same position occurs three times
 	// (same player to move and same rights).
-	StateThreefoldRepetition = state.ThreefoldRepetition
+	StateFivefoldRepetition = state.FivefoldRepetition
 	// StateInsufficientMaterial means a draw when neither side has enough material to checkmate
 	// (e.g., king vs king, king and bishop vs king).
 	StateInsufficientMaterial = state.InsufficientMaterial

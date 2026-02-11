@@ -37,7 +37,7 @@ func validateMove(
 	validateObstacle bool,
 ) error {
 	king, kingPosition := board.Squares().FindPiece(piece.NotationKing, side)
-	if err := validateKing(king, side, board); err != nil {
+	if err := validateKing(king, kingPosition, side, board); err != nil {
 		return err
 	}
 	fileDir := fileDirection(castlingType)
@@ -65,16 +65,19 @@ func validateMove(
 	return nil
 }
 
-func validateKing(king chess.Piece,
+func validateKing(
+	king chess.Piece,
+	kingPosition chess.Position,
 	side chess.Color,
-	board chess.Board) error {
+	board chess.Board,
+) error {
 	if king == nil {
 		return fmt.Errorf("%w: the king wasn't found", ErrValidation)
 	}
 	if king.IsMoved() {
 		return fmt.Errorf("%w: the king already has been moved", ErrValidation)
 	}
-	if side == board.Turn() && !board.State().Type().IsClear() {
+	if side == board.Turn() && board.IsSquareAttacked(kingPosition) {
 		return fmt.Errorf("%w: the king is under threat", ErrValidation)
 	}
 

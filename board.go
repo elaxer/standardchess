@@ -43,14 +43,6 @@ var firstRowPieceNotations = [...]string{
 	piece.NotationRook,
 }
 
-var stateRules = []rule.Rule{
-	rule.Checkmate,
-	rule.Stalemate,
-	rule.Check,
-
-	rule.FiftyMoves,
-}
-
 type board struct {
 	turn           chess.Color
 	squares        *chess.Squares
@@ -60,6 +52,11 @@ type board struct {
 
 	moves []chess.Position
 	state chess.State
+
+	observers []interface {
+		AfterBoardMakeMove(board chess.Board)
+		AfterBoardUndoMove(board chess.Board)
+	}
 }
 
 func NewBoard() chess.Board {
@@ -118,6 +115,16 @@ func NewBoardEmpty(
 		return nil, err
 	}
 
+	var fivefoldRepetitionRule = rule.NewFivefoldRepetition()
+
+	var stateRules = []rule.Rule{
+		rule.Checkmate,
+		rule.Stalemate,
+		fivefoldRepetitionRule.Rule,
+		rule.FiftyMoves,
+		rule.Check,
+	}
+
 	return &board{
 		turn:           turn,
 		squares:        squares,
@@ -126,6 +133,11 @@ func NewBoardEmpty(
 		capturedPieces: make([]chess.Piece, 0, 30),
 
 		stateRules: stateRules,
+
+		observers: []interface {
+			AfterBoardMakeMove(board chess.Board)
+			AfterBoardUndoMove(board chess.Board)
+		}{fivefoldRepetitionRule},
 	}, nil
 }
 
@@ -206,7 +218,7 @@ func (b *board) LegalMoves(p chess.Piece) []chess.Position {
 	}
 
 	enPassantPosition := enpassant.EnPassantTargetSquare(b)
-	if err := enpassant.ValidateMove(from, enPassantPosition, b); err == nil {
+	if enpassant.ValidateMove(from, enPassantPosition, b) == nil {
 		legalMoves = append(legalMoves, enPassantPosition)
 	}
 
@@ -243,6 +255,10 @@ func (b *board) MakeMove(move string) (chess.Move, error) {
 	b.moves = b.moves[:0]
 	b.state = nil
 
+	for _, observer := range b.observers {
+		observer.AfterBoardMakeMove(b)
+	}
+
 	moveResult.SetBoardNewState(b.State())
 
 	return moveResult, nil
@@ -268,6 +284,10 @@ func (b *board) UndoLastMove() (chess.Move, error) {
 
 	b.moves = b.moves[:0]
 	b.state = nil
+
+	for _, observer := range b.observers {
+		observer.AfterBoardUndoMove(b)
+	}
 
 	return lastMove, nil
 }

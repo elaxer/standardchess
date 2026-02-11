@@ -10,6 +10,6 @@ var (
 	Stalemate = chess.NewState("stalemate", chess.StateTypeTerminal)
 
 	FiftyMoves           = chess.NewState("fifty moves rule", chess.StateTypeTerminal)
-	ThreefoldRepetition  = chess.NewState("threefold repetition", chess.StateTypeTerminal)
+	FivefoldRepetition   = chess.NewState("fivefold repetition", chess.StateTypeTerminal)
 	InsufficientMaterial = chess.NewState("insufficient material", chess.StateTypeTerminal)
 )
