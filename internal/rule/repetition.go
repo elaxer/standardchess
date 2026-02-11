@@ -8,6 +8,7 @@ import (
 
 type repetitionRule struct {
 	*repetition.Repetition
+
 	repetitionsNum int
 	stateValue     chess.State
 }

@@ -93,6 +93,8 @@ case standardchess.StateStalemate:
     fmt.Println("Stalemate on the board, no new moves can be made")
 case standardchess.StateFiftyMoves:
     fmt.Println("Case of the fifty moves rule")
+case standardchess.StateThreefoldRepetition:
+    fmt.Println("Case of the threefold repetition rule")
 case standardchess.StateFivefoldRepetition:
     fmt.Println("Case of the fivefold repetition rule")
 case standardchess.StateInsufficientMaterial:
@@ -106,7 +108,7 @@ if state.IsTerminal() {
     fmt.Print("Checkmate, stalemate, fifty moves rule draw, ")
     fmt.Println("fivefold repetition draw or insufficient material")
 } else {
-    fmt.Println("Nothing special on the board")
+    fmt.Println("Threefold repetition or nothing special on the board")
 }
 ```
 
