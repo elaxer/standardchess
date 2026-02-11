@@ -14,13 +14,17 @@ const (
 
 type King struct {
 	*abstract
+
+	pseudoMoves []chess.Position
 }
 
 func NewKing(color chess.Color) *King {
-	return &King{&abstract{color, false}}
+	return &King{&abstract{color, false}, make([]chess.Position, 0, 8)}
 }
 
 func (k *King) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
+	k.pseudoMoves = k.pseudoMoves[:0]
+
 	positions := [8]chess.Position{
 		chess.NewPosition(from.File, from.Rank+1),
 		chess.NewPosition(from.File, from.Rank-1),
@@ -32,18 +36,17 @@ func (k *King) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.
 		chess.NewPosition(from.File-1, from.Rank+1),
 	}
 
-	moves := make([]chess.Position, 0, len(positions))
 	for _, move := range positions {
 		if move.Validate() != nil {
 			continue
 		}
 
 		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.color) {
-			moves = append(moves, move)
+			k.pseudoMoves = append(k.pseudoMoves, move)
 		}
 	}
 
-	return moves
+	return k.pseudoMoves
 }
 
 func (k *King) Notation() string {

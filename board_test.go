@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_board_MakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
+func TestBoard_MakeMove_CaptureAddsToCapturedPieces(t *testing.T) {
 	b := standardtest.DecodeFEN("r3k2r/ppp2ppp/B1n2n1B/3pp2Q/3PP2q/b1N2N1b/PPP2PPP/R3K2R")
 	require.Equal(t, 0, len(b.CapturedPieces()))
 	cases := []struct {
@@ -160,6 +160,18 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 func BenchmarkNewBoard(b *testing.B) {
 	for range b.N {
 		standardchess.NewBoard()
+	}
+}
+
+func BenchmarkBoard_MakeMove(b *testing.B) {
+	board := standardchess.NewBoard()
+	b.ResetTimer()
+	for range b.N {
+		_, err := board.MakeMove("e4")
+		b.StopTimer()
+		require.NoError(b, err)
+		board = standardchess.NewBoard()
+		b.StartTimer()
 	}
 }
 

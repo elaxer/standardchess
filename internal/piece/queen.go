@@ -13,10 +13,12 @@ const (
 
 type Queen struct {
 	*sliding
+
+	pseudoMoves []chess.Position
 }
 
 func NewQueen(color chess.Color) *Queen {
-	return &Queen{&sliding{&abstract{color, false}}}
+	return &Queen{&sliding{&abstract{color, false}}, make([]chess.Position, 0, 27)}
 }
 
 func (q *Queen) Side() chess.Color {
@@ -24,14 +26,15 @@ func (q *Queen) Side() chess.Color {
 }
 
 func (q *Queen) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
-	moves := make([]chess.Position, 0, 27)
+	q.pseudoMoves = q.pseudoMoves[:0]
+
 	for _, direction := range allDirections {
 		for move := range q.slide(from, direction, squares) {
-			moves = append(moves, move)
+			q.pseudoMoves = append(q.pseudoMoves, move)
 		}
 	}
 
-	return moves
+	return q.pseudoMoves
 }
 
 func (q *Queen) Notation() string {

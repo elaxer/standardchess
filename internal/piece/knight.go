@@ -13,13 +13,17 @@ const (
 
 type Knight struct {
 	*abstract
+
+	pseudoMoves []chess.Position
 }
 
 func NewKnight(color chess.Color) *Knight {
-	return &Knight{&abstract{color, false}}
+	return &Knight{&abstract{color, false}, make([]chess.Position, 0, 4)}
 }
 
 func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
+	k.pseudoMoves = k.pseudoMoves[:0]
+
 	positions := [8]chess.Position{
 		chess.NewPosition(from.File+1, from.Rank+2),
 		chess.NewPosition(from.File-1, from.Rank+2),
@@ -31,14 +35,13 @@ func (k *Knight) PseudoMoves(from chess.Position, squares *chess.Squares) []ches
 		chess.NewPosition(from.File+1, from.Rank-2),
 	}
 
-	moves := make([]chess.Position, 0, len(positions))
 	for _, move := range positions {
 		if piece, err := squares.FindByPosition(move); err == nil && k.canMove(piece, k.color) {
-			moves = append(moves, move)
+			k.pseudoMoves = append(k.pseudoMoves, move)
 		}
 	}
 
-	return moves
+	return k.pseudoMoves
 }
 
 func (k *Knight) Notation() string {

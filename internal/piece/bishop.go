@@ -13,21 +13,24 @@ const (
 
 type Bishop struct {
 	*sliding
+
+	pseudoMoves []chess.Position
 }
 
 func NewBishop(color chess.Color) *Bishop {
-	return &Bishop{&sliding{&abstract{color, false}}}
+	return &Bishop{&sliding{&abstract{color, false}}, make([]chess.Position, 0, 13)}
 }
 
 func (b *Bishop) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
-	moves := make([]chess.Position, 0, 13)
+	b.pseudoMoves = b.pseudoMoves[:0]
+
 	for _, direction := range diagonalDirections {
 		for move := range b.slide(from, direction, squares) {
-			moves = append(moves, move)
+			b.pseudoMoves = append(b.pseudoMoves, move)
 		}
 	}
 
-	return moves
+	return b.pseudoMoves
 }
 
 func (b *Bishop) Notation() string {

@@ -13,21 +13,23 @@ const (
 
 type Rook struct {
 	*sliding
+
+	pseudoMoves []chess.Position
 }
 
 func NewRook(color chess.Color) *Rook {
-	return &Rook{&sliding{&abstract{color, false}}}
+	return &Rook{&sliding{&abstract{color, false}}, make([]chess.Position, 0, 14)}
 }
 
 func (r *Rook) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
-	moves := make([]chess.Position, 0, 14)
+	r.pseudoMoves = r.pseudoMoves[:0]
 	for _, direction := range orthogonalDirections {
 		for move := range r.slide(from, direction, squares) {
-			moves = append(moves, move)
+			r.pseudoMoves = append(r.pseudoMoves, move)
 		}
 	}
 
-	return moves
+	return r.pseudoMoves
 }
 
 func (r *Rook) Notation() string {
