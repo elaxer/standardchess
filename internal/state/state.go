@@ -4,12 +4,12 @@ package state
 import "github.com/elaxer/chess"
 
 var (
-	Check = chess.NewState("check", chess.StateTypeThreat)
+	Check = chess.NewState("check", false)
 
-	Checkmate = chess.NewState("checkmate", chess.StateTypeTerminal)
-	Stalemate = chess.NewState("stalemate", chess.StateTypeTerminal)
+	Checkmate = chess.NewState("checkmate", true)
+	Stalemate = chess.NewState("stalemate", true)
 
-	FiftyMoves           = chess.NewState("fifty moves rule", chess.StateTypeTerminal)
-	FivefoldRepetition   = chess.NewState("fivefold repetition", chess.StateTypeTerminal)
-	InsufficientMaterial = chess.NewState("insufficient material", chess.StateTypeTerminal)
+	FiftyMoves           = chess.NewState("fifty moves rule", true)
+	FivefoldRepetition   = chess.NewState("fivefold repetition", true)
+	InsufficientMaterial = chess.NewState("insufficient material", true)
 )

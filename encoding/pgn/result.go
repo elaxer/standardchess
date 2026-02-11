@@ -23,7 +23,7 @@ type Result string
 //   - ResultDraw if the game is drawn
 //   - ResultInProcess if the game is still ongoing
 func ResultFromBoard(board chess.Board) Result {
-	if !board.State().Type().IsTerminal() {
+	if !board.State().IsTerminal() {
 		return ResultInProcess
 	}
 	if board.State() == state.Checkmate {

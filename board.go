@@ -237,7 +237,7 @@ func (b *board) IsSquareAttacked(position chess.Position) bool {
 }
 
 func (b *board) MakeMove(move string) (chess.Move, error) {
-	if b.State().Type().IsTerminal() {
+	if b.State().IsTerminal() {
 		return nil, ErrCannotMoveInTerminalState
 	}
 
