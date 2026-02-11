@@ -8,6 +8,7 @@ var (
 	Stalemate = chess.NewState("stalemate", true)
 
 	FiftyMoves           = chess.NewState("fifty moves rule", true)
+	ThreefoldRepetition  = chess.NewState("threefold repetition", false)
 	FivefoldRepetition   = chess.NewState("fivefold repetition", true)
 	InsufficientMaterial = chess.NewState("insufficient material", true)
 )
