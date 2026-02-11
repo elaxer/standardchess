@@ -2,21 +2,12 @@ package rule
 
 import (
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/state"
 )
 
-func Check(board chess.Board) chess.State {
-	_, kingPosition := board.Squares().FindPiece(piece.NotationKing, board.Turn())
-	if board.IsSquareAttacked(kingPosition) {
-		return state.Check
-	}
-
-	return nil
-}
-
 func Checkmate(board chess.Board) chess.State {
-	if Check(board) != nil && len(board.Moves()) == 0 {
+	if check.IsCheck(board) && len(board.Moves()) == 0 {
 		return state.Checkmate
 	}
 
@@ -24,7 +15,7 @@ func Checkmate(board chess.Board) chess.State {
 }
 
 func Stalemate(board chess.Board) chess.State {
-	if Check(board) == nil && len(board.Moves()) == 0 {
+	if !check.IsCheck(board) && len(board.Moves()) == 0 {
 		return state.Stalemate
 	}
 

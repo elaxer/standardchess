@@ -87,8 +87,6 @@ Now let's check the value:
 switch state {
 case standardchess.StateClear:
     fmt.Println("Nothing special on the board")
-case standardchess.StateCheck:
-    fmt.Println("Check on the board")
 case standardchess.StateCheckmate:
     fmt.Println("Checkmate on the board, no new moves can be made")
 case standardchess.StateStalemate:
@@ -104,13 +102,10 @@ case standardchess.StateInsufficientMaterial:
 
 ... or check the type of the state:
 ```go
-switch {
-case state.Type().IsTerminal():
+if state.IsTerminal() {
     fmt.Print("Checkmate, stalemate, fifty moves rule draw, ")
     fmt.Println("fivefold repetition draw or insufficient material")
-case state.Type().IsThreat():
-    fmt.Println("Check")
-case state.Type().IsClear():
+} else {
     fmt.Println("Nothing special on the board")
 }
 ```
@@ -285,7 +280,8 @@ It encodes your board into the format:
 ```json
 {
   "turn": false,
-  "state": { "name": "string", "type": "string" },
+  "is_check": false,
+  "state": { "name": "string", "is_terminal": false },
   "castlings": { "O-O": false, "O-O-O": false },
   "captured_pieces": [
     { "color": false, "notation": "string", "is_moved": false }
@@ -295,14 +291,14 @@ It encodes your board into the format:
       "move": "string",
       "side": false,
       "captured_piece": { "side": false, "notation": "string", "is_moved": false },
-      "board_new_state": { "name": "string", "type": "string" },
+      "board_new_state": { "name": "string", "is_terminal": false },
       "str": "string"
     },
     {
       "move": "string",
       "side": false,
       "captured_piece": null,
-      "board_new_state": { "name": "string", "type": "string" },
+      "board_new_state": { "name": "string", "is_terminal": false },
       "str": "string"
     }
   ],

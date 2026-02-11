@@ -15,6 +15,7 @@ import (
 	"slices"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/castling"
 	"github.com/elaxer/standardchess/internal/move/enpassant"
 	"github.com/elaxer/standardchess/internal/move/normal"
@@ -122,7 +123,6 @@ func NewBoardEmpty(
 		rule.Stalemate,
 		fivefoldRepetitionRule.Rule,
 		rule.FiftyMoves,
-		rule.Check,
 	}
 
 	return &board{
@@ -352,6 +352,7 @@ func (b *board) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(map[string]any{
 		"turn":            b.turn,
+		"is_check":        check.IsCheck(b),
 		"state":           b.State(),
 		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
 		"captured_pieces": b.capturedPieces,

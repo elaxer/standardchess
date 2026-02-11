@@ -9,11 +9,16 @@ import (
 	"github.com/elaxer/standardchess/internal/state"
 )
 
-var ErrValidation = errors.New("abstract result validation error")
+var (
+	ErrValidation = errors.New("abstract result validation error")
+
+	errValidationEmptyNewState = fmt.Errorf("%w: empty new state", ErrValidation)
+)
 
 type Abstract struct {
 	MoveSide chess.Color
 	NewState chess.State
+	IsCheck  bool
 }
 
 func (r *Abstract) Side() chess.Color {
@@ -30,17 +35,17 @@ func (r *Abstract) BoardNewState() chess.State {
 
 func (r *Abstract) Validate() error {
 	if r.NewState == nil {
-		return fmt.Errorf("%w: empty new state", ErrValidation)
+		return errValidationEmptyNewState
 	}
 
 	return nil
 }
 
 func (r *Abstract) Suffix() string {
-	switch r.NewState {
-	case state.Check:
+	if r.IsCheck {
 		return "+"
-	case state.Checkmate:
+	}
+	if r.NewState == state.Checkmate {
 		return "#"
 	}
 

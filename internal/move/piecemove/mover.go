@@ -2,6 +2,7 @@ package piecemove
 
 import (
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/result"
 	"github.com/elaxer/standardchess/internal/resolver"
 )
@@ -40,10 +41,10 @@ func MakeMove(
 	piece.SetIsMoved(true)
 
 	return PieceMoveResult{
+		Abstract:      &result.Abstract{MoveSide: board.Turn(), IsCheck: check.IsCheck(board)},
 		WasMoved:      wasMoved,
 		FromFull:      fullFrom,
 		FromShortened: shortenedFrom,
 		Captured:      capturedPiece,
-		Abstract:      &result.Abstract{MoveSide: board.Turn()},
 	}, nil
 }

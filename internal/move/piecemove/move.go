@@ -8,7 +8,11 @@ import (
 	"github.com/elaxer/chess"
 )
 
-var ErrMoveValidation = errors.New("piece move validation error")
+var (
+	ErrMoveValidation = errors.New("piece move validation error")
+
+	errMoveValidationToPositionIsNotFull = fmt.Errorf("%w: to position is not full", ErrMoveValidation)
+)
 
 type PieceMove struct {
 	From chess.Position `json:"from"`
@@ -27,7 +31,7 @@ func (m PieceMove) Validate() error {
 		return err
 	}
 	if !m.To.IsFull() {
-		return fmt.Errorf("%w: to position is not full", ErrMoveValidation)
+		return errMoveValidationToPositionIsNotFull
 	}
 
 	return nil

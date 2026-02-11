@@ -43,7 +43,7 @@ func (r *fivefoldRepetition) AfterBoardMakeMove(board chess.Board) {
 }
 
 func (r *fivefoldRepetition) AfterBoardUndoMove(board chess.Board) {
-	if len(r.hashes) >= 0 {
+	if len(r.hashes) > 0 {
 		r.hashes = r.hashes[:len(r.hashes)-1]
 	}
 }

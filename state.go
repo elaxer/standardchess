@@ -9,9 +9,6 @@ var (
 	// StateClear means a clear default state of the chess board.
 	StateClear = chess.StateClear
 
-	// StateCheck means there is a check on the board.
-	StateCheck = state.Check
-
 	// StateCheckmate means there is a checkmate on the board.
 	StateCheckmate = state.Checkmate
 	// StateStalemate means there is a stalemate on the board.

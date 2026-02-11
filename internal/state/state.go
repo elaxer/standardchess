@@ -4,8 +4,6 @@ package state
 import "github.com/elaxer/chess"
 
 var (
-	Check = chess.NewState("check", false)
-
 	Checkmate = chess.NewState("checkmate", true)
 	Stalemate = chess.NewState("stalemate", true)
 

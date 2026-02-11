@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/result"
 	"github.com/elaxer/standardchess/internal/piece"
 )
@@ -47,7 +48,7 @@ func MakeMove(castlingType CastlingType, board chess.Board) (chess.Move, error) 
 	rook.SetIsMoved(true)
 
 	return &MoveResult{
-		Abstract:         &result.Abstract{MoveSide: board.Turn()},
+		Abstract:         &result.Abstract{MoveSide: board.Turn(), IsCheck: check.IsCheck(board)},
 		CastlingType:     castlingType,
 		InitKingPosition: kingPosition,
 		InitRookPosition: rookPosition,
