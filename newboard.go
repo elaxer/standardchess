@@ -84,6 +84,7 @@ func NewBoardEmpty(
 		rule.NewFivefoldRepetition(repetition).Rule,
 		rule.NewThreefoldRepetition(repetition).Rule,
 		rule.FiftyMoves,
+		rule.InsufficientMaterial,
 	}
 
 	return &board{

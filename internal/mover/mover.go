@@ -20,7 +20,6 @@ var (
 )
 
 func MakeMove(moveStr string, board chess.Board) (chess.Move, error) {
-
 	if move, err := normal.MoveFromString(moveStr); err == nil {
 		isPawn := move.PieceNotation == piece.NotationPawn
 		if enpassant.CanEnPassant(board) && isPawn &&
