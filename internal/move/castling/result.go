@@ -45,7 +45,7 @@ func (r *MoveResult) validate() error {
 	if r.Abstract == nil {
 		return fmt.Errorf("%w: empty abstract", ErrMoveResultValidation)
 	}
-	if err := r.Abstract.Validate(); err != nil {
+	if err := r.Validate(); err != nil {
 		return fmt.Errorf("%w: %w", ErrMoveResultValidation, err)
 	}
 	if !r.InitKingPosition.IsFull() {

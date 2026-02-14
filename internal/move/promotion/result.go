@@ -16,14 +16,6 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
-func (r *MoveResult) validate() error {
-	if err := r.PieceMoveResult.Validate(); err != nil {
-		return err
-	}
-
-	return r.InputMove.validate()
-}
-
 func (r *MoveResult) String() string {
 	from := r.FromShortened
 	if from.IsEmpty() && r.IsCapture() {
@@ -42,4 +34,12 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 		"board_new_state": r.BoardNewState(),
 		"str":             r.String(),
 	})
+}
+
+func (r *MoveResult) validate() error {
+	if err := r.Validate(); err != nil {
+		return err
+	}
+
+	return r.InputMove.validate()
 }

@@ -40,7 +40,7 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 }
 
 func (r *MoveResult) validate() error {
-	if err := r.PieceMoveResult.Validate(); err != nil {
+	if err := r.Validate(); err != nil {
 		return err
 	}
 	if r.Captured == nil {

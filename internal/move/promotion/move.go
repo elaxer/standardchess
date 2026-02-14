@@ -59,7 +59,7 @@ func (m *Move) String() string {
 }
 
 func (m *Move) validate() error {
-	if err := m.PieceMove.Validate(); err != nil {
+	if err := m.Validate(); err != nil {
 		return err
 	}
 	if !slices.Contains(allowedNotations, m.PromotedPieceNotation) {
