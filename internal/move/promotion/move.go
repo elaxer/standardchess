@@ -54,7 +54,11 @@ func MoveFromString(notation string) (*Move, error) {
 	), nil
 }
 
-func (m *Move) Validate() error {
+func (m *Move) String() string {
+	return m.From.String() + m.To.String() + "=" + m.PromotedPieceNotation
+}
+
+func (m *Move) validate() error {
 	if err := m.PieceMove.Validate(); err != nil {
 		return err
 	}
@@ -63,8 +67,4 @@ func (m *Move) Validate() error {
 	}
 
 	return nil
-}
-
-func (m *Move) String() string {
-	return m.From.String() + m.To.String() + "=" + m.PromotedPieceNotation
 }

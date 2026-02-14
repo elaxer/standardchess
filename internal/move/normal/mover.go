@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/elaxer/chess"
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 )
 
@@ -20,11 +21,13 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 		return nil, err
 	}
 
+	pieceMoveResult.IsCheck = check.IsKingPseudoAttacked(board, !board.Turn())
+
 	return &MoveResult{PieceMoveResult: pieceMoveResult, InputMove: *move}, nil
 }
 
 func UndoMove(move *MoveResult, board chess.Board) error {
-	if err := move.Validate(); err != nil {
+	if err := move.validate(); err != nil {
 		return err
 	}
 

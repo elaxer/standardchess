@@ -59,7 +59,7 @@ func NewBoardFromMoves(moves []string) (chess.Board, error) {
 	board := NewBoard()
 	for i, move := range moves {
 		if _, err := board.MakeMove(move); err != nil {
-			return nil, fmt.Errorf("%s#%d: %w", move, i+1, err)
+			return nil, fmt.Errorf("%w (%s#%d)", err, move, i+1)
 		}
 	}
 

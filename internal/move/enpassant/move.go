@@ -13,10 +13,6 @@ func NewEnPassant(from, to chess.Position) *Move {
 	return &Move{piecemove.NewPieceMove(from, to)}
 }
 
-func (m *Move) Validate() error {
-	return m.PieceMove.Validate()
-}
-
 func (m *Move) String() string {
 	return m.From.String() + m.To.String()
 }

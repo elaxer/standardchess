@@ -6,6 +6,7 @@ import (
 
 	"github.com/elaxer/chess"
 
+	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/piece"
 )
@@ -13,7 +14,7 @@ import (
 var ErrUndo = errors.New("cannot undo promotion move")
 
 func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
-	if err := move.Validate(); err != nil {
+	if err := move.validate(); err != nil {
 		return nil, err
 	}
 
@@ -33,11 +34,13 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 		return nil, err
 	}
 
+	pieceResult.IsCheck = check.IsKingPseudoAttacked(board, !board.Turn())
+
 	return &MoveResult{PieceMoveResult: pieceResult, InputMove: *move}, nil
 }
 
 func UndoPromotion(move *MoveResult, board chess.Board) error {
-	if err := move.Validate(); err != nil {
+	if err := move.validate(); err != nil {
 		return err
 	}
 

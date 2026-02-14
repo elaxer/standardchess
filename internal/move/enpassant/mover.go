@@ -45,7 +45,10 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 
 	return &MoveResult{
 		PieceMoveResult: piecemove.PieceMoveResult{
-			Abstract:      &result.Abstract{MoveSide: board.Turn(), IsCheck: check.IsCheck(board)},
+			Abstract: &result.Abstract{
+				MoveSide: board.Turn(),
+				IsCheck:  check.IsKingPseudoAttacked(board, !board.Turn()),
+			},
 			WasMoved:      true,
 			FromFull:      fullFrom,
 			FromShortened: shortenedFrom,

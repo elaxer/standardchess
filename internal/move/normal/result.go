@@ -17,12 +17,13 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
-func (r *MoveResult) Validate() error {
-	if err := r.PieceMoveResult.Validate(); err != nil {
-		return err
+func (r *MoveResult) String() string {
+	from := r.FromShortened
+	if from.IsEmpty() && r.IsCapture() && r.InputMove.PieceNotation == piece.NotationPawn {
+		from.File = r.FromFull.File
 	}
 
-	return r.InputMove.validate()
+	return r.InputMove.PieceNotation + from.String() + r.CaptureString() + r.InputMove.To.String() + r.Suffix()
 }
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
@@ -35,11 +36,10 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (r *MoveResult) String() string {
-	from := r.FromShortened
-	if from.IsEmpty() && r.IsCapture() && r.InputMove.PieceNotation == piece.NotationPawn {
-		from.File = r.FromFull.File
+func (r *MoveResult) validate() error {
+	if err := r.PieceMoveResult.Validate(); err != nil {
+		return err
 	}
 
-	return r.InputMove.PieceNotation + from.String() + r.CaptureString() + r.InputMove.To.String() + r.Suffix()
+	return r.InputMove.validate()
 }

@@ -48,7 +48,10 @@ func MakeMove(castlingType CastlingType, board chess.Board) (chess.Move, error) 
 	rook.SetIsMoved(true)
 
 	return &MoveResult{
-		Abstract:         &result.Abstract{MoveSide: board.Turn(), IsCheck: check.IsCheck(board)},
+		Abstract: &result.Abstract{
+			MoveSide: board.Turn(),
+			IsCheck:  check.IsKingPseudoAttacked(board, !board.Turn()),
+		},
 		CastlingType:     castlingType,
 		InitKingPosition: kingPosition,
 		InitRookPosition: rookPosition,

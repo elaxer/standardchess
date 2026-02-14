@@ -42,11 +42,11 @@ func (r *Abstract) Validate() error {
 }
 
 func (r *Abstract) Suffix() string {
-	if r.IsCheck {
-		return "+"
-	}
 	if r.NewState == state.Checkmate {
 		return "#"
+	}
+	if r.IsCheck {
+		return "+"
 	}
 
 	return ""

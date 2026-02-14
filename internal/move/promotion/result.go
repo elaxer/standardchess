@@ -16,22 +16,12 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
-func (r *MoveResult) Validate() error {
+func (r *MoveResult) validate() error {
 	if err := r.PieceMoveResult.Validate(); err != nil {
 		return err
 	}
 
-	return r.InputMove.Validate()
-}
-
-func (r *MoveResult) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		"move":            r.InputMove.String(),
-		"side":            r.Side(),
-		"captured_piece":  r.CapturedPiece(),
-		"board_new_state": r.BoardNewState(),
-		"str":             r.String(),
-	})
+	return r.InputMove.validate()
 }
 
 func (r *MoveResult) String() string {
@@ -42,4 +32,14 @@ func (r *MoveResult) String() string {
 
 	return from.String() + r.CaptureString() + r.InputMove.To.String() +
 		"=" + r.InputMove.PromotedPieceNotation + r.Suffix()
+}
+
+func (r *MoveResult) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"move":            r.InputMove.String(),
+		"side":            r.Side(),
+		"captured_piece":  r.CapturedPiece(),
+		"board_new_state": r.BoardNewState(),
+		"str":             r.String(),
+	})
 }
