@@ -139,6 +139,7 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 			require.NoError(t, err)
 			for _, move := range pgn.Moves() {
 				result, err := board.MakeMove(move)
+				assert.Equal(t, move, result.String())
 				require.NotNil(t, result)
 				require.NoError(t, err)
 			}
