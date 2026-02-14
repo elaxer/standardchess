@@ -27,7 +27,21 @@ func (r *MoveResult) Input() string {
 	return r.CastlingType.String()
 }
 
-func (r *MoveResult) Validate() error {
+func (r *MoveResult) String() string {
+	return r.CastlingType.String() + r.Suffix()
+}
+
+func (r *MoveResult) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]any{
+		"move":            r.CastlingType.String(),
+		"side":            r.Side(),
+		"captured_piece":  nil,
+		"board_new_state": r.BoardNewState(),
+		"str":             r.String(),
+	})
+}
+
+func (r *MoveResult) validate() error {
 	if r.Abstract == nil {
 		return fmt.Errorf("%w: empty abstract", ErrMoveResultValidation)
 	}
@@ -42,18 +56,4 @@ func (r *MoveResult) Validate() error {
 	}
 
 	return nil
-}
-
-func (r *MoveResult) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]any{
-		"move":            r.CastlingType.String(),
-		"side":            r.Side(),
-		"captured_piece":  nil,
-		"board_new_state": r.BoardNewState(),
-		"str":             r.String(),
-	})
-}
-
-func (r *MoveResult) String() string {
-	return r.CastlingType.String() + r.Suffix()
 }

@@ -22,7 +22,7 @@ func (r *MoveResult) Validate() error {
 		return err
 	}
 
-	return r.InputMove.Validate()
+	return r.InputMove.validate()
 }
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {

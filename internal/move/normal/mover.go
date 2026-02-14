@@ -11,7 +11,7 @@ import (
 var ErrUndoMove = errors.New("cannot undo normal move")
 
 func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
-	if err := move.Validate(); err != nil {
+	if err := move.validate(); err != nil {
 		return nil, err
 	}
 

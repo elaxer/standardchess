@@ -26,10 +26,6 @@ func TypeFromString(str string) (CastlingType, error) {
 	return CastlingType(result["long"] == ""), nil
 }
 
-func (m CastlingType) Validate() error {
-	return nil
-}
-
 func (m CastlingType) IsShort() bool {
 	return m == TypeShort
 }
@@ -39,8 +35,12 @@ func (m CastlingType) IsLong() bool {
 }
 
 func (m CastlingType) String() string {
-	return map[CastlingType]string{
-		TypeShort: "O-O",
-		TypeLong:  "O-O-O",
-	}[m]
+	switch m {
+	case TypeShort:
+		return "O-O"
+	case TypeLong:
+		return "O-O-O"
+	default:
+		panic("unknown catling type")
+	}
 }

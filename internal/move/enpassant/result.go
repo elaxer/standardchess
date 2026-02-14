@@ -20,15 +20,13 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
-func (r *MoveResult) Validate() error {
-	if err := r.PieceMoveResult.Validate(); err != nil {
-		return err
-	}
-	if r.Captured == nil {
-		return fmt.Errorf("%w: must have a captured piece", ErrMoveResultValidation)
+func (r *MoveResult) String() string {
+	from := r.FromShortened
+	if from.IsEmpty() {
+		from.File = r.FromFull.File
 	}
 
-	return r.InputMove.Validate()
+	return from.String() + "x" + r.InputMove.To.String() + r.Suffix()
 }
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
@@ -41,11 +39,13 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (r *MoveResult) String() string {
-	from := r.FromShortened
-	if from.IsEmpty() {
-		from.File = r.FromFull.File
+func (r *MoveResult) validate() error {
+	if err := r.PieceMoveResult.Validate(); err != nil {
+		return err
+	}
+	if r.Captured == nil {
+		return fmt.Errorf("%w: must have a captured piece", ErrMoveResultValidation)
 	}
 
-	return from.String() + "x" + r.InputMove.To.String() + r.Suffix()
+	return r.InputMove.Validate()
 }

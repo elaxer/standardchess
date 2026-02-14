@@ -56,7 +56,7 @@ func MakeMove(castlingType CastlingType, board chess.Board) (chess.Move, error) 
 }
 
 func UndoMove(move *MoveResult, board chess.Board) error {
-	if err := move.Validate(); err != nil {
+	if err := move.validate(); err != nil {
 		return err
 	}
 
