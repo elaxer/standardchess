@@ -20,6 +20,10 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
+func (r *MoveResult) UCI() string {
+	return r.FromFull.String() + r.InputMove.To.String()
+}
+
 func (r *MoveResult) String() string {
 	from := r.FromShortened
 	if from.IsEmpty() {
@@ -31,10 +35,11 @@ func (r *MoveResult) String() string {
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"move":            r.InputMove.String(),
+		"input":           r.InputMove.String(),
 		"side":            r.Side(),
 		"captured_piece":  r.CapturedPiece(),
 		"board_new_state": r.BoardNewState(),
+		"uci":             r.UCI(),
 		"str":             r.String(),
 	})
 }

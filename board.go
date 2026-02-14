@@ -17,12 +17,9 @@ import (
 	"github.com/elaxer/standardchess/internal/check"
 	"github.com/elaxer/standardchess/internal/move/castling"
 	"github.com/elaxer/standardchess/internal/move/enpassant"
-	"github.com/elaxer/standardchess/internal/move/normal"
-	"github.com/elaxer/standardchess/internal/move/promotion"
 	"github.com/elaxer/standardchess/internal/mover"
 	"github.com/elaxer/standardchess/internal/piece"
 	"github.com/elaxer/standardchess/internal/rule"
-	"github.com/elaxer/standardchess/metric"
 )
 
 var EdgePosition = chess.NewPosition(chess.FileH, chess.Rank8)
@@ -202,77 +199,49 @@ func (b *board) UndoLastMove() (chess.Move, error) {
 }
 
 func (b *board) MarshalJSON() ([]byte, error) {
-	type Placement struct {
-		Piece      chess.Piece      `json:"piece"`
-		Position   chess.Position   `json:"position"`
+	type Piece struct {
+		Color      chess.Color      `json:"color"`
+		Notation   string           `json:"notation"`
+		IsMoved    bool             `json:"is_moved"`
 		LegalMoves []chess.Position `json:"legal_moves"`
+	}
+	type Placement struct {
+		Piece    *Piece         `json:"piece"`
+		Position chess.Position `json:"position"`
 	}
 
 	placements := make([]*Placement, 0, 32)
-	for pos, piece := range b.squares.Iter() {
+	for position, piece := range b.squares.Iter() {
 		if piece == nil {
 			continue
 		}
 
 		placement := &Placement{
-			Piece:      piece,
-			LegalMoves: make([]chess.Position, 0, 27),
-			Position:   pos,
+			&Piece{
+				piece.Color(),
+				piece.Notation(),
+				piece.IsMoved(),
+				make([]chess.Position, 0),
+			},
+			position,
 		}
 		if piece.Color() == b.turn {
-			placement.LegalMoves = b.LegalMoves(piece)
+			placement.Piece.LegalMoves = b.LegalMoves(piece)
 		}
 
 		placements = append(placements, placement)
 	}
 
-	lastMovements := make([]map[string]string, 0, 2)
-	if len(b.moveHistory) > 0 {
-		switch move := b.moveHistory[len(b.moveHistory)-1].(type) {
-		case *normal.MoveResult:
-			lastMovements = append(lastMovements, map[string]string{
-				"from": move.FromFull.String(),
-				"to":   move.InputMove.To.String(),
-			})
-		case *promotion.MoveResult:
-			lastMovements = append(lastMovements, map[string]string{
-				"from": move.FromFull.String(),
-				"to":   move.InputMove.To.String(),
-			})
-		case *enpassant.MoveResult:
-			lastMovements = append(lastMovements, map[string]string{
-				"from": move.FromFull.String(),
-				"to":   move.InputMove.To.String(),
-			})
-		case *castling.MoveResult:
-			lastMovements = append(
-				lastMovements,
-				map[string]string{
-					"from": castling.KingInitPosition(move.Side()).String(),
-					"to":   castling.KingCastledPosition(move.CastlingType, move.Side()).String(),
-				},
-				map[string]string{
-					"from": castling.RookInitPosition(move.CastlingType, move.Side()).String(),
-					"to":   castling.RookCastledPosition(move.CastlingType, move.Side()).String(),
-				},
-			)
-		}
-	}
-
 	return json.Marshal(map[string]any{
-		"turn":            b.turn,
-		"is_check":        check.IsCheck(b),
-		"state":           b.State(),
-		"castlings":       metric.CastlingAbility(b).Value().(metric.Castlings)["practical"][b.turn],
+		"turn":     b.turn,
+		"is_check": check.IsCheck(b),
+		"state":    b.State(),
+		"castlings": map[string]bool{
+			"O-O":   castling.ValidateMoveWithObstacle(castling.TypeShort, b.turn, b) == nil,
+			"O-O-O": castling.ValidateMoveWithObstacle(castling.TypeLong, b.turn, b) == nil,
+		},
 		"captured_pieces": b.capturedPieces,
 		"move_history":    b.moveHistory,
 		"placement":       placements,
-		"last_movements":  lastMovements,
 	})
-}
-
-func must(err error) {
-	if err != nil {
-		panic(err)
-	}
 }

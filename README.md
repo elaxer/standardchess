@@ -283,42 +283,57 @@ It encodes your board into the format:
 {
   "turn": false,
   "is_check": false,
-  "state": { "name": "string", "is_terminal": false },
-  "castlings": { "O-O": false, "O-O-O": false },
+  "state": {
+    "name": "string",
+    "is_terminal": false
+  },
+  "castlings": {
+    "O-O": false,
+    "O-O-O": false
+  },
   "captured_pieces": [
-    { "color": false, "notation": "string", "is_moved": false }
+    {
+      "color": false,
+      "notation": "string",
+      "is_moved": false
+    }
   ],
   "move_history": [
     {
-      "move": "string",
+      "input": "string",
       "side": false,
-      "captured_piece": { "side": false, "notation": "string", "is_moved": false },
-      "board_new_state": { "name": "string", "is_terminal": false },
+      "captured_piece": {
+        "side": false,
+        "notation": "string",
+        "is_moved": false
+      }, // nullable
+      "board_new_state": {
+        "name": "string",
+        "is_terminal": false
+      },
+      "uci": "string",
       "str": "string"
     },
-    {
-      "move": "string",
-      "side": false,
-      "captured_piece": null,
-      "board_new_state": { "name": "string", "is_terminal": false },
-      "str": "string"
-    }
   ],
   "placement": [
     {
-      "piece": { "side": false, "notation": "string", "is_moved": false },
-      "position": { "file": "string", "rank": 0 },
-      "legal_moves": [
-        { "file": "string", "rank": 0 },
-      ]
+      "position": {
+        "file": "string",
+        "rank": 0
+      },
+      "piece": {
+        "color": false,
+        "notation": "string",
+        "is_moved": false,
+        "legal_moves": [
+          {
+            "file": "string",
+            "rank": 0
+          }
+        ]
+      }
     }
-  ],
-  "last_movements": [
-    {
-      "from": "string",
-      "to": "string",
-    },
-  ],
+  ]
 }
 ```
 

@@ -99,3 +99,9 @@ func NewBoardEmpty(
 		observers: []moveObserver{repetition},
 	}, nil
 }
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
