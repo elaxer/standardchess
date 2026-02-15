@@ -32,6 +32,20 @@ func NewBoardFromPGN(pgnStr string) chess.Board {
 	return board
 }
 
+// func UCIMovesFromPGN(pgnStr string) []string {
+// 	pgn, err := pgn.FromString(pgnStr)
+// 	must(err)
+
+// 	moves := make([]string, 0, len(pgn.Moves()))
+// 	board := standardchess.NewBoard()
+// 	for _, move := range pgn.Moves() {
+// 		result, err := board.MakeMove(move)
+// 		must(err)
+
+// 		moves = append(moves, resu)
+// 	}
+// }
+
 // NewPiece creates a new piece by string.
 // Created piece marked as not moved.
 // P, R, N, B, Q, K - creates white piece

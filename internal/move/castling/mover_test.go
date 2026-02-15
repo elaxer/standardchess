@@ -25,7 +25,7 @@ var (
 	blackRookPosAfterLongCastling = chess.PositionFromString("d8")
 )
 
-func TestMakeCastling(t *testing.T) {
+func TestMakeMove(t *testing.T) {
 	type args struct {
 		castlingType castling.CastlingType
 		board        chess.Board
@@ -168,7 +168,7 @@ func TestMakeCastling(t *testing.T) {
 	}
 }
 
-func TestMakeCastling_Negative(t *testing.T) {
+func TestMakeMove_Negative(t *testing.T) {
 	_, err := castling.MakeMove(
 		castling.TypeShort,
 		standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{

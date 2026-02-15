@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestUndoNormal(t *testing.T) {
+func TestUndoMove(t *testing.T) {
 	piece := standardtest.NewPiece("Q")
 	movedPiece := standardtest.NewPieceM("Q")
 

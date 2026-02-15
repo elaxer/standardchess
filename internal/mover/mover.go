@@ -14,13 +14,27 @@ import (
 )
 
 var (
-	Err         = errors.New("mover error")
-	ErrMakeMove = fmt.Errorf("%w: cannot make move", Err)
-	ErrUndoMove = fmt.Errorf("%w: cannot undo move", Err)
+	Err = errors.New("mover error")
+
+	ErrMakeMove            = fmt.Errorf("%w: cannot make move", Err)
+	errMakeMoveUnknownType = fmt.Errorf("%w: unknown move type", ErrMakeMove)
+
+	ErrUndoMove            = fmt.Errorf("%w: cannot undo move", Err)
+	errUndoMoveUnknownType = fmt.Errorf("%w: unknown move type", ErrUndoMove)
 )
 
 func MakeMove(moveStr string, board chess.Board) (chess.Move, error) {
-	if move, err := normal.MoveFromString(moveStr); err == nil {
+	move, err := moveFromUCI(moveStr, board)
+	if err != nil {
+		move, err = moveFromNotation(moveStr)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	switch move := move.(type) {
+	case *normal.Move:
 		isPawn := move.PieceNotation == piece.NotationPawn
 		if enpassant.CanEnPassant(board) && isPawn &&
 			move.To == enpassant.EnPassantTargetSquare(board) {
@@ -28,15 +42,42 @@ func MakeMove(moveStr string, board chess.Board) (chess.Move, error) {
 		}
 
 		return normal.MakeMove(move, board)
-	}
-	if move, err := promotion.MoveFromString(moveStr); err == nil {
+
+	case *promotion.Move:
 		return promotion.MakeMove(move, board)
-	}
-	if move, err := castling.TypeFromString(moveStr); err == nil {
+	case castling.CastlingType:
 		return castling.MakeMove(move, board)
 	}
 
-	return nil, fmt.Errorf("%w: invalid move \"%s\"", ErrMakeMove, moveStr)
+	return nil, errMakeMoveUnknownType
+}
+
+func moveFromUCI(uciStr string, board chess.Board) (any, error) {
+	if move, err := normal.MoveFromUCI(uciStr, board.Squares()); err == nil {
+		return move, nil
+	}
+	if move, err := promotion.MoveFromUCI(uciStr); err == nil {
+		return move, nil
+	}
+	if castlingType, err := castling.FromUCI(uciStr, board.Squares(), board.Turn()); err == nil {
+		return castlingType, nil
+	}
+
+	return nil, fmt.Errorf("%w: invalid move \"%s\"", ErrMakeMove, uciStr)
+}
+
+func moveFromNotation(notation string) (any, error) {
+	if move, err := normal.MoveFromNotation(notation); err == nil {
+		return move, nil
+	}
+	if move, err := promotion.MoveFromNotation(notation); err == nil {
+		return move, nil
+	}
+	if castlingType, err := castling.FromNotation(notation); err == nil {
+		return castlingType, nil
+	}
+
+	return nil, fmt.Errorf("%w: invalid move \"%s\"", ErrMakeMove, notation)
 }
 
 func UndoMove(move chess.Move, board chess.Board) error {
@@ -44,12 +85,12 @@ func UndoMove(move chess.Move, board chess.Board) error {
 	case *normal.MoveResult:
 		return normal.UndoMove(move, board)
 	case *promotion.MoveResult:
-		return promotion.UndoPromotion(move, board)
+		return promotion.UndoMove(move, board)
 	case *enpassant.MoveResult:
 		return enpassant.UndoMove(move, board)
 	case *castling.MoveResult:
 		return castling.UndoMove(move, board)
 	default:
-		return fmt.Errorf("%w: unknown move to undo", ErrUndoMove)
+		return errUndoMoveUnknownType
 	}
 }

@@ -27,10 +27,6 @@ func (r *MoveResult) Input() string {
 	return r.CastlingType.String()
 }
 
-func (r *MoveResult) UCI() string {
-	return KingInitPosition(r.MoveSide).String() + KingCastledPosition(r.CastlingType, r.MoveSide).String()
-}
-
 func (r *MoveResult) String() string {
 	return r.CastlingType.String() + r.Suffix()
 }
@@ -41,9 +37,13 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 		"side":            r.Side(),
 		"captured_piece":  nil,
 		"board_new_state": r.BoardNewState(),
-		"uci":             r.UCI(),
+		"uci":             r.uci(),
 		"str":             r.String(),
 	})
+}
+
+func (r *MoveResult) uci() string {
+	return KingInitPosition(r.MoveSide).String() + KingCastledPosition(r.CastlingType, r.MoveSide).String()
 }
 
 func (r *MoveResult) validate() error {

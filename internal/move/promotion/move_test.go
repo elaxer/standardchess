@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPromotionFromString(t *testing.T) {
+func TestMoveFromNotation(t *testing.T) {
 	type args struct {
 		notation string
 	}
@@ -68,12 +68,12 @@ func TestPromotionFromString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := MoveFromString(tt.args.notation)
+			got, err := MoveFromNotation(tt.args.notation)
 
 			require.Truef(
 				t,
 				(err != nil) == tt.wantErr,
-				"PromotionFromString() error = %v, wantErr %v",
+				"MoveFromNotation() error = %v, wantErr %v",
 				err,
 				tt.wantErr,
 			)
@@ -84,7 +84,7 @@ func TestPromotionFromString(t *testing.T) {
 	}
 }
 
-func TestPromotion_String(t *testing.T) {
+func TestMove_String(t *testing.T) {
 	type fields struct {
 		promotion *Move
 	}

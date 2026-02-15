@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestMakePromotion_White(t *testing.T) {
+func TestMakeMove_White(t *testing.T) {
 	board := standardtest.NewBoardEmpty8x8(chess.ColorWhite, map[chess.Position]chess.Piece{
 		chess.PositionFromString("d7"): standardtest.NewPiece("P"),
 		chess.PositionFromString("a1"): standardtest.NewPiece("K"),
@@ -34,7 +34,7 @@ func TestMakePromotion_White(t *testing.T) {
 	assert.Equal(t, piece.NotationQueen, queen.Notation())
 }
 
-func TestMakePromotion_Black(t *testing.T) {
+func TestMakeMove_Black(t *testing.T) {
 	board := standardtest.NewBoardEmpty8x8(chess.ColorBlack, map[chess.Position]chess.Piece{
 		chess.PositionFromString("d2"): standardtest.NewPiece("p"),
 		chess.PositionFromString("a8"): standardtest.NewPiece("K"),

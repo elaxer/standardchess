@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNormalFromString(t *testing.T) {
+func TestMoveFromNotation(t *testing.T) {
 	type args struct {
 		str string
 	}
@@ -77,12 +77,12 @@ func TestNormalFromString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := normal.MoveFromString(tt.args.str)
+			got, err := normal.MoveFromNotation(tt.args.str)
 
 			require.Truef(
 				t,
 				(err != nil) == tt.wantErr,
-				"NormalFromString() error = %v, wantErr %v",
+				"MoveFromNotation() error = %v, wantErr %v",
 				err,
 				tt.wantErr,
 			)
@@ -93,7 +93,7 @@ func TestNormalFromString(t *testing.T) {
 	}
 }
 
-func TestNormal_String(t *testing.T) {
+func TestMove_String(t *testing.T) {
 	tests := []struct {
 		name string
 		move *normal.Move

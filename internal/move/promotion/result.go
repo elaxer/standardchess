@@ -17,10 +17,6 @@ func (r *MoveResult) Input() string {
 	return r.InputMove.String()
 }
 
-func (r *MoveResult) UCI() string {
-	return r.FromFull.String() + r.InputMove.To.String() + strings.ToLower(r.InputMove.PromotedPieceNotation)
-}
-
 func (r *MoveResult) String() string {
 	from := r.FromShortened
 	if from.IsEmpty() && r.IsCapture() {
@@ -37,9 +33,13 @@ func (r *MoveResult) MarshalJSON() ([]byte, error) {
 		"side":            r.Side(),
 		"captured_piece":  r.CapturedPiece(),
 		"board_new_state": r.BoardNewState(),
-		"uci":             r.UCI(),
+		"uci":             r.uci(),
 		"str":             r.String(),
 	})
+}
+
+func (r *MoveResult) uci() string {
+	return r.FromFull.String() + r.InputMove.To.String() + strings.ToLower(r.InputMove.PromotedPieceNotation)
 }
 
 func (r *MoveResult) validate() error {

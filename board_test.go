@@ -158,6 +158,10 @@ Kc5 54. Qd8 Kc6 55. Qfc7+ Kb5 56. Qb6+ Kc4 57. Qc6+ Kb4 58. Qdd5 Ka3 59. Qb6 Ka4
 	}
 }
 
+func TestMakeMoveUCIWithUndo(t *testing.T) {
+
+}
+
 func BenchmarkNewBoard(b *testing.B) {
 	for range b.N {
 		standardchess.NewBoard()

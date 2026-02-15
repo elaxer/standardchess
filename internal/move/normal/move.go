@@ -12,6 +12,7 @@ import (
 	"github.com/elaxer/rgx"
 	"github.com/elaxer/standardchess/internal/move/piecemove"
 	"github.com/elaxer/standardchess/internal/piece"
+	"github.com/elaxer/standardchess/internal/uci"
 )
 
 var ErrMoveValidation = errors.New("normal move validation error")
@@ -30,7 +31,7 @@ func NewMove(from, to chess.Position, pieceNotation string) *Move {
 	return &Move{piecemove.NewPieceMove(from, to), pieceNotation}
 }
 
-func MoveFromString(notation string) (*Move, error) {
+func MoveFromNotation(notation string) (*Move, error) {
 	data, err := rgx.Group(regexpNormal, notation)
 	if err != nil {
 		return nil, err
@@ -41,6 +42,23 @@ func MoveFromString(notation string) (*Move, error) {
 		chess.PositionFromString(data["to"]),
 		data["piece"],
 	), nil
+}
+
+func MoveFromUCI(uciStr string, squares *chess.Squares) (*Move, error) {
+	uciMove, err := uci.MoveFromString(uciStr)
+	if err != nil {
+		return nil, err
+	}
+
+	piece, err := squares.FindByPosition(uciMove.From)
+	if err != nil {
+		return nil, err
+	}
+	if piece == nil {
+		return nil, fmt.Errorf("%w: no piece at this from position", ErrMoveValidation)
+	}
+
+	return NewMove(uciMove.From, uciMove.To, piece.Notation()), nil
 }
 
 func (m *Move) String() string {

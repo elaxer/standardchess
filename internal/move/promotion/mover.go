@@ -39,7 +39,7 @@ func MakeMove(move *Move, board chess.Board) (*MoveResult, error) {
 	return &MoveResult{PieceMoveResult: pieceResult, InputMove: *move}, nil
 }
 
-func UndoPromotion(move *MoveResult, board chess.Board) error {
+func UndoMove(move *MoveResult, board chess.Board) error {
 	if err := move.validate(); err != nil {
 		return err
 	}
