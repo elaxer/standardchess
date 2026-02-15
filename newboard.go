@@ -90,8 +90,8 @@ func NewBoardEmpty(
 	return &board{
 		turn:           turn,
 		squares:        squares,
-		moveHistory:    make([]chess.Move, 0, 128),
-		moves:          make([]chess.Position, 0, 64),
+		moveHistory:    make([]chess.Move, 0, 64),
+		moves:          make([]chess.Position, 0, 32),
 		capturedPieces: make([]chess.Piece, 0, 30),
 
 		stateRules: stateRules,

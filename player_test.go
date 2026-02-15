@@ -19,12 +19,12 @@ cxd4 b6 9. e5 Qg6 10. O-O Nh6 11. d5 Ne7 12. Re1 Nhf5 13. Nc3 Nxe3 14. fxe3 Qg5
 Nxb5 d5 22. Qxd5+ Be6 23. Qxa8+ Bc8 24. Qxc8+ Qf8 25. Qxf8# 1-0`)
 
 	player := standardchess.NewBoardPlayer(board)
-	assert.Equal(t, "5Qkr/p5pp/1p6/1N6/8/4P3/PP4PP/R4RK1 b - - 0 25", fen.Encode(player.Board()).String())
+	assert.Equal(t, "5Qkr/p5pp/1p6/1N6/8/4P3/PP4PP/R4RK1 b - - 0 25", fen.Encode(player.Snapshot()).String())
 }
 
 func TestBoardPlayer_GoTo(t *testing.T) {
 	rewinds := []struct {
-		n          uint16
+		n          int
 		wantOK     bool
 		wantFENStr string
 	}{
@@ -68,7 +68,7 @@ c3 Ba5 9. Nxa5 f4 10. d4 f3 11. Bxg5 d5 12. Qxf3 Nc6 13. Qxd5 Nxa5 14. Qxa5 b6
 		if !r.wantOK {
 			continue
 		}
-		fen := fen.Encode(player.Board())
+		fen := fen.Encode(player.Snapshot())
 		require.Equal(t, r.wantFENStr, fen.String())
 	}
 }
@@ -82,7 +82,7 @@ c3 Ba5 9. Nxa5 f4 10. d4 f3 11. Bxg5 d5 12. Qxf3 Nc6 13. Qxd5 Nxa5 14. Qxa5 b6
 	player := standardchess.NewBoardPlayer(board)
 	player.Reset()
 
-	fen := fen.Encode(player.Board()).String()
+	fen := fen.Encode(player.Snapshot()).String()
 	require.Equal(t, initFENStr, fen)
 }
 
@@ -94,7 +94,7 @@ Qxh1# 0-1`)
 	player := standardchess.NewBoardPlayer(board)
 	player.End()
 
-	fen := fen.Encode(player.Board()).String()
+	fen := fen.Encode(player.Snapshot()).String()
 	require.Equal(t, "r4rk1/p1p2ppp/2p5/2b5/2P3b1/2N3Pn/PP1P1P1P/R1B1QK1q w - - 0 15", fen)
 }
 
@@ -110,21 +110,21 @@ func TestBoardPlayer_AfterNewMoves(t *testing.T) {
 	require.NoError(t, err)
 
 	player.Reset()
-	require.Equal(t, initFENStr, fen.Encode(player.Board()).String())
+	require.Equal(t, initFENStr, fen.Encode(player.Snapshot()).String())
 
 	player.Next()
-	require.Equal(t, "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", fen.Encode(player.Board()).String())
+	require.Equal(t, "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", fen.Encode(player.Snapshot()).String())
 	player.Next()
-	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2", fen.Encode(player.Board()).String())
+	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2", fen.Encode(player.Snapshot()).String())
 	player.Next()
-	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2", fen.Encode(player.Board()).String())
+	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2", fen.Encode(player.Snapshot()).String())
 
 	ok := player.Next()
 	require.False(t, ok)
 
 	_, err = board.UndoLastMove()
 	require.NoError(t, err)
-	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2", fen.Encode(player.Board()).String())
+	require.Equal(t, "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2", fen.Encode(player.Snapshot()).String())
 
 }
 
@@ -139,5 +139,5 @@ Qxh1# 0-1`)
 	ok := player.Prev()
 	require.False(t, ok)
 
-	require.Equal(t, initFENStr, fen.Encode(player.Board()).String())
+	require.Equal(t, initFENStr, fen.Encode(player.Snapshot()).String())
 }
