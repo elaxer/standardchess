@@ -34,11 +34,11 @@ func (r *MoveResult) String() string {
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
 		"input":           r.CastlingType.String(),
+		"uci":             r.uci(),
+		"san":             r.String(),
 		"side":            r.Side(),
 		"captured_piece":  nil,
 		"board_new_state": r.BoardNewState(),
-		"uci":             r.uci(),
-		"str":             r.String(),
 	})
 }
 

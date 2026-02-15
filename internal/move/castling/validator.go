@@ -10,14 +10,6 @@ import (
 
 var ErrValidation = errors.New("castling move validation error")
 
-var (
-	kingFileAfterShortCastling = chess.FileG
-	rookFileAfterShortCastling = chess.FileF
-
-	kingFileAfterLongCastling = chess.FileC
-	rookFileAfterLongCastling = chess.FileD
-)
-
 func ValidateMove(castlingType CastlingType, board chess.Board) error {
 	return validateMove(castlingType, board.Turn(), board, true)
 }
@@ -54,12 +46,12 @@ func validateMove(
 		return fmt.Errorf("%w: an obstacle", ErrValidation)
 	}
 
-	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
+	kingNewPosition := KingCastledPosition(castlingType, board.Turn())
+	rookNewPosition := RookCastledPosition(castlingType, board.Turn())
 
 	if side == board.Turn() &&
 		(board.IsSquareAttacked(kingNewPosition) || board.IsSquareAttacked(rookNewPosition)) {
 		return fmt.Errorf("%w: castling squares are under threat", ErrValidation)
-
 	}
 
 	return nil

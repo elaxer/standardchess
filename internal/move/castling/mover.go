@@ -35,7 +35,8 @@ func MakeMove(castlingType CastlingType, board chess.Board) (chess.Move, error) 
 		return nil, err
 	}
 
-	kingNewPosition, rookNewPosition := pickPositions(castlingType, kingPosition.Rank)
+	kingNewPosition := KingCastledPosition(castlingType, board.Turn())
+	rookNewPosition := RookCastledPosition(castlingType, board.Turn())
 
 	if err := board.Squares().PlacePiece(king, kingNewPosition); err != nil {
 		return nil, err
@@ -63,7 +64,8 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 		return err
 	}
 
-	kingPosition, rookPosition := pickPositions(move.CastlingType, rank(move.Side()))
+	kingPosition := KingCastledPosition(move.CastlingType, move.Side())
+	rookPosition := RookCastledPosition(move.CastlingType, move.Side())
 
 	king, err := board.Squares().FindByPosition(kingPosition)
 	if err != nil {
@@ -96,27 +98,4 @@ func UndoMove(move *MoveResult, board chess.Board) error {
 	rook.SetIsMoved(false)
 
 	return board.Squares().PlacePiece(rook, move.InitRookPosition)
-}
-
-func pickPositions(
-	castlingType CastlingType,
-	rank chess.Rank,
-) (kingPosition, rookPosition chess.Position) {
-	if castlingType.IsLong() {
-		return chess.NewPosition(
-				kingFileAfterLongCastling,
-				rank,
-			), chess.NewPosition(
-				rookFileAfterLongCastling,
-				rank,
-			)
-	}
-
-	return chess.NewPosition(
-			kingFileAfterShortCastling,
-			rank,
-		), chess.NewPosition(
-			rookFileAfterShortCastling,
-			rank,
-		)
 }

@@ -301,18 +301,18 @@ It encodes your board into the format:
   "move_history": [
     {
       "input": "string",
+      "uci": "string",
+      "san": "string",
       "side": false,
       "captured_piece": {
-        "side": false,
+        "color": false,
         "notation": "string",
         "is_moved": false
       }, // nullable
       "board_new_state": {
         "name": "string",
         "is_terminal": false
-      },
-      "uci": "string",
-      "str": "string"
+      }
     },
   ],
   "placement": [
