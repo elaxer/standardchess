@@ -53,14 +53,14 @@ func MakeMove(moveStr string, board chess.Board) (chess.Move, error) {
 }
 
 func moveFromUCI(uciStr string, board chess.Board) (any, error) {
-	if move, err := normal.MoveFromUCI(uciStr, board.Squares()); err == nil {
-		return move, nil
+	if castlingType, err := castling.FromUCI(uciStr, board.Squares(), board.Turn()); err == nil {
+		return castlingType, nil
 	}
 	if move, err := promotion.MoveFromUCI(uciStr); err == nil {
 		return move, nil
 	}
-	if castlingType, err := castling.FromUCI(uciStr, board.Squares(), board.Turn()); err == nil {
-		return castlingType, nil
+	if move, err := normal.MoveFromUCI(uciStr, board.Squares()); err == nil {
+		return move, nil
 	}
 
 	return nil, fmt.Errorf("%w: invalid move \"%s\"", ErrMakeMove, uciStr)

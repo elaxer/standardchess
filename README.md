@@ -48,12 +48,21 @@ board, err := standardchess.NewBoardFromMoves([]string{
 
 After you create a filled one, you can perform and cancel moves:
 ```go
+moveResult, err := board.MakeMove("b1c3")
+if err != nil {
+    // ...
+}
+```
+... or do the same using SAN notation:
+```go
 moveResult, err := board.MakeMove("Nc3")
 if err != nil {
     // ...
 }
+```
 
-// Undo the last "Nc3" move:
+You can undo the last move:
+```go
 poppedMoveResult, err := board.UndoLastMove()
 if err != nil {
     // ...
@@ -62,12 +71,12 @@ if err != nil {
 
 Also make/undo castling moves and pawn promotions:
 ```go
-moveResult, err := board.MakeMove("0-0")
+moveResult, err := board.MakeMove("e1g1") // or use SAN variants: "O-O", "O-O-O"
 if err != nil {
     // ...
 }
 
-moveResult, err = board.MakeMove("c8=Q")
+moveResult, err = board.MakeMove("c7c8q") // or use SAN variant: "c8=Q"
 if err != nil {
     // ...
 }
@@ -163,7 +172,7 @@ ok = player.Next() // Moves the cursor forward one position
 player.End() // Sets the cursor at the last board position
 
 // Get a snapshot of the board after moving the cursor:
-boardSnapshot := player.Board() 
+boardSnapshot := player.Snapshot() 
 ```
 
 ### Board encoding/decoding

@@ -11,6 +11,10 @@ import (
 	"github.com/elaxer/standardchess"
 	"github.com/elaxer/standardchess/encoding/fen"
 	"github.com/elaxer/standardchess/encoding/pgn"
+	"github.com/elaxer/standardchess/internal/move/castling"
+	"github.com/elaxer/standardchess/internal/move/enpassant"
+	"github.com/elaxer/standardchess/internal/move/normal"
+	"github.com/elaxer/standardchess/internal/move/promotion"
 	"github.com/elaxer/standardchess/internal/piece"
 	standardmetric "github.com/elaxer/standardchess/metric"
 )
@@ -32,19 +36,30 @@ func NewBoardFromPGN(pgnStr string) chess.Board {
 	return board
 }
 
-// func UCIMovesFromPGN(pgnStr string) []string {
-// 	pgn, err := pgn.FromString(pgnStr)
-// 	must(err)
+func UCIMovesFromSAN(san []string) []string {
+	moves := make([]string, 0, len(san))
 
-// 	moves := make([]string, 0, len(pgn.Moves()))
-// 	board := standardchess.NewBoard()
-// 	for _, move := range pgn.Moves() {
-// 		result, err := board.MakeMove(move)
-// 		must(err)
+	board := standardchess.NewBoard()
+	for _, move := range san {
+		result, err := board.MakeMove(move)
+		must(err)
 
-// 		moves = append(moves, resu)
-// 	}
-// }
+		switch moveResult := result.(type) {
+		case *normal.MoveResult:
+			moves = append(moves, moveResult.UCI())
+		case *enpassant.MoveResult:
+			moves = append(moves, moveResult.UCI())
+		case *promotion.MoveResult:
+			moves = append(moves, moveResult.UCI())
+		case *castling.MoveResult:
+			moves = append(moves, moveResult.UCI())
+		default:
+			panic("unknown move type")
+		}
+	}
+
+	return moves
+}
 
 // NewPiece creates a new piece by string.
 // Created piece marked as not moved.
