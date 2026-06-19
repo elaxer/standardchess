@@ -2,7 +2,7 @@ package standardchess
 
 import (
 	"github.com/elaxer/chess"
-	"github.com/elaxer/standardchess/player"
+	"github.com/elaxer/standardchess/internal/player"
 )
 
 var copyBoardFunc = func(board chess.Board, cursor int) chess.Board {

@@ -28,7 +28,7 @@ func (q *Queen) Side() chess.Color {
 func (q *Queen) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	q.pseudoMoves = q.pseudoMoves[:0]
 
-	for _, direction := range allDirections {
+	for _, direction := range chess.DirectionsAll {
 		for move := range q.slide(from, direction, squares) {
 			q.pseudoMoves = append(q.pseudoMoves, move)
 		}

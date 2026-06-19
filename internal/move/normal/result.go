@@ -32,10 +32,10 @@ func (r *MoveResult) String() string {
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
-		"input": r.InputMove.String(),
-		"uci":   r.UCI(),
-		"san":   r.String(),
-
+		"type":            "normal",
+		"input":           r.InputMove.String(),
+		"uci":             r.UCI(),
+		"san":             r.String(),
 		"side":            r.Side(),
 		"captured_piece":  r.CapturedPiece(),
 		"board_new_state": r.BoardNewState(),

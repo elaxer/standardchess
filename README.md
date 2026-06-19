@@ -309,6 +309,7 @@ It encodes your board into the format:
   ],
   "move_history": [
     {
+      "type": "string", // "normal", "enpassant", "promotion" or "castling"
       "input": "string",
       "uci": "string",
       "san": "string",

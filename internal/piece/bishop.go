@@ -24,7 +24,7 @@ func NewBishop(color chess.Color) *Bishop {
 func (b *Bishop) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	b.pseudoMoves = b.pseudoMoves[:0]
 
-	for _, direction := range diagonalDirections {
+	for _, direction := range chess.DirectionsDiagonal {
 		for move := range b.slide(from, direction, squares) {
 			b.pseudoMoves = append(b.pseudoMoves, move)
 		}

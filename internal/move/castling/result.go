@@ -37,6 +37,7 @@ func (r *MoveResult) String() string {
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
+		"type":            "castling",
 		"input":           r.CastlingType.String(),
 		"uci":             r.UCI(),
 		"san":             r.String(),

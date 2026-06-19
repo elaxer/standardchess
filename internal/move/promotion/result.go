@@ -33,6 +33,7 @@ func (r *MoveResult) String() string {
 
 func (r *MoveResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]any{
+		"type":            "promotion",
 		"input":           r.InputMove.String(),
 		"uci":             r.UCI(),
 		"san":             r.String(),

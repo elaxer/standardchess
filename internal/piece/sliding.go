@@ -6,22 +6,6 @@ import (
 	"github.com/elaxer/chess"
 )
 
-var (
-	orthogonalDirections = []chess.Position{
-		chess.DirectionRight,
-		chess.DirectionLeft,
-		chess.DirectionTop,
-		chess.DirectionBottom,
-	}
-	diagonalDirections = []chess.Position{
-		chess.DirectionTopRight,
-		chess.DirectionBottomLeft,
-		chess.DirectionBottomRight,
-		chess.DirectionTopLeft,
-	}
-	allDirections = append(orthogonalDirections, diagonalDirections...)
-)
-
 type sliding struct {
 	*abstract
 }

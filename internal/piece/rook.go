@@ -23,7 +23,7 @@ func NewRook(color chess.Color) *Rook {
 
 func (r *Rook) PseudoMoves(from chess.Position, squares *chess.Squares) []chess.Position {
 	r.pseudoMoves = r.pseudoMoves[:0]
-	for _, direction := range orthogonalDirections {
+	for _, direction := range chess.DirectionsOrthogonal {
 		for move := range r.slide(from, direction, squares) {
 			r.pseudoMoves = append(r.pseudoMoves, move)
 		}
